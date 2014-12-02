@@ -1,5 +1,5 @@
-\name{smote}
-\alias{smote}
+\name{smoteClassif}
+\alias{smoteClassif}
 
 \title{
 SMOTE algorithm for unbalanced classification problems
@@ -7,12 +7,10 @@ SMOTE algorithm for unbalanced classification problems
 \description{
 This function handles unbalanced classification problems using the SMOTE
 method. Namely, it can generate a new "SMOTEd" data set that addresses
-the class unbalance problem. Alternatively, it can also run a
-classification algorithm on this new data set and return the resulting
-model. 
+the class unbalance problem. 
 }
 \usage{
-smote(form, data, perc.over = 2, k = 5, perc.under = 2)
+smoteClassif(form, data, perc.over = 2, k = 5, perc.under = 2)
 }
 
 \arguments{
@@ -84,15 +82,9 @@ of these neighbours are used.
 \emph{Smote: Synthetic minority over-sampling technique}. Journal of Artificial
 Intelligence Research, 16:321-357.
 
-  Torgo, L. (2010) \emph{Data Mining using R: learning with case studies},
-  CRC Press (ISBN: 9781439810187).
-  \url{http://www.dcc.fc.up.pt/~ltorgo/DataMiningWithR} 
-
-  Torgo, L. (2014) \emph{An Infra-Structure for Performance
-    Estimation and Experimental Comparison of Predictive Models in R}. arXiv:1412.0436 [cs.MS]
-  \url{http://arxiv.org/abs/1412.0436}
 }
-\author{ Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
+\author{ Paula Branco \email{paobranco@gmail.com}, Rita Ribeiro
+  \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
 \examples{
 ## A small example with a data set created artificially from the IRIS
 ## data 
@@ -103,7 +95,7 @@ data$Species <- factor(ifelse(data$Species == "setosa","rare","common"))
 table(data$Species)
 
 ## now using SMOTE to create a more "balanced problem"
-newData <- smote(Species ~ ., data, perc.over = 6,perc.under=1)
+newData <- smoteClassif(Species ~ ., data, perc.over = 6,perc.under=1)
 table(newData$Species)
 
 ## Checking visually the created data

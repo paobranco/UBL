@@ -1,9 +1,9 @@
 
-# ===================================================
-# Creating a SMOTE training sample for classification problems
-# L. Torgo, Feb 2010, Nov 2014
-# ---------------------------------------------------
-smote <- function(form,data, perc.over=2,k=5,perc.under=2)
+## ===================================================
+## Creating a SMOTE training sample for classification problems
+## L. Torgo, Feb 2010, Nov 2014
+## ---------------------------------------------------
+smoteClassif <- function(form,data, perc.over=2,k=5,perc.under=2)
   
   # INPUTS:
   # form a model formula
