@@ -1,0 +1,43 @@
+##import(graphics)
+##import(abind)  # commented out as it does not have a name space
+##import(xts)
+##importFrom(zoo,as.zoo)
+import(methods)
+##import(ggplot2)
+
+
+#exportClasses(
+#    CV, Holdout, LOOCV,
+#    MonteCarlo, Bootstrap, 
+#
+#    EstimationResults,
+#    ComparisonResults,
+#
+#    PredTask,
+#
+#    EstimationTask,
+#
+#    Workflow,
+#    WFoutput
+#    )
+
+#exportMethods(show)
+#exportMethods(summary)
+#exportMethods(plot)
+#exportMethods(subset)
+
+export(
+    ## constructors (classDefs.R file)
+    #CV, Holdout, LOOCV,
+    #MonteCarlo, Bootstrap, 
+
+    ## resampling.R
+    smote,
+    undersampling,
+    
+    ## costs.R file
+    metacost
+
+    )
+
+

@@ -1,0 +1,55 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{fancyvrb}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=true,bookmarksopen=true,bookmarksopenlevel=2,
+ breaklinks=false,pdfborder={0 0 1},backref=false,colorlinks=false]
+ {hyperref}
+\hypersetup{
+ pdfstartview={XYZ null null 1}}
+\usepackage{breakurl}
+
+\newcommand{\UBL}{package \texttt{UBL}\ }
+
+\author{Paula Branco, Rita Ribeiro and Luis Torgo\\FCUP - LIAAD/INESC Tec\\University of Porto\\
+  \texttt{paobranco@gmail.com}, \texttt{rpribeiro@dcc.fc.up.pt}, \texttt{ltorgo@dcc.fc.up.pt}}
+\title{Utility-base Learning in R}
+
+\begin{document}
+
+
+<<setup, include=FALSE, cache=FALSE>>=
+library(knitr)
+## set global chunk options
+opts_chunk$set(cache.path='cache/UBL-',dev='pdf',fig.path='figures/UBL-', fig.align='center', fig.show='hold',tidy=FALSE,size="footnotesize",message=FALSE)
+options(replace.assign=TRUE,width=90)
+##
+## Load the package (later this should be substituted by library(performanceEstimation))
+##library(devtools)
+##load_all("~/Software/R/MyPackages/UBLn")
+library(UBL)
+@
+%$
+\maketitle
+
+\begin{abstract}
+  
+  This document describes the R \UBL. 
+   
+\end{abstract}
+
+% ====================================================================
+\section{Introduction}
+
+% =======================================================
+\section{Conclusions}
+
+
+\bibliographystyle{alpha}
+\bibliography{UBL}
+\end{document}
