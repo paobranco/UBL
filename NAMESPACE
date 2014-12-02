@@ -32,11 +32,10 @@ export(
     #MonteCarlo, Bootstrap, 
 
     ## resampling.R
-    smote,
-    undersampling,
+    smoteClassif,
     
     ## costs.R file
-    metacost
+    metacostClassif
 
     )
 

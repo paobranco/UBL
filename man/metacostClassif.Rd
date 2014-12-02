@@ -1,5 +1,5 @@
-\name{metacost}
-\alias{metacost}
+\name{metacostClassif}
+\alias{metacostClassif}
 
 \title{
 METACOST algorithm for cost-sentive classification problems
@@ -10,7 +10,7 @@ given a set of probabilities of each class for each test cases, and a
 cost-benefit matrix
 }
 \usage{
-metacost(preds, cb.matrix)
+metacostClassif(preds, cb.matrix)
 }
 
 \arguments{
@@ -29,12 +29,18 @@ metacost(preds, cb.matrix)
 
 }
 \details{
-
+This function applies the well-know METACOST (Domingos, 1999) algorithm
+to obtain the predictions of a probabilistic classifier that maximize
+the utility according to a provided cost-benefit matrix.
 }
 \value{
   The function returns a factor of class labels.
 }
 \references{
+    Domingos,P. (1999), \emph{MetaCost: a general method for making
+    classifiers cost-sensitive}. Proceedings of
+    KDD'1999. \url{http://homes.cs.washington.edu/~pedrod/papers/kdd99.pdf} 
+
 }
 \author{ Paula Branco \email{paobranco@gmail.com}, Rita Ribeiro
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
@@ -52,7 +58,7 @@ rownames(cb) <- paste("t",levels(iris$Species),sep=".")
 ## t.versicolor     -100           60        -200
 ## t.virginica      -100         -200          60
 
-
+\dontrun{
 ## Now learning a model
 library(rpart)
 idx <- sample(1:nrow(iris),as.integer(0.7*nrow(iris)))
@@ -68,6 +74,7 @@ metacost.preds <- metacostClassif(prob.preds,cb)
 table(noprob.preds,metacost.preds)
 table(noprob.preds,ts$Species)
 table(metacost.preds,ts$Species)
+}
 }
 
 \keyword{models}
