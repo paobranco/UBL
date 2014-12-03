@@ -1,7 +1,7 @@
 Package: UBL
 Type: Package
-Title: An R package implementing several approaches to utility-based learning, both for classification and regression predictive tasks
-Description: This package provides a set of functions that can be used to obtain better predictive performance on cost-sensitive tasks (both regression and classification). This includes resampling approaches, cost-based methods, special purpose evaluation metrics as well as specific learning systems.
+Title: Implementation of Several Approaches to Utility-based Learning for both Classification and Regression Tasks
+Description: Provides a set of functions that can be used to obtain better predictive performance on cost-sensitive tasks (both regression and classification). This includes resampling approaches, cost-based methods, special purpose evaluation metrics as well as specific learning systems.
 Version: 0.0.1
 Depends: R(>= 3.0), methods
 Date: 2014-12-02
