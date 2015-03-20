@@ -21,7 +21,7 @@ randUnderClassif <- function(form, data, C.perc, repl=FALSE)
   # INPUTS:
   # form a model formula
   # data the original training set (with the unbalanced distribution)
-  # C.perc is a named list containing each class under-sampling percentage.
+  # C.perc is a named list containing each class under-sampling percentage(between 0 and 1).
   #       The user may only provide the classes where he wants to apply under-sampling.
   #       Alternatively it may be "balance" or "extreme", cases where 
   #       the under-sampling percentages are automatically estimated
@@ -31,7 +31,7 @@ randUnderClassif <- function(form, data, C.perc, repl=FALSE)
 
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
-  names <- unique(data[,tgt])
+  names <- sort(unique(data[,tgt]))
   li <-class.freq(data, tgt)
   
   if(is.list(C.perc)){ # the under-sampling percentages are provided by the user
@@ -42,7 +42,7 @@ randUnderClassif <- function(form, data, C.perc, repl=FALSE)
     pos <- as.numeric(match(names.und,names))
     tot.num <-li[[2]][pos]
     # include example from classes unchanged
-    newdata <- data[which(data[,tgt] ==names[which(!(names %in% names.und))]),]
+    newdata <- data[which(data[,tgt] %in% names[which(!(names %in% names.und))]),]
   
     for(i in 1:length(names.und)){ # under-sampling each class provided
       Exs <- which(data[,tgt]== names.und[i])
@@ -106,8 +106,8 @@ randUnderClassif <- function(form, data, C.perc, repl=FALSE)
 # ---------------------------------------------------
 
 class.freq <- function(data, tgt){
-  names <- unique(data[,tgt])
-  li <- list(names,sapply(names, function(x) length(which(data[,tgt] == names[x])), USE.NAMES=TRUE))
+  names <- sort(unique(data[,tgt]))
+  li <- list(names, sapply(names, function(x)length(which(data[,tgt] == names[x]))))
   li
 }
 
