@@ -5,16 +5,16 @@
 # existing classes or it can "smoothly invert" the frequency
 # of the examples in each class
 # Examples:
-  ir<- iris[-c(95:130),]
-  under.iris <- randUnderClassif(Species~., ir, list(setosa=0.5, versicolor=0.8))
-  balance.iris <- randUnderClassif(Species~., ir, "balance")
-  invert.iris <- randUnderClassif(Species~., ir, "extreme")
-  
-  library(MASS)
-  data(cats)
-  under.cats <- randUnderClassif(Sex~., cats, list(M=0.8))
-  balance.cats <- randUnderClassif(Sex~., cats,"balance")
-  invert.cats <- randUnderClassif(Sex~., cats, "extreme")
+#   ir<- iris[-c(95:130),]
+#   under.iris <- randUnderClassif(Species~., ir, list(setosa=0.5, versicolor=0.8))
+#   balance.iris <- randUnderClassif(Species~., ir, "balance")
+#   invert.iris <- randUnderClassif(Species~., ir, "extreme")
+#   
+#   library(MASS)
+#   data(cats)
+#   under.cats <- randUnderClassif(Sex~., cats, list(M=0.8))
+#   balance.cats <- randUnderClassif(Sex~., cats,"balance")
+#   invert.cats <- randUnderClassif(Sex~., cats, "extreme")
 # P. Branco, Mar 2015
 # ---------------------------------------------------
 randUnderClassif <- function(form, data, C.perc, repl=FALSE)
