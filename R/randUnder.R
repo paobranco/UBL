@@ -6,15 +6,23 @@
 # of the examples in each class
 # Examples:
 #   ir<- iris[-c(95:130),]
-#   under.iris <- randUnderClassif(Species~., ir, list(setosa=0.5, versicolor=0.8))
-#   balance.iris <- randUnderClassif(Species~., ir, "balance")
-#   invert.iris <- randUnderClassif(Species~., ir, "extreme")
+#   myunder.iris <- randUnderClassif(Species~., ir, list(setosa=0.5, versicolor=0.8))
+#   undBalan.iris <- randUnderClassif(Species~., ir, "balance")
+#   undInvert.iris <- randUnderClassif(Species~., ir, "extreme")
+# 
+#   library(DMwR)
+#   data(algae)
+#   C.perc=list(autumn=1, summer=0.9, winter=0.4) # classes autumn and spring remain unchanged
+#   myunder.algae <- randUnderClassif(season~., algae, C.perc)
+#   undBalan.algae <- randUnderClassif(season~., algae, "balance")
+#   undInvert.algae <- randUnderClassif(season~., algae, "extreme")
 #   
 #   library(MASS)
 #   data(cats)
-#   under.cats <- randUnderClassif(Sex~., cats, list(M=0.8))
-#   balance.cats <- randUnderClassif(Sex~., cats,"balance")
-#   invert.cats <- randUnderClassif(Sex~., cats, "extreme")
+#   myunder.cats <- randUnderClassif(Sex~., cats, list(M=0.8))
+#   undBalan.cats <- randUnderClassif(Sex~., cats,"balance")
+#   undInvert.cats <- randUnderClassif(Sex~., cats, "extreme")
+# 
 # P. Branco, Mar 2015
 # ---------------------------------------------------
 randUnderClassif <- function(form, data, C.perc, repl=FALSE)
@@ -28,7 +36,6 @@ randUnderClassif <- function(form, data, C.perc, repl=FALSE)
   # repl is it allowed or not to perform sampling with replacement
   
 {
-
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
   names <- sort(unique(data[,tgt]))
@@ -109,5 +116,9 @@ class.freq <- function(data, tgt){
   li <- list(names, sapply(names, function(x)length(which(data[,tgt] == names[x]))))
   li
 }
+
+
+
+
 
   
