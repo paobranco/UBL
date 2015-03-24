@@ -78,7 +78,7 @@ randUnderClassif <- function(form, data, C.perc, repl=FALSE)
                       replace=repl)
         newdata <- rbind(newdata,data[sel,])
       }      
-    }else if (C.perc=="extreme"){ #"reverse" the classes frequencies(fre.min^2/freq.maj)
+    }else if (C.perc=="extreme"){ #"reverse" the classes frequencies (freq.min^2/freq. each class)
       
       minCl <- names(which(table(data[,tgt])==min(table(data[,tgt]))))
       
@@ -91,7 +91,7 @@ randUnderClassif <- function(form, data, C.perc, repl=FALSE)
       newdata <- data[minExs,]
       names.und <- names[which(!(names %in% minCl))]
       
-      # under-sample all the other classes reversing frequencies
+      # under-sample all the other classes reversing frequencies 
       for(i in 1:length(names.und)){ 
         Exs <- which(data[,tgt]== names.und[i])
         sel <- sample(Exs,
