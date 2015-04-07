@@ -5,10 +5,11 @@
 # Examples:
 #   library(DMwR)
 #   data(algae)
+#   clean.algae <- algae[complete.cases(algae),]
 #   C.perc=list(autumn=2, summer=1.5, winter=0.9) # class spring remains unchanged
-#   mysmote.algae <- smoteClassif(season~., algae, C.perc)
-#   smoteBalan.algae <- smoteClassif(season~., algae, "balance")
-#   smoteExtre.algae <- smoteClassif(season~., algae, "extreme")
+#   mysmote.algae <- smoteClassif(season~., clean.algae, C.perc)
+#   smoteBalan.algae <- smoteClassif(season~., clean.algae, "balance")
+#   smoteExtre.algae <- smoteClassif(season~., clean.algae, "extreme")
 # 
 #   ir<- iris[-c(95:130),]
 #   mysmote.iris <- smoteClassif(Species~., ir, list(setosa=0.6, virginica=1.5))
@@ -40,7 +41,9 @@ smoteClassif <- function(form, data, C.perc, k=5, repl=FALSE)
   # repl is it allowed to perform sampling with replacement (when under-sampling)
 
 {
-  
+  if(any(is.na(data))){
+    stop("The data set provided contains NA values!")
+  }
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
   names <- sort(unique(data[,tgt]))
@@ -181,7 +184,7 @@ smote.exsClassif <- function(data,tgt,N,k)
     
       # the k NNs of case T[i,]
       xd <- scale(T,T[i,],ranges)
-      for(a in nomatr) xd[,a] <- xd[,a]==0
+      for(a in nomatr) xd[,a] <- !xd[,a]==0
       dd <- drop(xd^2 %*% rep(1, ncol(xd)))
       kNNs <- order(dd)[2:(k+1)]
           
