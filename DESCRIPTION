@@ -6,9 +6,12 @@ Version: 0.0.1
 Depends: R(>= 3.0), methods
 Date: 2014-12-02
 Authors@R: c(person("Paula", "Branco", email = "paobranco@gmail.com", role = c("aut", "cre")), person("Rita", "Ribeiro", email = "rpribeiro@dcc.fc.up.pt", role = c("aut", "cre")), person("Luis", "Torgo", email = "ltorgo@dcc.fc.up.pt", role = c("aut", "cre")))
+Maintainer: Paula Branco <paobranco@gmail.com>
 URL: https://github.com/ltorgo/UBL
 BugReports: https://github.com/ltorgo/UBL/issues
 License: GPL (>=2)
+Imports: Rcpp (>= 0.11.5)
+LinkingTo: Rcpp
 LazyLoad: yes
 LazyData: yes
 

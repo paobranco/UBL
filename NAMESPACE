@@ -4,6 +4,8 @@
 ##importFrom(zoo,as.zoo)
 import(methods)
 ##import(ggplot2)
+useDynLib(UBL)
+exportPattern("^[[:alpha:]]+")
 
 
 #exportClasses(
