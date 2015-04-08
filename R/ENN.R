@@ -7,6 +7,7 @@
 # The Cl parameter allows for the user to specify which particular 
 # classes should be under-sampled.
 # Examples:
+# 
 #   ir<- iris[-c(95:130),]
 #   ir1norm <- EnnClassif(Species~., ir, k=5, dist="p-norm", p=1, Cl="all")
 #   irManhat <- EnnClassif(Species~., ir, k=5, dist="Manhattan", Cl="all") 
@@ -22,11 +23,11 @@
 #   alg.HVDM <- EnnClassif(season~., clean.algae, k=1, dist="HVDM")
 #   alg.3norm <- EnnClassif(season~., clean.algae, k=3, dist="p-norm", p=2, use.at="numeric")
 #   alg.Eucl <- EnnClassif(season~., clean.algae, k=5, use.at="numeric", Cl=c("winter", "summer"))
-#   summary(clean.algae$season)
-#   summary(alg.HVDMWinter$season)
-#   summary(alg.HVDM$season)
-#   summary(alg.Eucl$season)
-#   summary(alg.3norm$season)
+#   summary(clean.algae[[1]]$season)
+#   summary(alg.HVDMWinter[[1]]$season)
+#   summary(alg.HVDM[[1]]$season)
+#   summary(alg.Eucl[[1]]$season)
+#   summary(alg.3norm[[1]]$season)
 # P. Branco, Mar 2015
 # ---------------------------------------------------
 EnnClassif <- function(form, data, k=3, dist="Euclidean", p=2, use.at="all", Cl="all")
@@ -44,21 +45,20 @@ EnnClassif <- function(form, data, k=3, dist="Euclidean", p=2, use.at="all", Cl=
   #       The default is "all" meaning that examples from all the
   #       existing classes can be removed
   # OUTPUTS:
-  # a cleaned dataframe
+  # a list with the cleaned dataframe and the indexes of the examples removed 
   
 {
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
   nom.at <- which(sapply(data[,-tgt], is.numeric)==FALSE)
-  if (length(nom.at) & (dist=="Euclidean" | dist=="p-norm" | dist=="Chebyshev") & use.at!="numeric"){
-    stop("Can not compute the distance with nominal attributes!")
-  }
+#   if (length(nom.at) & (dist=="Euclidean" | dist=="p-norm" | dist=="Chebyshev") & use.at!="numeric"){
+#     stop("Can not compute the distance with nominal attributes!")
+#   }
   
   if(!length(unique(data[,tgt]))){
     stop("The data set contains only one class!")
   }
   
-#  for(r in 1:rep){
     # prepare .Fortran
     neig <- neighbours(tgt, data, dist, p, k, use.at="all")
     rm.idx <- c()
@@ -71,7 +71,6 @@ EnnClassif <- function(form, data, k=3, dist="Euclidean", p=2, use.at="all", Cl=
       }
     }else if(length(Cl)){
       for(i in Cl){ 
-        #Cl.neig <- neig[which(data[,tgt]==i),]
         for(j in which(data[,tgt]==i)){
           if(sum(data[neig[j,],tgt]!=i)>k/2){
             rm.idx <- c(rm.idx, j)
@@ -82,11 +81,10 @@ EnnClassif <- function(form, data, k=3, dist="Euclidean", p=2, use.at="all", Cl=
     
     if(length(rm.idx)){
     res <- data[-rm.idx,]
-    data <- res
     }else{
       warning("There are no examples to remove!")
       res <-data
     }
-#  }
-  res
+
+  return(list(res, rm.idx))
 }
