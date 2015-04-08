@@ -3,7 +3,7 @@
 # Basically randomly removes a percentage of cases of the class(es) 
 # selected by the user. Alternatively, it can either balance all the 
 # existing classes or it can "smoothly invert" the frequency
-# of the examples in each class
+# of the examples in each class.
 # Examples:
 #   ir<- iris[-c(95:130),]
 #   myunder.iris <- randUnderClassif(Species~., ir, list(setosa=0.5, versicolor=0.8))
@@ -28,7 +28,7 @@
 randUnderClassif <- function(form, data, C.perc, repl=FALSE)
   # INPUTS:
   # form a model formula
-  # data the original training set (with the unbalanced distribution)
+  # data the original training set (with the imbalanced distribution)
   # C.perc is a named list containing each class under-sampling percentage(between 0 and 1).
   #       The user may only provide the classes where he wants to apply under-sampling.
   #       Alternatively it may be "balance" or "extreme", cases where 
@@ -47,7 +47,7 @@ randUnderClassif <- function(form, data, C.perc, repl=FALSE)
     }
     names.und <- names(which(C.perc<1))
 
-    # include example from classes unchanged
+    # include examples from classes unchanged
     newdata <- data[which(data[,tgt] %in% names[which(!(names %in% names.und))]),]
   
     for(i in 1:length(names.und)){ # under-sampling each class provided
