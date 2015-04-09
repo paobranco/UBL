@@ -1,6 +1,6 @@
 # ===================================================
 # Random oversampling strategy for multiclass problems.
-# Basically randomly cpies a percentage of cases of the class(es) 
+# Basically randomly copies a percentage of cases of the class(es) 
 # selected by the user. Alternatively, it can either balance all the 
 # existing classes or it can "smoothly invert" the frequency
 # of the examples in each class

@@ -37,19 +37,17 @@ NCLClassif <- function(form, data, k=3, dist="Euclidean", p=2, use.at="all", Cl=
 {
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
-  nrCl <-length(as.integer(unique(data[,tgt])))
   classes <- levels(data[,tgt])
+  nrCl <- length(classes)
 
   # When Cl is "all" or "smaller" the Cl and otherCl classes must be determined.
   # Alternatively the user may chose the Cl class(es) and then only otherCl is determined.
   
   if(Cl[1]=="smaller"){
     Cl <-names(which(table(data[,tgt])<nrow(data)/nrCl))
-    otherCl <- setdiff(classes, Cl)
-  }else{
-
-    otherCl <-levels(data[,tgt])[which(!levels(data[,tgt])%in%Cl)]
   }
+    otherCl <- setdiff(classes, Cl)
+
   
   if(!length(Cl)){
     res <- EnnClassif(form, data, k, dist, p, use.at)
