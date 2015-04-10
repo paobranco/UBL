@@ -40,9 +40,9 @@ OSSClassif <- function(form, data, dist="Euclidean", p=2, use.at="all", Cl="smal
   # Cl is a vector with the names of the more important classes. Defaults to "smaller" which
   #       automatically decides which are the relevant classes. In this case, all the classes
   #       that have frequency below #examples/#classes are considered important.
-  # start is a string which determines which strategy (CNN or Tomek links) should be performed 
-  #       first. If set to "CNN" (the default) this strategy will be performed first and  
-  #       Tomek links are applied after. If set to "Tomek" the reverse order is applied.
+#   start is a string which determines which strategy (CNN or Tomek links) should be performed 
+#         first. If set to "CNN" (the default) this strategy will be performed first and  
+#         Tomek links are applied after. If set to "Tomek" the reverse order is applied.
 
 {
   if(start=="CNN"){
