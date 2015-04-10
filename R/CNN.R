@@ -28,7 +28,7 @@ CNNClassif <- function(form, data, dist="Euclidean", p=2, use.at= "all", Cl="sma
   
   # INPUTS:
   # form a model formula
-  # data the original training set (with the unbalanced distribution)
+  # data the original training set (with the imbalanced distribution)
   # dist represents the distance function to be used for the kNN computation
   # p a parameter used when the dist is set to "p-norm" which represents the used p.
   # use.at which attributes should be used for determining the neighbours. Defaults to "all",
@@ -45,7 +45,7 @@ CNNClassif <- function(form, data, dist="Euclidean", p=2, use.at= "all", Cl="sma
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
   
-  #classes <- levels(data[,tgt])
+  classes <- levels(data[,tgt])
   nrCl <- length(classes)
   
   if(Cl[[1]]=="smaller"){ # define which is(are) the important class(es)
