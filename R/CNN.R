@@ -8,13 +8,16 @@
 #   myCNN <- CNNClassif(season~., clean.algae, Cl=c("summer", "spring", "winter"))
 #   CNN1 <- CNNClassif(season~., clean.algae, Cl="smaller")
 #   CNN2<- CNNClassif(season~., clean.algae, Cl="summer")
-#   summary(myCNN$season)
-#   summary(CNN1$season)
-#   summary(CNN2$season)
+#   summary(myCNN[[1]]$season)
+#   summary(CNN1[[1]]$season)
+#   summary(CNN2[[1]]$season)
 #   ir<- iris[-c(95:130),]
 #   myCNN.iris <- CNNClassif(Species~., ir, Cl=c("setosa", "virginica"))
 #   CNN.iris1 <- CNNClassif(Species~., ir, Cl="smaller")
 #   CNN.iris2 <- CNNClassif(Species~., ir, Cl="versicolor")
+#   summary(myCNN.iris[[1]]$Species)
+#   summary(CNN.iris1[[1]]$Species)
+#   summary(CNN.iris2[[1]]$Species)
 # 
 # 
 #   library(MASS)

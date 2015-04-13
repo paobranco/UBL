@@ -52,9 +52,9 @@ Hart, P. E. (1968). \emph{The condensed nearest neighbor rule} IEEE Transactions
   myCNN <- CNNClassif(season~., clean.algae, Cl=c("summer", "spring", "winter"))
   CNN1 <- CNNClassif(season~., clean.algae, Cl="smaller")
   CNN2<- CNNClassif(season~., clean.algae, Cl="summer")
-  summary(myCNN$season)
-  summary(CNN1$season)
-  summary(CNN2$season)
+  summary(myCNN[[1]]$season)
+  summary(CNN1[[1]]$season)
+  summary(CNN2[[1]]$season)
   
   
   ir<- iris[-c(95:130),]
