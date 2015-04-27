@@ -23,7 +23,7 @@
 #   alg.HVDM <- EnnClassif(season~., clean.algae, k=1, dist="HVDM")
 #   alg.3norm <- EnnClassif(season~., clean.algae, k=3, dist="p-norm", p=2, use.at="numeric")
 #   alg.Eucl <- EnnClassif(season~., clean.algae, k=5, use.at="numeric", Cl=c("winter", "summer"))
-#   summary(clean.algae[[1]]$season)
+#   summary(clean.algae$season)
 #   summary(alg.HVDMWinter[[1]]$season)
 #   summary(alg.HVDM[[1]]$season)
 #   summary(alg.Eucl[[1]]$season)
