@@ -28,10 +28,9 @@ A named list containing each class name and the corresponding under-sampling per
   \item{repl}{
   A boolean value controling the possibility of having repetition of examples in the undersampled data set. Defaults to FALSE.
   }
-  
-  
 }
 \details{
+This function performs a random undersampling strategy for dealing with imbalanced multiclass problems. The examples removed are randomly selected among the examples belonging to each class containing the normal cases. The user can chose one or more classes to be undersampled. 
 
 }
 \value{

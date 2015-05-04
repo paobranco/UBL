@@ -10,7 +10,7 @@ method. Namely, it can generate a new "SMOTEd" data set that addresses
 the class unbalance problem. 
 }
 \usage{
-smoteClassif(form, data, perc.over = 2, k = 5, perc.under = 2)
+smoteClassif(form, data, C.perc, k=5, repl=FALSE, dist="Euclidean", p=2)
 }
 
 \arguments{
@@ -20,19 +20,27 @@ smoteClassif(form, data, perc.over = 2, k = 5, perc.under = 2)
   \item{data}{
     A data frame containing the original (unbalanced) data set
   }
-  \item{perc.over}{
-    A number that drives the decision of how many extra cases from the
-    minority class are generated (known as over-sampling).
+  \item{C.perc}{
+      A named list containing the percentage(s) of under- or/and 
+        over-sampling to apply to each class.
+        The oversampling percentage means that the examples above the threshold
+        are increased by this percentage. The undersampling percentage means 
+        that the normal cases are undersampled by this percentage. Alternatively it may be "balance" (the default) or "extreme", cases where the sampling percentages are automatically estimated either to balance the examples between the minority and majority classes or to invert the distribution of examples across the existing classes transforming the majority classes into minority and vice-versa.
   }
   \item{k}{
     A number indicating the number of nearest neighbours that are used to
-    generate the new examples of the minority class.
+    generate the new examples of the minority class(es).
   }
-  \item{perc.under}{
-    A number that drives the decision of how many extra cases from the
-    majority classes are selected for each case generated from the
-    minority class (known as under-sampling)
+  \item{repl}{
+    A boolean value controling the possibility of having repetition of examples when performing undersampling by selecting among the majority class(es) examples.
   }
+  \item{dist}{
+    A character string indicating which distance metric to use when determining the k nearest neighbours.
+  }
+    \item{p}{
+    A number indicating the value of p if the "p-norm" distance is choosen.
+  }
+
 }
 \details{
   Unbalanced classification problems cause problems to many learning
@@ -45,32 +53,9 @@ smoteClassif(form, data, perc.over = 2, k = 5, perc.under = 2)
   these cases. Furthermore, the majority class examples are also
   under-sampled, leading to a more balanced dataset. 
 
-The parameters \code{perc.over} and \code{perc.under} control the amount
-of over-sampling of the minority class and under-sampling of the
-majority classes, respectively. \code{perc.over} will tipically be a
-number above 1. With this type of values, for each case in the orginal
-data set belonging to the minority class, \code{perc.over} new
-examples of that class will be created. If \code{perc.over} is a value
-below 1 than a single case will be generated for a randomly selected
-proportion (given by \code{perc.over}) of the cases belonging to the
-minority class on the original data set. The parameter \code{perc.under}
-controls the proportion of cases of the majority class that will be
-randomly selected for the final "balanced" data set. This proportion is
-calculated with respect to the number of newly generated minority class
-cases. For instance, if 200 new examples were generated for the minority
-class, a value of \code{perc.under} of 1 will randomly select exactly 200 cases
-belonging to the majority classes from the original data set to belong
-to the final data set. Values above 1 will select more examples from
-the majority classes. 
-
-The parameter \code{k} controls the way the new examples are
-created. For each currently existing minority class example X new
-examples will be created (this is controlled by the parameter
-\code{perc.over} as mentioned above). These examples will be generated
-by using the information from the \code{k} nearest neighbours of each
-example of the minority class. The parameter \code{k} controls how many
-of these neighbours are used.
-
+The parameter \code{C.perc} controls the amount
+of over-sampling and under-sampling applied and can be automatically estimated either to balance or invert the distribution of examples across the different classes. 
+The parameter \code{k} controls the number of neighbours used to generate new synthetic examples.
 }
 \value{
   The function returns a data frame with
@@ -81,10 +66,14 @@ of these neighbours are used.
   Chawla, N. V., Bowyer, K. W., Hall, L. O., and Kegelmeyer, W. P. (2002).
 \emph{Smote: Synthetic minority over-sampling technique}. Journal of Artificial
 Intelligence Research, 16:321-357.
-
 }
 \author{ Paula Branco \email{paobranco@gmail.com}, Rita Ribeiro
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
+  
+  \seealso{
+\code{\link{randUnderClassif}, \link{randOverClassif}}
+}
+
 \examples{
 ## A small example with a data set created artificially from the IRIS
 ## data 
@@ -95,7 +84,7 @@ data$Species <- factor(ifelse(data$Species == "setosa","rare","common"))
 table(data$Species)
 
 ## now using SMOTE to create a more "balanced problem"
-newData <- smoteClassif(Species ~ ., data, perc.over = 6,perc.under=1)
+newData <- smoteClassif(Species ~ ., data, C.perc = list(common=1,rare=6))
 table(newData$Species)
 
 ## Checking visually the created data
@@ -106,6 +95,29 @@ plot(data[, 1], data[, 2], pch = 19 + as.integer(data[, 3]),
 plot(newData[, 1], newData[, 2], pch = 19 + as.integer(newData[,3]),
      main = "SMOTE'd Data")
 }
+
+# automaticaly balancing the data maintaining the total number of examples
+datBal <- smoteClassif(Species ~ ., data, C.perc = "balance")
+table(datBal$Species)
+
+# automaticaly inverting the original distribution of examples 
+datExt <- smoteClassif(Species ~ ., data, C.perc = "extreme")
+table(datExt$Species)
+
+
+ library(DMwR)
+ data(algae)
+ clean.algae <- algae[complete.cases(algae),]
+ C.perc=list(autumn=2, summer=1.5, winter=0.9) # class spring remains unchanged
+ mysmote.algae <- smoteClassif(season~., clean.algae, C.perc)
+ smoteBalan.algae <- smoteClassif(season~., clean.algae, "balance")
+ smoteExtre.algae <- smoteClassif(season~., clean.algae, "extreme")
+
+  library(MASS)
+  data(cats)
+  mysmote.cats <- smoteClassif(Sex~., cats, list(M=0.8, F=1.8))
+  smoteBalan.cats <- smoteClassif(Sex~., cats,"balance")
+  smoteExtre.cats <- smoteClassif(Sex~., cats, "extreme")
 
 }
 
