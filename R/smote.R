@@ -1,4 +1,3 @@
-
 ## ===================================================
 ## Creating a SMOTE training sample for classification problems
 # 
@@ -11,6 +10,23 @@
 #   smoteBalan.algae <- smoteClassif(season~., clean.algae, "balance")
 #   smoteExtre.algae <- smoteClassif(season~., clean.algae, "extreme")
 # 
+# data(iris)
+# data <- iris[, c(1, 2, 5)]
+# data$Species <- factor(ifelse(data$Species == "setosa","rare","common")) 
+# ## checking the class distribution of this artificial data set
+# table(data$Species)
+# 
+# ## now using SMOTE to create a more "balanced problem"
+# newData <- smoteClassif(Species ~ ., data, C.perc = list(common=1,rare=6))
+# table(newData$Species)
+# 
+# ## Checking visually the created data
+#   par(mfrow = c(1, 2))
+#   plot(data[, 1], data[, 2], pch = 19 + as.integer(data[, 3]),
+#        main = "Original Data")
+#   plot(newData[, 1], newData[, 2], pch = 19 + as.integer(newData[,3]),
+#        main = "SMOTE'd Data")
+# ## Another example with iris data 
 #   ir<- iris[-c(95:130),]
 #   mysmote.iris <- smoteClassif(Species~., ir, list(setosa=0.6, virginica=1.5))
 #   smoteBalan.iris <- smoteClassif(Species~., ir, "balance")
@@ -24,9 +40,9 @@
 #   smoteExtre.cats <- smoteClassif(Sex~., cats, "extreme")
 #
 ## L. Torgo, Feb 2010, Nov 2014
-## P.Branco, Mar 2015
+## P.Branco, Mar,Apr 2015
 ## ---------------------------------------------------
-smoteClassif <- function(form, data, C.perc, k=5, repl=FALSE)
+smoteClassif <- function(form, data, C.perc, k=5, repl=FALSE, dist="Euclidean", p=2)
   
   # INPUTS:
   # form a model formula
@@ -39,6 +55,8 @@ smoteClassif <- function(form, data, C.perc, k=5, repl=FALSE)
   # k is the number of neighbours to consider as the pool from where
   #       the new examples are generated
   # repl is it allowed to perform sampling with replacement (when under-sampling)
+  # dist is the distance measure to be used (defaults to "Euclidean")
+  # p is a parameter used when a p-norm is computed
 
 {
   if(any(is.na(data))){
@@ -79,7 +97,9 @@ smoteClassif <- function(form, data, C.perc, k=5, repl=FALSE)
         newExs <- smote.exsClassif(data[which(data[,ncol(data)] == names.ove[i]),],
                                    ncol(data),
                                    C.perc[[names.ove[i]]],
-                                   k)
+                                   k,
+                                   dist,
+                                   p)
         # add original rare examples and synthetic generated examples
         newdata <- rbind(newdata, newExs, data[which(data[,ncol(data)] == names.ove[i]),])
       }
@@ -125,7 +145,9 @@ smoteClassif <- function(form, data, C.perc, k=5, repl=FALSE)
         newExs <- smote.exsClassif(data[which(data[,ncol(data)] == li[[1]][ove[i]]),],
                                    ncol(data),
                                    li[[3]][ove[i]]/li[[2]][ove[i]]+1,
-                                   k)
+                                   k,
+                                   dist,
+                                   p)
         # add original rare examples and synthetic generated examples
         newdata <- rbind(newdata, newExs, data[which(data[,ncol(data)] == li[[1]][ove[i]]),])
       } 
@@ -143,16 +165,18 @@ smoteClassif <- function(form, data, C.perc, k=5, repl=FALSE)
 # ===================================================
 # Obtain a set of smoted examples for a set of rare cases.
 # L. Torgo, Feb 2010
-# P.Branco, Mar 2015
+# P.Branco, Mar,Apr 2015
 # ---------------------------------------------------
-smote.exsClassif <- function(data,tgt,N,k)
+smote.exsClassif <- function(data,tgt,N,k,dist,p)
   # INPUTS:
   # data are the rare cases (the minority class cases)
   # tgt is the name of the target variable
   # N is the percentage of over-sampling to carry out;
   # and k is the number of nearest neighours to use for the generation
+  # dist is the distance function to use for the neighbours computation
+  # p is an integer used when a "p-norm" distance is selected
   # OUTPUTS:
-  # The result of the function is a N*nrow(data) set of generated
+  # The result of the function is a (N-1)*nrow(data) set of generated
   # examples with rare class on the target
 {
   nomatr <- c()
@@ -170,35 +194,41 @@ smote.exsClassif <- function(data,tgt,N,k)
   #  N <- 1
   #}
   
-  p <- dim(T)[2]
-  nT <- dim(T)[1]
+#   p <- dim(T)[2]
+#   nT <- dim(T)[1]
   
-  ranges <- apply(T,2,max)-apply(T,2,min)
+
+  nC <- dim(T)[2]
+  nT <- dim(T)[1]
+
+#   ranges <- apply(T,2,max)-apply(T,2,min)
+  
+  kNNs <-neighbours(tgt, data, dist, p, k, use.at="numeric")
   
   nexs <-  as.integer(N-1) # nr of examples to generate for each rare case
   extra <- as.integer(nT*(N-1-nexs)) # the extra examples to generate
   idx <- sample(1:nT, extra)
-  new <- matrix(nrow=nexs*nT+extra,ncol=p)    # the new cases
+  new <- matrix(nrow=nexs*nT+extra,ncol=nC)    # the new cases
   if(nexs){
     for(i in 1:nT) {
     
       # the k NNs of case T[i,]
-      xd <- scale(T,T[i,],ranges)
-      for(a in nomatr) xd[,a] <- !xd[,a]==0
-      dd <- drop(xd^2 %*% rep(1, ncol(xd)))
-      kNNs <- order(dd)[2:(k+1)]
+#       xd <- scale(T,T[i,],ranges)
+#       for(a in nomatr) xd[,a] <- !xd[,a]==0
+#       dd <- drop(xd^2 %*% rep(1, ncol(xd)))
+#       kNNs <- order(dd)[2:(k+1)]
           
       for(n in 1:nexs) {
         # select randomly one of the k NNs
         neig <- sample(1:k,1)
       
-        ex <- vector(length=ncol(T))
+       # ex <- vector(length=ncol(T))
       
         # the attribute values of the generated case
-        difs <- T[kNNs[neig],]-T[i,]
+        difs <- T[kNNs[i,neig],]-T[i,]
         new[(i-1)*nexs+n,] <- T[i,]+runif(1)*difs
-        for(a in nomatr)
-          new[(i-1)*nexs+n,a] <- c(T[kNNs[neig],a],T[i,a])[1+round(runif(1),0)]
+        for(a in nomatr) # nominal attributes are randomly selected among the existing values of seed and the selected neighbour 
+          new[(i-1)*nexs+n,a] <- c(T[kNNs[i,neig],a],T[i,a])[1+round(runif(1),0)]
       
       }
     }
@@ -208,21 +238,21 @@ smote.exsClassif <- function(data,tgt,N,k)
     for (i in idx){
       
       # the k NNs of case T[i,]
-      xd <- scale(T,T[i,],ranges)
-      for(a in nomatr) xd[,a] <- xd[,a]==0
-      dd <- drop(xd^2 %*% rep(1, ncol(xd)))
-      kNNs <- order(dd)[2:(k+1)]
+#       xd <- scale(T,T[i,],ranges)
+#       for(a in nomatr) xd[,a] <- xd[,a]==0
+#       dd <- drop(xd^2 %*% rep(1, ncol(xd)))
+#       kNNs <- order(dd)[2:(k+1)]
       
       # select randomly one of the k NNs
       neig <- sample(1:k,1)
       
-      ex <- vector(length=ncol(T))
+      #ex <- vector(length=ncol(T))
       
       # the attribute values of the generated case
-      difs <- T[kNNs[neig],]-T[i,]
+      difs <- T[kNNs[i,neig],]-T[i,]
       new[nexs*nT+count,] <- T[i,]+runif(1)*difs
       for(a in nomatr)
-        new[nexs*nT+count,a] <- c(T[kNNs[neig],a],T[i,a])[1+round(runif(1),0)]
+        new[nexs*nT+count,a] <- c(T[kNNs[i,neig],a],T[i,a])[1+round(runif(1),0)]
       
       count <- count+1
     }
