@@ -9,8 +9,6 @@ Authors@R: c(person("Paula", "Branco", email = "paobranco@gmail.com", role = c("
 URL: https://github.com/ltorgo/UBL
 BugReports: https://github.com/ltorgo/UBL/issues
 License: GPL (>=2)
-Imports: Rcpp (>= 0.11.5)
-LinkingTo: Rcpp
 LazyLoad: yes
 LazyData: yes
 
