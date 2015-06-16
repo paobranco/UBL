@@ -1,19 +1,15 @@
 # ===================================================
-# This function prepares the data to pass to fortran call 
+# This function prepares the data and calls fortran subroutine
 # P. Branco, April 2015
 # ---------------------------------------------------
 
-neighbours <- function(tgt, data, dist, p=2, k, use.at="all")
+neighbours <- function(tgt, data, dist, p=2, k)
 #  INPUTS:
 #   tgt is the column where the target variable is
 #   data is the original data set
 #   dist is the distance measure to be used
 #   p is a parameter used when a p-norm is computed
 #   k is the number of neighbours to consider
-#   use.at if set to "all" (default) means that all the attribute types 
-#          are to be used. It can be set to "nominal" or "numeric" meaning
-#          that only the selected type of attributes wil be used.
-#          If dist is HVDM use.at should be always "all".
 #   OUTPUTS:
 #   a matrix with the indexes of the k nearest neighbours for each example
 {
@@ -22,46 +18,66 @@ neighbours <- function(tgt, data, dist, p=2, k, use.at="all")
   # Manhattan : p=1
   # Euclidean : p=2
   # Chebyshev : p=0
-  # HVDM : p=-1
+  # Canberra : p=-1
+  # HEOM : p=-2
+  # HVDM : p=-3
+  # DVDM : p=-4
+  # IVDM : p=-5
+  # WVDM : p=-6
+  # MVDM : p=-7
   
   
   
   if(p<1) stop("The parameter p must be >=1!")
-  # check this! It is not exactly the intended behaviour
-  p<- switch(dist, "Chebyshev"=0, "Manhattan"=1, "Euclidean"=2, "HVDM"=-1, "p-norm"=p, stop("Distance measure not available!"))
+  # p >=-1 only numeric attributes handled
+  # p =-2 only nominal attributes handled
+  # p<= -3 nominal and numeric attributes handled
+  p<- switch(dist,
+            "Chebyshev"=0,
+            "Manhattan"=1,
+            "Euclidean"=2,
+            "Canberra"=-1,
+            "Overlap"=-2,
+            "HEOM"=-3,
+            "HVDM"=-4,
+            "DVDM"=-5,
+            "IVDM"=-6,
+            "WVDM"=-7,
+            "MVDM"=-8,
+            "p-norm"=p,
+            stop("Distance measure not available!"))
+   
   
-  # check use.at and change to integer code:
-  # "numeric": 0
-  # "nominal": 1
-  # "all": 2
+#   # construct a flag for the type of problem: 0 classification 1 regression
+#   ifelse (class(data[,tgt])=="numeric", flag <- 1, flag <- 0)
   
-  if(use.at=="numeric")codeAt <- 0
-  else if(use.at=="nominal") codeAt <- 1
-  else codeAt <- 2
-  
-  # construct a flag for the type of problem: 0 classification 1 regression (0 false 1 true)
-  ifelse (class(data[,tgt])=="numeric", flag <- 1, flag <- 0)
-  
-  # tgt is included in the nominal atributes if it is a classification problem
-  # or in the numeric atributes if it is a regression problem (always in the last column)
-  nomatr <- c() 
+  if (class(data[,tgt])=="numeric" & p <=-4) stop("distance measure selected only available for classification tasks")
+
+nomatr <- c() 
   for(col in seq.int(dim(data)[2])){
     if(class(data[,col]) %in% c('factor','character')){
       nomatr <- c(nomatr, col)
     }
   }
   
-  numatr <- setdiff(seq.int(dim(data)[2]), nomatr)
+  nomatr <- setdiff(nomatr, tgt)
+  numatr <- setdiff(seq.int(dim(data)[2]), c(nomatr,tgt))
   
-  nomData <- t(sapply(subset(data, select=setdiff(nomatr, tgt)), as.integer))
-  numData <- t(subset(data, select=setdiff(numatr, tgt)))
-  #ifelse(flag, numData <- cbind(num.data, data[,tgt]), nomData <- cbind(nomData, data[,tgt]))
+  nomData <- t(sapply(subset(data, select=nomatr), as.integer))
+  numData <- t(subset(data, select=numatr))
   
-  #nomData <- t(sapply(nomData, as.integer))
-  #numData <- t(numData)
+  # check if the measure can be applied to the data set features
+  
+  if(length(numatr) & p==-2){
+    stop("Can not compute Overlap metric with numeric attributes!")
+  }
+  if(length(nomatr) & p >=-1){
+    stop("Can not compute ", dist ," distance with nominal attributes!")
+  }
+
   tgtData <- data[,tgt]
   n <- length(tgtData)
-  res <- matrix(0,nrow=k, ncol=n)
+  res <- matrix(0.0,nrow=k, ncol=n)
   if(class(tgtData)!="numeric"){tgtData <- as.integer(tgtData)}
   
   Cl <- length(unique(tgtData))
@@ -70,8 +86,8 @@ neighbours <- function(tgt, data, dist, p=2, k, use.at="all")
 
   
   
-  dist <- matrix(0,nrow=n, ncol=n)
-  numD <- matrix(0,nrow=nnum, ncol=n)
+  distm <- matrix(0.0,nrow=n, ncol=n)
+  numD <- matrix(0.0,nrow=nnum, ncol=n)
   
   
                  
@@ -79,12 +95,10 @@ neighbours <- function(tgt, data, dist, p=2, k, use.at="all")
   storage.mode(nomData) <- "integer"
   storage.mode(res) <- "integer"
   storage.mode(tgtData) <- "double"
-  storage.mode(dist) <- "double"
+  storage.mode(distm) <- "double"
   storage.mode(numD) <- "double"
   
   neig <- .Fortran("neighbours", 
-                   flag=as.integer(flag), # flag for classification/regression task
-                   codeAt=as.integer(codeAt),
                    tgtData=tgtData,  # tgt data
                    numData=numData, #numeric data
                    nomData=nomData, #nominal data
@@ -94,11 +108,10 @@ neighbours <- function(tgt, data, dist, p=2, k, use.at="all")
                    nnum=as.integer(nnum), # nr of numeric attributes
                    nnom=as.integer(nnom), # nr of nominal attributes
                    Cl=as.integer(Cl), # number of different classes in the target variable
-                   dist=dist,
+                   distm=distm,
                    numD=numD,
                    res=res) # output
   neig <- t(neig$res)
-#  rownames(neig) <- rownames(data)
-#  neig <- cbind(seq(1:nrow(neig)),neig)
+
   neig
 }

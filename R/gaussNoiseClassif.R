@@ -16,7 +16,7 @@ gaussNoiseClassif <- function(form, data, C.perc="balance", pert=0.1, repl=FALSE
   # form a model formula
   # data the original training set (with the unbalanced distribution)
   # C.perc  named list containing each class percentage of under- or 
-  #       over-sampling to apply between 0 and 1. The user may provide
+  #       over-sampling to apply. The user may provide
   #       only a subset of the existing classes where sampling is to
   #       be applied. Alternatively it may be "balance" or "extreme",
   #       cases where the sampling percentages are automatically estimated.
@@ -33,7 +33,6 @@ gaussNoiseClassif <- function(form, data, C.perc="balance", pert=0.1, repl=FALSE
   tgt <- which(names(data) == as.character(form[[2]]))
   names <- sort(unique(data[,tgt]))
   li <-class.freq(data, tgt)
-  
   if (tgt < ncol(data)) {
     orig.order <- colnames(data)
     cols <- 1:ncol(data)
@@ -151,8 +150,7 @@ gn.exsClassif <- function(data, tgt, N, pert)
   newdata <- matrix(nrow=nexs*nL+extra,ncol=nC)
 
   if(nexs){
-  for(i in 1:nL) {
-        
+  for(i in 1:nL) {  
     for(n in 1:nexs) {
       idx <- (i-1)*nexs+n 
 

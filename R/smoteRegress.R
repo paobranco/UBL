@@ -11,10 +11,10 @@
 #   smoteExt.alg <- smoteRegress(a7~., clean.algae, C.perc="extreme")
 # 
 #   ir<- iris[-c(95:130),]
-#   mysmote.iris <- smoteRegress(Sepal.Width~., ir, C.perc=list(0.5,2.5))
-#   mysmote.iris <- smoteRegress(Sepal.Width~., ir, C.perc=list(0.2,4), thr.rel=0.8)
-#   smoteBalan.iris <- smoteRegress(Sepal.Width~., ir, C.perc="balance")
-#   smoteExtre.iris <- smoteRegress(Sepal.Width~., ir, C.perc="extreme")
+#   mysmote.iris <- smoteRegress(Sepal.Width~., ir, dist="HEOM", C.perc=list(0.5,2.5))
+#   mysmote.iris <- smoteRegress(Sepal.Width~., ir, dist="HEOM", C.perc=list(0.2,4), thr.rel=0.8)
+#   smoteBalan.iris <- smoteRegress(Sepal.Width~., ir, dist="HEOM", C.perc="balance")
+#   smoteExtre.iris <- smoteRegress(Sepal.Width~., ir, dist="HEOM", C.perc="extreme")
 # 
 #   rel <- matrix(0,ncol=3,nrow=0)
 #   rel <- rbind(rel,c(2,1,0))
@@ -36,22 +36,22 @@ smoteRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balance",
   #       package or provided by the user through a matrix. See examples.
   # thr.rel is the relevance threshold above which a case is considered
   #       as belonging to the rare "class"
-#   C.perc is a list containing the percentage of under- or/and 
-#         over-sampling to apply to each "class" obtained with the threshold.
-#         The over-sampling percentage means that the examples above the threshold
-#         are increased by this percentage. The undersampling percentage means 
-#         that the normal cases (cases below the threshold) are undersampled by 
-#         this percentage. Alternatively it may be "balance" or "extreme",
-#         cases where the sampling percentages are automatically estimated.
-#   k is the number of neighbours to consider as the pool from where
-#               the new generated examples are generated
+  # C.perc is a list containing the percentage of under- or/and 
+  #         over-sampling to apply to each "class" obtained with the threshold.
+  #         The over-sampling percentage means that the examples above the threshold
+  #         are increased by this percentage. The undersampling percentage means 
+  #         that the normal cases (cases below the threshold) are undersampled by 
+  #         this percentage. Alternatively it may be "balance" or "extreme",
+  #         cases where the sampling percentages are automatically estimated.
+  # k is the number of neighbours to consider as the pool from where
+  #               the new generated examples are generated
   # repl is it allowed to perform sampling with replacement
   # dist is the distance measure to be used (defaults to "Euclidean")
   # p is a parameter used when a p-norm is computed
 {
  
-  require(uba, quietly=TRUE)
-  require(DMwR, quietly=TRUE)
+#  require(uba, quietly=TRUE)
+  suppressWarnings(suppressPackageStartupMessages(library('uba')))
   
   if(any(is.na(data))){
     stop("The data set provided contains NA values!")
@@ -81,7 +81,8 @@ smoteRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balance",
     stop("future work!")
   }
   temp <- y.relev <- phi(s.y,pc)
-  
+  if(!length(which(temp<1)))stop("All the points have relevance 1. Please, redefine your relevance function!")
+  if(!length(which(temp>0)))stop("All the points have relevance 0. Please, redefine your relevance function!")
   temp[which(y.relev>thr.rel)] <- -temp[which(y.relev>thr.rel)]
   bumps <- c()
   for(i in 1:(length(y)-1)){if(temp[i]*temp[i+1]<0) bumps <- c(bumps,i)}
@@ -180,30 +181,15 @@ smote.exsRegress <- function(data, tgt, N, k, dist, p)
   nC <- dim(T)[2]
   nT <- dim(T)[1]
   
-#   nomattrs <- c()
-#   lvls <- list()
-#   for(x in (1:p)[-tgt])
-#     if (!is.numeric(T[1,x])) {
-#       nomattrs <- c(nomattrs,x)
-#       lvls[[as.character(x)]] <- list(l=levels(T[,x]),n=nlevels(T[,x]))
-#     }
+
   ranges <- rep(1,nC)
-  for(x in (1:nC)[-c(nomatr)]) ranges[x] <- max(T[,x]) - min(T[,x])
-#   
-#   if (N < 1) { # only a percentage of the T cases will be SMOTEd
-#     nT <- NROW(T)
-#     idx <- sample(1:nT,as.integer(N*nT))
-#     T <- T[idx,]
-#     N <- 1
-#   }
-  
-#   for(x in nomattrs) T[,x] <- as.integer(T[,x])
-#   T <- as.matrix(T)
+  if(length(nomatr)){
+    for(x in (1:nC)[-c(nomatr)]) ranges[x] <- max(T[,x]) - min(T[,x])
+  } else{
+    for(x in (1:nC)) ranges[x] <- max(T[,x]) - min(T[,x])
+  }
 
-
-
-  
-  kNNs <-neighbours(tgt, data, dist, p, k, use.at="numeric")
+  kNNs <-neighbours(tgt, data, dist, p, k)
     
   nexs <-  as.integer(N-1) # nr of examples to generate for each rare case
   extra <- as.integer(nT*(N-1-nexs)) # the extra examples to generate
@@ -213,11 +199,6 @@ smote.exsRegress <- function(data, tgt, N, k, dist, p)
   if(nexs){
     for(i in 1:nT) {
     
-    # the k NNs of case T[i,]
-#     xd <- scale(T,T[i,],ranges)
-#     for(a in nomattrs) xd[,a] <- xd[,a]!=0
-#     dd <- drop(xd[,-tgt]^2 %*% rep(1, ncol(xd)-1))
-#     kNNs <- order(dd)[2:(k+1)]
         
       for(n in 1:nexs) {
         # select randomly one of the k NNs
@@ -270,7 +251,7 @@ smote.exsRegress <- function(data, tgt, N, k, dist, p)
         d2 <- d2 + sum(T[kNNs[i,neig],nomatr] != new[(i-1)*nexs+n,nomatr])
       }
       # (d2+d1-d1 = d2 and d2+d1-d2 = d1) the more distant the less weight
-      new[(i-1)*nexs+n,tgt] <- if (d1 == d2) (T[i,tgt]+T[kNNs[i,neig],tgt])/2 else (d2*T[i,tgt]+d1*T[kNNs[i,neig],tgt])/(d1+d2)
+      new[nexs*nT+count,tgt] <- if (d1 == d2) (T[i,tgt]+T[kNNs[i,neig],tgt])/2 else (d2*T[i,tgt]+d1*T[kNNs[i,neig],tgt])/(d1+d2)
     
       count <- count+1
     }

@@ -33,9 +33,8 @@ randUnderRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balanc
   # repl is it allowed to perform sampling with replacement
 
 {
-  require(uba, quietly=TRUE)
-  require(DMwR, quietly=TRUE)
-  
+#  require(uba, quietly=TRUE)
+  suppressWarnings(suppressPackageStartupMessages(library('uba')))
   #   if(any(is.na(data))){
   #     stop("The data set provided contains NA values!")
   #   }
@@ -43,7 +42,9 @@ randUnderRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balanc
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
   
-  y <- resp(form,data)
+#  y <- resp(form,data)
+  y <- data[,tgt]
+  attr(y,"names") <- rownames(data)
   s.y <- sort(y)
   if (is.matrix(rel)){ 
     pc <- phi.control(y, method="range", control.pts=rel)
@@ -53,6 +54,8 @@ randUnderRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balanc
     stop("future work!")
   }
   temp <- y.relev <- phi(s.y,pc)
+  if(!length(which(temp<1)))stop("All the points have relevance 1. Please, redefine your relevance function!")
+  if(!length(which(temp>0)))stop("All the points have relevance 0. Please, redefine your relevance function!")
   
   temp[which(y.relev>thr.rel)] <- -temp[which(y.relev>thr.rel)]
   bumps <- c()
@@ -81,7 +84,10 @@ randUnderRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balanc
   und <- which(imp<thr.rel)
   ove <- which(imp>thr.rel)
   
-  newdata <- data[names(obs.ind[[ove]]),] # start with the examples from the minority "classes"
+  newdata <- NULL
+  for(j in 1:length(ove)){
+  newdata <- data[names(obs.ind[[ove[j]]]),] # start with the examples from the minority "classes"
+  }
   
   # set the undersampling percentages
   if(is.list(C.perc)){
@@ -95,11 +101,11 @@ randUnderRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balanc
   }else if(C.perc == "balance"){
     B <- sum(sapply(obs.ind[ove],length))
     obj <- B/length(und)
-    C.perc <- as.list(round(obj/sapply(obs.ind[und],length),1))
+    C.perc <- as.list(round(obj/sapply(obs.ind[und],length),5))
   }else if(C.perc== "extreme"){
     Bove <- sum(sapply(obs.ind[ove],length))/length(ove)
     obj <- Bove^2/sapply(obs.ind[und],length)
-    C.perc <- as.list(round(obj/sapply(obs.ind[und], length),1))
+    C.perc <- as.list(round(obj/sapply(obs.ind[und], length),5))
   }
   
   for(j in 1:length(und)){

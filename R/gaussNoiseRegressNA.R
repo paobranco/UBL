@@ -54,9 +54,9 @@ gaussNoiseRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balan
 {
 #  require(uba, quietly=TRUE)
   suppressWarnings(suppressPackageStartupMessages(library('uba'))) 
-  if(any(is.na(data))){
-    stop("The data set provided contains NA values!")
-  }
+#   if(any(is.na(data))){
+#     stop("The data set provided contains NA values!")
+#   }
   
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
@@ -71,7 +71,9 @@ gaussNoiseRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balan
     stop("Future work!")
   }
   
-  y <- resp(form, data)
+  
+  y <- data[,tgt]
+  attr(y,"names") <- rownames(data)
   s.y <- sort(y)
   if (is.matrix(rel)){ 
     pc <- phi.control(y, method="range", control.pts=rel)
