@@ -5,7 +5,7 @@
 Introduction of Gaussian Noise for the generation of synthetic examples to handle imbalanced regression problems
 }
 \description{
- This strategy performs both oversampling and undersampling. The undersampling is randomly performed on the examples below the relevance threshold defined by the user. Regarding the oversampling method, this is based on the generation of new synthetic examples with the introduction of a small perturbation on existing examples through gaussian noise. A new example from a rare "class"" is obtained by perturbing all the features and the traget variable a percentage of its standard deviation (evaluated on the rare examples). The value of nominal features of the new example is randomly selected according to the frequency of the values existing in the rare cases of the bump in consideration.
+ This strategy performs both oversampling and under-sampling. The under-sampling is randomly performed on the examples below the relevance threshold defined by the user. Regarding the oversampling method, this is based on the generation of new synthetic examples with the introduction of a small perturbation on existing examples through Gaussian noise. A new example from a rare "class"" is obtained by perturbing all the features and the target variable a percentage of its standard deviation (evaluated on the rare examples). The value of nominal features of the new example is randomly selected according to the frequency of the values existing in the rare cases of the bump in consideration.
 }
 \usage{
 gaussNoiseRegress(form, data, rel="auto", thr.rel=0.5, C.perc="balance", pert=0.1, repl=FALSE)
@@ -25,13 +25,13 @@ gaussNoiseRegress(form, data, rel="auto", thr.rel=0.5, C.perc="balance", pert=0.
     A number indicating the relevance threshold above which a case is considered as belonging to the rare "class".
   }
     \item{C.perc}{
-      A list containing the percentage(s) of under- or/and  over-sampling to apply to each "class" obtained with the threshold. The over-sampling percentage means that the examples above the threshold are increased by this percentage. The undersampling percentage means that the normal cases (cases below the threshold) are undersampled by this percentage. Alternatively it may be "balance" (the default) or "extreme", cases where the sampling percentages are automatically estimated.
+      A list containing the percentage(s) of under- or/and  over-sampling to apply to each "class" obtained with the threshold. The over-sampling percentage means that the examples above the threshold are increased by this percentage. The under-sampling percentage means that the normal cases (cases below the threshold) are under-sampled by this percentage. Alternatively it may be "balance" (the default) or "extreme", cases where the sampling percentages are automatically estimated.
   }
   \item{pert}{
     A number indicating the level of perturbation to introduce when generating synthetic examples. Assuming as center the base example, this parameter defines the radius (based on the standard deviation) where the new example is generated.
   }
   \item{repl}{
-    A boolean value controling the possibility of having repetition of examples when performing undersampling by selecting among the "normal" examples.
+    A boolean value controlling the possibility of having repetition of examples when performing under-sampling by selecting among the "normal" examples.
   }
 }
 \details{
@@ -39,7 +39,7 @@ gaussNoiseRegress(form, data, rel="auto", thr.rel=0.5, C.perc="balance", pert=0.
 }
 \value{
   The function returns a data frame with
-  the new data set resulting from the application of random undersampling and oversampling through the generation of synthetic examples using Gaussian noise. 
+  the new data set resulting from the application of random under-sampling and oversampling through the generation of synthetic examples using Gaussian noise. 
 }
 \references{
 Sauchi Stephen Lee. (1999)  \emph{Regularization in skewed binary classification.}

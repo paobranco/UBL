@@ -7,7 +7,7 @@ Random oversampling for imbalanced regression problems
 \description{
 This function performs a random oversampling strategy for imbalanced regression problems. 
 Basically a percentage of cases of the "class(es)"
-(bumps above a relevance threshold defined) selected by the user are randomly oversampled. 
+(bumps above a relevance threshold defined) selected by the user are randomly over-sampled. 
 Alternatively, it can either balance all the existing "classes" 
 (the default) or it can "smoothly invert" the frequency
 of the examples in each class.
@@ -37,7 +37,7 @@ randOverRegress(form, data, rel="auto", thr.rel=0.5, C.perc, repl=TRUE)
         cases where the over-sampling percentages are automatically estimated.
   }
   \item{repl}{
-  A boolean value controling the possibility of having repetition of examples when chosing the examples to repeat in the oversampled data set. 
+  A boolean value controlling the possibility of having repetition of examples when choosing the examples to repeat in the over-sampled data set. 
 Defaults to TRUE because this is a necessary condition if the selected percentage is greater than 2. This parameter is only important when the oversampling percentage is between 1 and 2. In this case, it controls if all the new examples selected from a given "class" can be repeated or not.
   }
 }
