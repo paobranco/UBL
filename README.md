@@ -11,12 +11,12 @@ An R package implementing several approaches to utility-based learning, both for
 **To Install the Latest Development Release (from github) do the following in R:**
 
     library(devtools)  # You need to install this package!
-    install_github("ltorgo/UBL",ref="develop")
+    install_github("ltorgo/UBL",ref="development")
 
 If this previous install_github calls somehow fail (there are reports of problems with different libcurl library version on Linux hosts) you may try in alternative the following in R:
 
     library(devtools)
-    install_git("https://github.com/ltorgo/UBL",branch="develop")
+    install_git("https://github.com/ltorgo/UBL",branch="development")
     install_git("https://github.com/ltorgo/UBL",branch="master")
 
 
