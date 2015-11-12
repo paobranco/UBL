@@ -46,7 +46,10 @@ ImpSampRegress <- function(form, data, rel="auto", thr.rel=NA, C.perc="balance",
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
   
-  y <- resp(form,data)
+#  y <- resp(form,data)
+  y <- data[,tgt]
+  attr(y,"names") <- rownames(data)
+
   if (is.matrix(rel)){ 
     pc <- phi.control(y, method="range", control.pts=rel)
   }else if(rel=="auto"){

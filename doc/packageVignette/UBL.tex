@@ -115,7 +115,7 @@ The \UBL has two releases which can be installed: the stable and the development
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{library}\hlstd{(devtools)}  \hlcom{# You need to install this package!}
-\hlkwd{install_github}\hlstd{(}\hlstr{"ltorgo/UBL"}\hlstd{,}\hlkwc{ref}\hlstd{=}\hlstr{"master"}\hlstd{)} \hlcom{# to install the stable release}
+\hlkwd{install_github}\hlstd{(}\hlstr{"paobranco/UBL"}\hlstd{,}\hlkwc{ref}\hlstd{=}\hlstr{"master"}\hlstd{)} \hlcom{# to install the stable release}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -126,7 +126,7 @@ If you want to install the development release you need to do the following in R
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{library}\hlstd{(devtools)}  \hlcom{# You need to install this package!}
-\hlkwd{install_github}\hlstd{(}\hlstr{"ltorgo/UBL"}\hlstd{,}\hlkwc{ref}\hlstd{=}\hlstr{"develop"}\hlstd{)} \hlcom{# to install the development release}
+\hlkwd{install_github}\hlstd{(}\hlstr{"paobranco/UBL"}\hlstd{,}\hlkwc{ref}\hlstd{=}\hlstr{"develop"}\hlstd{)} \hlcom{# to install the development release}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -138,9 +138,9 @@ If somehow the previous instructions fail (there are reports of problems with di
 \begin{alltt}
 \hlkwd{library}\hlstd{(devtools)}
 \hlcom{# to install the development release}
-\hlkwd{install_git}\hlstd{(}\hlstr{"https://github.com/ltorgo/UBL"}\hlstd{,}\hlkwc{branch}\hlstd{=}\hlstr{"develop"}\hlstd{)}
+\hlkwd{install_git}\hlstd{(}\hlstr{"https://github.com/paobranco/UBL"}\hlstd{,}\hlkwc{branch}\hlstd{=}\hlstr{"develop"}\hlstd{)}
 \hlcom{# to install the stable release}
-\hlkwd{install_git}\hlstd{(}\hlstr{"https://github.com/ltorgo/UBL"}\hlstd{,}\hlkwc{branch}\hlstd{=}\hlstr{"master"}\hlstd{)}
+\hlkwd{install_git}\hlstd{(}\hlstr{"https://github.com/paobranco/UBL"}\hlstd{,}\hlkwc{branch}\hlstd{=}\hlstr{"master"}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -434,6 +434,91 @@ Figure \ref{fig:Iris_RO2} shows the impact of this strategy on the number of exa
 
 \end{knitrout}
 
+\subsection{Importance Sampling}\label{sec:ISClassif}
+
+The main idea of Importance Sampling strategy is to perform random over- or under-sampling in each class according to the user importance assigned. This means that for each class the user can specify its relevance. Then, this relevance is used to change each class frequency by selecting randomly examples from each class. Alternatively, the user may consider that each class is equaly important or may chose to invert the classes frequencies.
+
+This strategy is available in \UBL through the function \texttt{ImpSampClassif}. The user may specify using parameter \texttt{C.perc} the classes where over-/under-sampling must be aaplied, by indicating the corresponding percentages. If all classes are equally important and a perfectly balanced data set should be obtained, the the \texttt{C.perc} parameter must be set to "balance". On the other hand, if the classes frequencies sould be inverted, then this parameter should be "extreme". The following example illustrate the use of this function.
+
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# reuse the same unbalanced data obtained from iris data set}
+\hlkwd{table}\hlstd{(data}\hlopt{$}\hlstd{Species)}
+\end{alltt}
+\begin{verbatim}
+## 
+##     setosa versicolor  virginica 
+##         50         40         25
+\end{verbatim}
+\begin{alltt}
+\hlstd{nds} \hlkwb{<-} \hlkwd{ImpSampClassif}\hlstd{(Species}\hlopt{~}\hlstd{.,data,} \hlkwc{C.perc}\hlstd{=}\hlkwd{list}\hlstd{(}\hlkwc{setosa}\hlstd{=}\hlnum{0.5}\hlstd{,} \hlkwc{virginica}\hlstd{=}\hlnum{6}\hlstd{))}
+\hlcom{# notice that when a certain class is not specified it remains unaltered}
+\hlkwd{table}\hlstd{(nds}\hlopt{$}\hlstd{Species)}
+\end{alltt}
+\begin{verbatim}
+## 
+##     setosa versicolor  virginica 
+##         25         40        150
+\end{verbatim}
+\begin{alltt}
+\hlcom{# to obtain a balanced data set}
+\hlstd{IS.bal} \hlkwb{<-} \hlkwd{ImpSampClassif}\hlstd{(Species}\hlopt{~}\hlstd{., data)} \hlcom{# or use C.perc="balance"}
+\hlkwd{table}\hlstd{(IS.bal}\hlopt{$}\hlstd{Species)}
+\end{alltt}
+\begin{verbatim}
+## 
+##     setosa versicolor  virginica 
+##         38         38         38
+\end{verbatim}
+\begin{alltt}
+\hlcom{# to obtain a data set with inverted frequencies }
+\hlstd{IS.ext} \hlkwb{<-} \hlkwd{ImpSampClassif}\hlstd{(Species}\hlopt{~}\hlstd{., data,} \hlkwc{C.perc}\hlstd{=}\hlstr{"extreme"}\hlstd{)}
+\hlkwd{table}\hlstd{(IS.ext}\hlopt{$}\hlstd{Species)}
+\end{alltt}
+\begin{verbatim}
+## 
+##     setosa versicolor  virginica 
+##         27         34         54
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+
+Figure \ref{fig:ISC} shows the impact on the unbalanced iris data set of the changes made in the domain with Importance Sampling.
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
+
+{\centering \includegraphics[width=\maxwidth]{figures/UBL-ISC-1} 
+
+}
+
+\caption[Impact of Importance Sampling strategy in Iris unbalanced data set]{Impact of Importance Sampling strategy in Iris unbalanced data set.}\label{fig:ISC}
+\end{figure}
+
+
+\end{knitrout}
+
+
+
+Figure \ref{fig:ISC_2} shows the impact of this strategy on the number of examples in the data set.
+
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
+
+{\centering \includegraphics[width=\maxwidth]{figures/UBL-ISC_2-1} 
+
+}
+
+\caption[Impact of Importance Sampling strategy]{Impact of Importance Sampling strategy.}\label{fig:ISC_2}
+\end{figure}
+
+
+\end{knitrout}
+
+We must highlight that random under- and over-sampling also allow to balance and invert the classes frequencies. Importance Sampling strategy, although also allowing this type of impact, acts differently because it combines both under- and over-sampling strategies. This means that a balanced data set can be obtained with random under-sampling or Importance Sampling strategy. However, the resulting data sets will be different. In the first possibility only under-sampling is applied and the final size of the data set is reduced, while on the second possibility both under and over-sampling strategies are applied and the changed data set has roughly the same number of examples than the original data set.
 
 \subsection{Tomek Links}\label{sec:Tomek}
 
@@ -1569,7 +1654,7 @@ In Figure \ref{fig:smoteR_fig2} we can visualize the impact of the several strat
 
 
 
-\subsection{Importance Sampling}\label{sec:IS}
+\subsection{Importance Sampling}\label{sec:ISRegress}
 
 The Importance Sampling method is a new proposal whose main idea is to use the relevance function defined for a regression problem as a probability for resampling the examples combining over with under-sampling. This method simply removes some of the examples and includes in the data set replicas of other existing examples. There is no generation of new synthetic examples. For the over-sampling strategy, replicas of examples are introduced by selecting examples according to the relevance function defined, i.e., the higher the relevance of an example, the higher is the probability of being selected as a new replica to include. The under-sampling strategy selects examples to remove according to the function $1-\phi(y)$, i.e, the higher the relevance value of an example, the lower will be the probability of removing it.
 
@@ -1974,494 +2059,192 @@ In Figure \ref{fig:dist_HVDM2} the impact of smote strategy applied with differe
 
 
 
-
-% ====================================================================
-\section{Experimental Comparison of Methods for Classification Tasks}
-
-In this Section we present some results of the experimental comparison of the implemented methods for classification tasks. 
-The experiences were made with data sets with a binary target class. The main characteristics of the used data sets are described in Table \ref{tab:ClassDataBinary}.
-The used learning algorithms, their parameters variants an the corresponding R packages are described in Table \ref{tab:Sys}.
-
-We tested 8 learning variants (4 random Forest and 4 svm) on 3 data sets with 29 strategies variants (the original data, 2 random undersampling, 2 random oversampling, 2 CNN, 4 Tomek links, 4 OSS, 2 ENN, 2 NCL, 6 Gaussian Noise and 4 smote).
-
-\begin{table}[!tbp]
-\begin{center}
-\resizebox{0.7\textwidth}{!}{
-\begin{tabular}{crrrrr}
-\hline\hline
-Data Set & N & Pnom & Pnum & nRare & \%Rare\tabularnewline
-\hline
-Ionosphere &351 &1&32&126&0.359\tabularnewline
-
-thor &470& 13& 3& 70&0.149\tabularnewline
-
-Pima&768&0&8&268&0.349\tabularnewline
-\hline
-\hline
-\end{tabular}
-}
-\end{center}
-\caption{Classification Data sets and characteristics(N: nr. of examples; Pnom: nr. of nominal predictors; Pnum: nr. of numeric predictors; nRare: nr. of examples in the rare class; \%Rare: nRare/N).}
-\label{tab:ClassDataBinary}
-\end{table}
-
-\begin{table}[!tbp]
-\begin{center}
-\resizebox{\textwidth}{!} {
-\begin{tabular}{lll}
-\hline \hline
-Learner & Parameter Variants & R package \\ 
-\hline 
-SVM & $cost=\{10,150\},gamma=\{0.01,0.001\}$ & \textbf{e1071}~\cite{e1071} \\ 
-Random Forest & $mtry=\{4,6\},ntree=\{500,750\}$ & \textbf{randomForest}~\cite{rf} \\ 
-\hline \hline
-\end{tabular} 
-}
-\end{center}
-\caption{Learning algorithms and parameter variants, and the respective R packages.}\label{tab:Sys}
-\end{table}
-
-
-Regarding the results obtained, we can observe the workflows that achieved the best scores for each metric and data set:
-
-
-
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{verbatim}
-## $Ionosphere
-##                          Workflow Estimate
-## F                     WFGN.svm.v2    0.936
-## rec       WFsmote.randomForest.v2    0.944
-## prec        WFENN.randomForest.v3    0.965
-## macroF                WFGN.svm.v2     0.95
-## microF                WFGN.svm.v2    0.954
-## macroRec              WFGN.svm.v2    0.947
-## macroPrec          WFsmote.svm.v1    0.956
-## 
-## $pima
-##                          Workflow Estimate
-## F                   WFnone.svm.v1    0.833
-## rec         WFENN.randomForest.v4    0.884
-## prec                  WFGN.svm.v4     0.93
-## macroF    WFsmote.randomForest.v1    0.747
-## microF              WFnone.svm.v1     0.77
-## macroRec  WFsmote.randomForest.v1    0.758
-## macroPrec           WFnone.svm.v1    0.752
-## 
-## $thor
-##                        Workflow Estimate
-## F                 WFnone.svm.v1     0.92
-## rec               WFnone.svm.v1        1
-## prec       WFGN.randomForest.v6    0.946
-## macroF    WFOSS.randomForest.v2    0.654
-## microF            WFnone.svm.v1    0.851
-## macroRec   WFGN.randomForest.v3    0.662
-## macroPrec  WFGN.randomForest.v3    0.596
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-We can also observe which were the top performing workflows for each data set considered and each computed metric:
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{verbatim}
-## $Ionosphere
-## $Ionosphere$F
-##       Workflow  Estimate
-## 1  WFGN.svm.v2 0.9356034
-## 2  WFGN.svm.v4 0.9356034
-## 3  WFGN.svm.v8 0.9356034
-## 4 WFGN.svm.v10 0.9356034
-## 5 WFGN.svm.v14 0.9356034
-## 
-## $Ionosphere$rec
-##                   Workflow Estimate
-## 1  WFsmote.randomForest.v2    0.944
-## 2  WFsmote.randomForest.v4    0.944
-## 3  WFsmote.randomForest.v6    0.944
-## 4  WFsmote.randomForest.v8    0.944
-## 5 WFsmote.randomForest.v10    0.944
-## 
-## $Ionosphere$prec
-##                 Workflow  Estimate
-## 1  WFENN.randomForest.v3 0.9652174
-## 2  WFENN.randomForest.v7 0.9652174
-## 3 WFENN.randomForest.v11 0.9652174
-## 4 WFENN.randomForest.v15 0.9652174
-## 5  WFENN.randomForest.v1 0.9636364
-## 
-## $Ionosphere$macroF
-##       Workflow  Estimate
-## 1  WFGN.svm.v2 0.9500671
-## 2  WFGN.svm.v4 0.9500671
-## 3  WFGN.svm.v8 0.9500671
-## 4 WFGN.svm.v10 0.9500671
-## 5 WFGN.svm.v14 0.9500671
-## 
-## $Ionosphere$microF
-##       Workflow  Estimate
-## 1  WFGN.svm.v2 0.9542857
-## 2  WFGN.svm.v4 0.9542857
-## 3  WFGN.svm.v8 0.9542857
-## 4 WFGN.svm.v10 0.9542857
-## 5 WFGN.svm.v14 0.9542857
-## 
-## $Ionosphere$macroRec
-##       Workflow  Estimate
-## 1  WFGN.svm.v2 0.9466667
-## 2  WFGN.svm.v4 0.9466667
-## 3  WFGN.svm.v8 0.9466667
-## 4 WFGN.svm.v10 0.9466667
-## 5 WFGN.svm.v14 0.9466667
-## 
-## $Ionosphere$macroPrec
-##          Workflow  Estimate
-## 1  WFsmote.svm.v1 0.9562097
-## 2  WFsmote.svm.v5 0.9562097
-## 3  WFsmote.svm.v9 0.9562097
-## 4 WFsmote.svm.v13 0.9562097
-## 5     WFGN.svm.v2 0.9551529
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-We can also visualize the results. However, since the results correspond to a very large set of experiences we only visualize some subsets of the experiences. So, we can observe some results for data set Ionosphere in Figure \ref{fig:Ionosphere_plot1}.
-
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
-
-{\centering \includegraphics[width=\maxwidth]{figures/UBL-Ionosphere_plot1-1} 
-
-}
-
-\caption[Results of Ionosphere data for strategies Gaussian Noise and smote on variants of svm learner]{Results of Ionosphere data for strategies Gaussian Noise and smote on variants of svm learner}\label{fig:Ionosphere_plot1}
-\end{figure}
-
-
-\end{knitrout}
-
-Using package \texttt{performanceEstimation}, a summary of Ionosphere data set results for the svm learners can also be obtained for the $F$ measure, as follows:
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{summary}\hlstd{(}\hlkwd{subset}\hlstd{(res,} \hlkwc{tasks}\hlstd{=}\hlstr{'Ionosphere'}\hlstd{,}
-                    \hlkwc{workflows}\hlstd{=}\hlkwd{glob2rx}\hlstd{(}\hlstr{'*svm*'}\hlstd{),}
-                    \hlkwc{metrics}\hlstd{=}\hlkwd{glob2rx}\hlstd{(}\hlstr{'F$'}\hlstd{)))}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-We do not present these results here due to its excessive length.
-
-The results of thor data set for the svm learning variants and the $F$ measure, are displayed in Figure \ref{fig:thor_plot1}. Here it is clear that the existing methods for dealing with imbalanced domains do not always work for all the data sets. However, we must also highlight that this was a very restrict set of experiences, and some of the resampling approaches variants not tested could have a different impact in this data set.
-
-
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
-
-{\centering \includegraphics[width=\maxwidth]{figures/UBL-thor_plot1-1} 
-
-}
-
-\caption[Results of thor data on variants of svm learner]{Results of thor data on variants of svm learner}\label{fig:thor_plot1}
-\end{figure}
-
-
-\end{knitrout}
-
-Regarding the Pima data set, we can observe the workflows ranking:
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{verbatim}
-## $pima
-## $pima$F
-##        Workflow  Estimate
-## 1 WFnone.svm.v1 0.8326535
-## 2 WFnone.svm.v2 0.8326535
-## 3 WFnone.svm.v3 0.8326535
-## 4 WFnone.svm.v4 0.8326535
-## 5  WFCNN.svm.v1 0.8323535
-## 
-## $pima$rec
-##                 Workflow Estimate
-## 1  WFENN.randomForest.v4    0.884
-## 2  WFENN.randomForest.v8    0.884
-## 3 WFENN.randomForest.v12    0.884
-## 4 WFENN.randomForest.v16    0.884
-## 5         WFTomek.svm.v1    0.880
-## 
-## $pima$prec
-##       Workflow  Estimate
-## 1  WFGN.svm.v4 0.9303794
-## 2 WFGN.svm.v10 0.9303794
-## 3 WFGN.svm.v16 0.9303794
-## 4 WFGN.svm.v22 0.9303794
-## 5  WFGN.svm.v2 0.9298970
-## 
-## $pima$macroF
-##                   Workflow  Estimate
-## 1  WFsmote.randomForest.v1 0.7473271
-## 2  WFsmote.randomForest.v5 0.7473271
-## 3  WFsmote.randomForest.v9 0.7473271
-## 4 WFsmote.randomForest.v13 0.7473271
-## 5  WFTomek.randomForest.v4 0.7455822
-## 
-## $pima$microF
-##        Workflow  Estimate
-## 1 WFnone.svm.v1 0.7699346
-## 2 WFnone.svm.v2 0.7699346
-## 3 WFnone.svm.v3 0.7699346
-## 4 WFnone.svm.v4 0.7699346
-## 5  WFCNN.svm.v1 0.7699346
-## 
-## $pima$macroRec
-##                   Workflow  Estimate
-## 1  WFsmote.randomForest.v1 0.7578113
-## 2  WFsmote.randomForest.v5 0.7578113
-## 3  WFsmote.randomForest.v9 0.7578113
-## 4 WFsmote.randomForest.v13 0.7578113
-## 5    WFNCL.randomForest.v3 0.7531509
-## 
-## $pima$macroPrec
-##        Workflow  Estimate
-## 1 WFnone.svm.v1 0.7524622
-## 2 WFnone.svm.v2 0.7524622
-## 3 WFnone.svm.v3 0.7524622
-## 4 WFnone.svm.v4 0.7524622
-## 5  WFCNN.svm.v1 0.7517770
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-Figure \ref{fig:pima_plot1} shows some partial results obtained for Pima data set with the $F$ measure. In this case we observe that the approaches that usually are more successful (random under-sample, smote and Gaussian noise strategies), here tend to present a worst performance.
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
-
-{\centering \includegraphics[width=\maxwidth]{figures/UBL-pima_plot1-1} 
-
-}
-
-\caption[Results of pima data for strategies Random under-sampling, Gaussian Noise and smote on variants of svm learner]{Results of pima data for strategies Random under-sampling, Gaussian Noise and smote on variants of svm learner}\label{fig:pima_plot1}
-\end{figure}
-
-
-\end{knitrout}
-
-However, we can also observe in Figure \ref{fig:pima_plot2} that for this data set, the Tomek links and ENN strategies present an improved median performance when compared to using the original data set.  
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
-
-{\centering \includegraphics[width=\maxwidth]{figures/UBL-pima_plot2-1} 
-
-}
-
-\caption[Results of pima data set for random Forest variants on original data set and data with ENN and Tomek links strategies applied]{Results of pima data set for random Forest variants on original data set and data with ENN and Tomek links strategies applied.}\label{fig:pima_plot2}
-\end{figure}
-
-
-\end{knitrout}
-
-% ====================================================================
-\section{Experimental Comparison of Methods for Regression Tasks}
-
-In this Section we present some results of the experimental comparison of the implemented methods for regression tasks. 
-The experiences were made with the data sets described in Table \ref{tab:RegressData}. The values in this Table were calculated for a relevance function automatically estimated using \texttt{uba} package and a relevance threshold of $0.8$.
-
-\begin{table}[!tbp]
-\begin{center}
-\resizebox{0.9\textwidth}{!}{
-\begin{tabular}{crrrrrrr}
-\hline\hline
-Data Set &tgt& N & Pnom & Pnum & nRare & \%Rare & Nrel bump\tabularnewline
-\hline
-algae &a1&198 &3&8&28&0.141& 1\tabularnewline
-
-acceleration& acceleration& 1732& 3&11&89&0.051& 1\tabularnewline
-
-boston& HousValue& 506& 0&14&65&0.128 & 1\tabularnewline
-\hline
-\hline
-\end{tabular}
-}
-\end{center}
-\caption{Regression Data sets and characteristics evaluated for a relevance function automatically determined with \texttt{uba} package and a relevance threshold of 0.8 (tgt: name of target variable; N: nr. of examples; Pnom: nr. of nominal predictors; Pnum: nr. of numeric predictors; nRare: nr. of examples in the rare class; \%Rare: nRare/N; Nrel bump: nr. of relevant bumps automatically determined).}
-\label{tab:RegressData}
-\end{table}
-
-
-The used learning algorithms, their parameters variants an the corresponding R packages are described in Table \ref{tab:Sys2}. We tested three data sets with 18 learning algorithms variants (12 svm variants and 6 randomForest variants) and 6 types of resampling strategies. The resampling strategies tested were: "none" which represents not changing the original data set; random under-sampling (with 2 variants); random over-sampling (2 variants); Gaussian Noise (6 variants); smoteR (2 variants) and Importance Sampling (4 variants). The experiences were evaluated with the metrics available in package \texttt{uba} specially developed for this type of problems: precision, recall and F measure defined for regression tasks. In these experiences we have named precision, recall and F measure as ubaprec, ubarec and ubaF respectively.
-
-
-\begin{table}[!tbp]
-\begin{center}
-\resizebox{\textwidth}{!} {
-\begin{tabular}{lll}
-\hline \hline
-Learner & Parameter Variants & R package \\ 
-\hline 
-%MARS & $nk=\{10,17\},degree=\{1,2\},thresh=\{0.01,0.001\}$ & \textbf{earth}~\cite{earth} \\ 
-SVM & $cost=\{10,150,300\},gamma=\{0.01,0.001\},epsilon=\{0.1, 0.01\}$ & \textbf{e1071}~\cite{e1071} \\ 
-Random Forest & $mtry=\{5,7\},ntree=\{500,750, 1500\}$ & \textbf{randomForest}~\cite{rf} \\ 
-\hline \hline
-\end{tabular} 
-}
-\end{center}
-\caption{Learning algorithms and parameter variants, and the respective R packages.}\label{tab:Sys2}
-\end{table}
-
-Regarding the results obtained, we can observe the workflows that acheived the best scores for each data set and metric:
-
-
-
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{verbatim}
-## $a1
-##                     Workflow Estimate
-## ubaF    WFRO.randomForest.v2     0.78
-## ubaprec WFGN.randomForest.v3    0.794
-## ubarec  WFRU.randomForest.v2    0.899
-## 
-## $acceleration
-##                     Workflow Estimate
-## ubaF    WFRO.randomForest.v2    0.951
-## ubaprec WFRO.randomForest.v2    0.951
-## ubarec           WFRU.svm.v2    0.963
-## 
-## $boston
-##                     Workflow Estimate
-## ubaF    WFIS.randomForest.v3     0.91
-## ubaprec WFIS.randomForest.v3    0.909
-## ubarec           WFRU.svm.v2    0.926
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-We can also verify which were the best performing workflows for each tested data set and measure evaluated: 
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{verbatim}
-## $a1
-## $a1$ubaF
-##                Workflow  Estimate
-## 1  WFRO.randomForest.v2 0.7795771
-## 2  WFRO.randomForest.v4 0.7795771
-## 3  WFRO.randomForest.v6 0.7795771
-## 4  WFRO.randomForest.v8 0.7795771
-## 5 WFRO.randomForest.v10 0.7795771
-## 
-## $a1$ubaprec
-##                Workflow Estimate
-## 1  WFGN.randomForest.v3 0.794354
-## 2  WFGN.randomForest.v9 0.794354
-## 3 WFGN.randomForest.v15 0.794354
-## 4 WFGN.randomForest.v21 0.794354
-## 5 WFGN.randomForest.v27 0.794354
-## 
-## $a1$ubarec
-##                Workflow  Estimate
-## 1  WFRU.randomForest.v2 0.8991302
-## 2  WFRU.randomForest.v4 0.8991302
-## 3  WFRU.randomForest.v6 0.8991302
-## 4  WFRU.randomForest.v8 0.8991302
-## 5 WFRU.randomForest.v10 0.8991302
-## 
-## 
-## $acceleration
-## $acceleration$ubaF
-##                Workflow Estimate
-## 1  WFRO.randomForest.v2 0.950759
-## 2  WFRO.randomForest.v4 0.950759
-## 3  WFRO.randomForest.v6 0.950759
-## 4  WFRO.randomForest.v8 0.950759
-## 5 WFRO.randomForest.v10 0.950759
-## 
-## $acceleration$ubaprec
-##                Workflow  Estimate
-## 1  WFRO.randomForest.v2 0.9513955
-## 2  WFRO.randomForest.v4 0.9513955
-## 3  WFRO.randomForest.v6 0.9513955
-## 4  WFRO.randomForest.v8 0.9513955
-## 5 WFRO.randomForest.v10 0.9513955
-## 
-## $acceleration$ubarec
-##       Workflow  Estimate
-## 1  WFRU.svm.v2 0.9625539
-## 2  WFRU.svm.v4 0.9625539
-## 3  WFRU.svm.v6 0.9625539
-## 4  WFRU.svm.v8 0.9625539
-## 5 WFRU.svm.v10 0.9625539
-## 
-## 
-## $boston
-## $boston$ubaF
-##                Workflow Estimate
-## 1  WFIS.randomForest.v3 0.910362
-## 2  WFIS.randomForest.v4 0.910362
-## 3  WFIS.randomForest.v7 0.910362
-## 4  WFIS.randomForest.v8 0.910362
-## 5 WFIS.randomForest.v11 0.910362
-## 
-## $boston$ubaprec
-##                Workflow  Estimate
-## 1  WFIS.randomForest.v3 0.9085275
-## 2  WFIS.randomForest.v4 0.9085275
-## 3  WFIS.randomForest.v7 0.9085275
-## 4  WFIS.randomForest.v8 0.9085275
-## 5 WFIS.randomForest.v11 0.9085275
-## 
-## $boston$ubarec
-##       Workflow Estimate
-## 1  WFRU.svm.v2 0.926304
-## 2  WFRU.svm.v4 0.926304
-## 3  WFRU.svm.v6 0.926304
-## 4  WFRU.svm.v8 0.926304
-## 5 WFRU.svm.v10 0.926304
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-
-We can observe visually the performance of subsets of the best performing strategies applied for the random Forest learning variants on Figures \ref{fig:algae_plot1}, \ref{fig:acceleration_plot1} and \ref{fig:boston_plot1} regarding the data sets algae, acceleration and boston respectively.
-
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
-
-{\centering \includegraphics[width=\maxwidth]{figures/UBL-algae_plot1-1} 
-
-}
-
-\caption[Results on algae data set for strategies none, random over-sampling and random under-sampling for random forest learning variants]{Results on algae data set for strategies none, random over-sampling and random under-sampling for random forest learning variants}\label{fig:algae_plot1}
-\end{figure}
-
-
-\end{knitrout}
-
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
-
-{\centering \includegraphics[width=\maxwidth]{figures/UBL-acceleration_plot1-1} 
-
-}
-
-\caption[Results on acceleration data set for none and random over-sampling strategies with random forest learning variants]{Results on acceleration data set for none and random over-sampling strategies with random forest learning variants}\label{fig:acceleration_plot1}
-\end{figure}
-
-
-\end{knitrout}
-
-\begin{knitrout}\footnotesize
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}
-
-{\centering \includegraphics[width=\maxwidth]{figures/UBL-boston_plot1-1} 
-
-}
-
-\caption[Results on boston data set for none and Importance Sampling strategy on random forest learning variants]{Results on boston data set for none and Importance Sampling strategy on random forest learning variants}\label{fig:boston_plot1}
-\end{figure}
-
-
-\end{knitrout}
+% 
+% % ====================================================================
+% \section{Experimental Comparison of Methods for Classification Tasks}
+% 
+% In this Section we present some results of the experimental comparison of the implemented methods for classification tasks. 
+% The experiences were made with data sets with a binary target class. The main characteristics of the used data sets are described in Table \ref{tab:ClassDataBinary}.
+% The used learning algorithms, their parameters variants an the corresponding R packages are described in Table \ref{tab:Sys}.
+% 
+% We tested 8 learning variants (4 random Forest and 4 svm) on 3 data sets with 29 strategies variants (the original data, 2 random undersampling, 2 random oversampling, 2 CNN, 4 Tomek links, 4 OSS, 2 ENN, 2 NCL, 6 Gaussian Noise and 4 smote).
+% 
+% \begin{table}[!tbp]
+% \begin{center}
+% \resizebox{0.7\textwidth}{!}{
+% \begin{tabular}{crrrrr}
+% \hline\hline
+% Data Set & N & Pnom & Pnum & nRare & \%Rare\tabularnewline
+% \hline
+% Ionosphere &351 &1&32&126&0.359\tabularnewline
+% 
+% thor &470& 13& 3& 70&0.149\tabularnewline
+% 
+% Pima&768&0&8&268&0.349\tabularnewline
+% \hline
+% \hline
+% \end{tabular}
+% }
+% \end{center}
+% \caption{Classification Data sets and characteristics(N: nr. of examples; Pnom: nr. of nominal predictors; Pnum: nr. of numeric predictors; nRare: nr. of examples in the rare class; \%Rare: nRare/N).}
+% \label{tab:ClassDataBinary}
+% \end{table}
+% 
+% \begin{table}[!tbp]
+% \begin{center}
+% \resizebox{\textwidth}{!} {
+% \begin{tabular}{lll}
+% \hline \hline
+% Learner & Parameter Variants & R package \\ 
+% \hline 
+% SVM & $cost=\{10,150\},gamma=\{0.01,0.001\}$ & \textbf{e1071}~\cite{e1071} \\ 
+% Random Forest & $mtry=\{4,6\},ntree=\{500,750\}$ & \textbf{randomForest}~\cite{rf} \\ 
+% \hline \hline
+% \end{tabular} 
+% }
+% \end{center}
+% \caption{Learning algorithms and parameter variants, and the respective R packages.}\label{tab:Sys}
+% \end{table}
+% 
+% 
+% Regarding the results obtained, we can observe the workflows that achieved the best scores for each metric and data set:
+% <<load_res1,echo=FALSE>>=
+% 
+% load("allResults2Class.Rdata")
+% @
+% 
+% 
+% <<res2class, warning=FALSE, echo=FALSE>>=
+% topPerformers(subset(res, workflows=glob2rx('*svm*|*random*')), maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
+% @
+% 
+% We can also observe which were the top performing workflows for each data set considered and each computed metric:
+% <<ionosphereRank, echo=FALSE>>=
+% rankWorkflows(subset(res, tasks='Ionosphere', workflows=glob2rx('*svm*|*random*')), maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
+% @
+% 
+% We can also visualize the results. However, since the results correspond to a very large set of experiences we only visualize some subsets of the experiences. So, we can observe some results for data set Ionosphere in Figure \ref{fig:Ionosphere_plot1}.
+% 
+% <<Ionosphere_plot1,echo=FALSE, fig.cap="Results of Ionosphere data for strategies Gaussian Noise and smote on variants of svm learner">>=
+% plot(subset(res, tasks='Ionosphere', workflows=glob2rx('*none.svm*|*GN.svm*|*smote.svm*'), metrics=glob2rx('F$')))
+% 
+% #metricsSummary(subset(res, workflows=glob2rx('*svm*'), tasks='Ionosphere'),summary='median')
+% @
+% 
+% Using package \texttt{performanceEstimation}, a summary of Ionosphere data set results for the svm learners can also be obtained for the $F$ measure, as follows:
+% <<summ_Ionosphere_F,  eval=FALSE >>=
+% summary(subset(res, tasks='Ionosphere', 
+%                     workflows=glob2rx('*svm*'),
+%                     metrics=glob2rx('F$')))
+% @
+% We do not present these results here due to its excessive length.
+% 
+% The results of thor data set for the svm learning variants and the $F$ measure, are displayed in Figure \ref{fig:thor_plot1}. Here it is clear that the existing methods for dealing with imbalanced domains do not always work for all the data sets. However, we must also highlight that this was a very restrict set of experiences, and some of the resampling approaches variants not tested could have a different impact in this data set.
+% 
+% 
+% <<thor_plot1, echo=FALSE,fig.cap="Results of thor data on variants of svm learner", warning=FALSE>>=
+% plot(subset(res, tasks='pima', workflows=glob2rx('*svm*'),metrics=glob2rx('F$')))
+% #plot(subset(res, tasks='thor', workflows=glob2rx('*svm*'),metrics='F', partial=FALSE))
+% @
+% 
+% Regarding the Pima data set, we can observe the workflows ranking:
+% <<pimaRankRes, echo=FALSE>>=
+% rankWorkflows(subset(res, tasks='pima', workflows=glob2rx('*svm*|*random*')), maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
+% @
+% 
+% Figure \ref{fig:pima_plot1} shows some partial results obtained for Pima data set with the $F$ measure. In this case we observe that the approaches that usually are more successful (random under-sample, smote and Gaussian noise strategies), here tend to present a worst performance.
+% <<pima_plot1, echo=FALSE, fig.cap="Results of pima data for strategies Random under-sampling, Gaussian Noise and smote on variants of svm learner">>=
+% plot(subset(res, tasks='pima',workflows=glob2rx('*none.svm|RU.svm|smote.svm|GN.svm*'), metrics=glob2rx('F$')))
+% #summary(subset(res, tasks='pima', workflows=glob2rx('*earth*'),metrics='F'))
+% 
+% #metricsSummary(subset(res, workflows=glob2rx('*svm*'), tasks='pima'),summary='median')
+% 
+% @
+% 
+% However, we can also observe in Figure \ref{fig:pima_plot2} that for this data set, the Tomek links and ENN strategies present an improved median performance when compared to using the original data set.  
+% <<pima_plot2, fig.cap="Results of pima data set for random Forest variants on original data set and data with ENN and Tomek links strategies applied.",echo=FALSE>>=
+% plot(subset(res, tasks='pima',workflows=glob2rx('*none.random|Tomek.random|ENN.random*'), metrics=glob2rx('F$')))
+% 
+% @
+% 
+% % ====================================================================
+% \section{Experimental Comparison of Methods for Regression Tasks}
+% 
+% In this Section we present some results of the experimental comparison of the implemented methods for regression tasks. 
+% The experiences were made with the data sets described in Table \ref{tab:RegressData}. The values in this Table were calculated for a relevance function automatically estimated using \texttt{uba} package and a relevance threshold of $0.8$.
+% 
+% \begin{table}[!tbp]
+% \begin{center}
+% \resizebox{0.9\textwidth}{!}{
+% \begin{tabular}{crrrrrrr}
+% \hline\hline
+% Data Set &tgt& N & Pnom & Pnum & nRare & \%Rare & Nrel bump\tabularnewline
+% \hline
+% algae &a1&198 &3&8&28&0.141& 1\tabularnewline
+% 
+% acceleration& acceleration& 1732& 3&11&89&0.051& 1\tabularnewline
+% 
+% boston& HousValue& 506& 0&14&65&0.128 & 1\tabularnewline
+% \hline
+% \hline
+% \end{tabular}
+% }
+% \end{center}
+% \caption{Regression Data sets and characteristics evaluated for a relevance function automatically determined with \texttt{uba} package and a relevance threshold of 0.8 (tgt: name of target variable; N: nr. of examples; Pnom: nr. of nominal predictors; Pnum: nr. of numeric predictors; nRare: nr. of examples in the rare class; \%Rare: nRare/N; Nrel bump: nr. of relevant bumps automatically determined).}
+% \label{tab:RegressData}
+% \end{table}
+% 
+% 
+% The used learning algorithms, their parameters variants an the corresponding R packages are described in Table \ref{tab:Sys2}. We tested three data sets with 18 learning algorithms variants (12 svm variants and 6 randomForest variants) and 6 types of resampling strategies. The resampling strategies tested were: "none" which represents not changing the original data set; random under-sampling (with 2 variants); random over-sampling (2 variants); Gaussian Noise (6 variants); smoteR (2 variants) and Importance Sampling (4 variants). The experiences were evaluated with the metrics available in package \texttt{uba} specially developed for this type of problems: precision, recall and F measure defined for regression tasks. In these experiences we have named precision, recall and F measure as ubaprec, ubarec and ubaF respectively.
+% 
+% 
+% \begin{table}[!tbp]
+% \begin{center}
+% \resizebox{\textwidth}{!} {
+% \begin{tabular}{lll}
+% \hline \hline
+% Learner & Parameter Variants & R package \\ 
+% \hline 
+% %MARS & $nk=\{10,17\},degree=\{1,2\},thresh=\{0.01,0.001\}$ & \textbf{earth}~\cite{earth} \\ 
+% SVM & $cost=\{10,150,300\},gamma=\{0.01,0.001\},epsilon=\{0.1, 0.01\}$ & \textbf{e1071}~\cite{e1071} \\ 
+% Random Forest & $mtry=\{5,7\},ntree=\{500,750, 1500\}$ & \textbf{randomForest}~\cite{rf} \\ 
+% \hline \hline
+% \end{tabular} 
+% }
+% \end{center}
+% \caption{Learning algorithms and parameter variants, and the respective R packages.}\label{tab:Sys2}
+% \end{table}
+% 
+% Regarding the results obtained, we can observe the workflows that acheived the best scores for each data set and metric:
+% <<load_res2,echo=FALSE>>=
+% 
+% load("allResultsRegress.Rdata")
+% @
+% 
+% 
+% <<resRegress, echo=FALSE>>=
+% topPerformers(res,maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
+% @
+
+% We can also verify which were the best performing workflows for each tested data set and measure evaluated: 
+% <<rankWFRegress, echo=FALSE>>=
+% rankWorkflows(res,maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
+% @
+% 
+% 
+% We can observe visually the performance of subsets of the best performing strategies applied for the random Forest learning variants on Figures \ref{fig:algae_plot1}, \ref{fig:acceleration_plot1} and \ref{fig:boston_plot1} regarding the data sets algae, acceleration and boston respectively.
+
+% <<algae_plot1, fig.cap="Results on algae data set for strategies none, random over-sampling and random under-sampling for random forest learning variants",echo=FALSE>>=
+% plot(subset(res, tasks='a1',workflows=glob2rx('*none.random|RO.rand|RU.rand*')))
+% @
+% 
+% <<acceleration_plot1, fig.cap="Results on acceleration data set for none and random over-sampling strategies with random forest learning variants",echo=FALSE>>=
+% plot(subset(res, tasks='acceleration',workflows=glob2rx('*none.random|RO.rand*'), metrics='F'))
+% @
+% 
+% <<boston_plot1, fig.cap="Results on boston data set for none and Importance Sampling strategy on random forest learning variants",echo=FALSE>>=
+% plot(subset(res, tasks='boston',workflows=glob2rx('*none.random|IS.rand*'), metrics='F'))
+% @
 
 
 % =======================================================

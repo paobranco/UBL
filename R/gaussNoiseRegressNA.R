@@ -72,7 +72,7 @@ gaussNoiseRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balan
   }
   
   
-  y <- data[,tgt]
+  y <- data[,ncol(data)]
   attr(y,"names") <- rownames(data)
   s.y <- sort(y)
   if (is.matrix(rel)){ 

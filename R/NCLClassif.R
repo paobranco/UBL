@@ -32,6 +32,10 @@ NCLClassif <- function(form, data, k=3, dist="Euclidean", p=2, Cl="smaller")
   #       are the most important.
 
 {
+  if(any(is.na(data))){
+    stop("The data set provided contains NA values!")
+  }
+  
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
   classes <- levels(data[,tgt])

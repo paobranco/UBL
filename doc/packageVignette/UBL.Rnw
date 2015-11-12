@@ -80,14 +80,14 @@ The \UBL has two releases which can be installed: the stable and the development
 
 <<message=FALSE, eval=FALSE>>=    
 library(devtools)  # You need to install this package!
-install_github("ltorgo/UBL",ref="master") # to install the stable release
+install_github("paobranco/UBL",ref="master") # to install the stable release
 @
 
 If you want to install the development release you need to do the following in R:
 
 <<message=FALSE, eval=FALSE>>=
 library(devtools)  # You need to install this package!
-install_github("ltorgo/UBL",ref="develop") # to install the development release
+install_github("paobranco/UBL",ref="develop") # to install the development release
 @
 
 
@@ -95,9 +95,9 @@ If somehow the previous instructions fail (there are reports of problems with di
 <<message=FALSE, eval=FALSE >>=
 library(devtools)
 # to install the development release
-install_git("https://github.com/ltorgo/UBL",branch="develop")
+install_git("https://github.com/paobranco/UBL",branch="develop")
 # to install the stable release
-install_git("https://github.com/ltorgo/UBL",branch="master")
+install_git("https://github.com/paobranco/UBL",branch="master")
 @
 
 After installation using any of the above procedures, the package can be used as any other R package by doing:
@@ -304,6 +304,66 @@ plots <- list(g1, g2)
 do.call(grid.arrange, plots)
 @
 
+\subsection{Importance Sampling}\label{sec:ISClassif}
+
+The main idea of Importance Sampling strategy is to perform random over- or under-sampling in each class according to the user importance assigned. This means that for each class the user can specify its relevance. Then, this relevance is used to change each class frequency by selecting randomly examples from each class. Alternatively, the user may consider that each class is equaly important or may chose to invert the classes frequencies.
+
+This strategy is available in \UBL through the function \texttt{ImpSampClassif}. The user may specify using parameter \texttt{C.perc} the classes where over-/under-sampling must be aaplied, by indicating the corresponding percentages. If all classes are equally important and a perfectly balanced data set should be obtained, the \texttt{C.perc} parameter must be set to "balance". On the other hand, if the classes frequencies sould be inverted, then this parameter should be "extreme". The following example illustrate the use of this function.
+
+
+<<ISClass>>=
+# reuse the same unbalanced data obtained from iris data set
+table(data$Species)
+
+nds <- ImpSampClassif(Species~.,data, C.perc=list(setosa=0.5, virginica=6))
+# notice that when a certain class is not specified it remains unaltered
+table(nds$Species)
+
+# to obtain a balanced data set
+IS.bal <- ImpSampClassif(Species~., data) # or use C.perc="balance"
+table(IS.bal$Species)
+
+# to obtain a data set with inverted frequencies 
+IS.ext <- ImpSampClassif(Species~., data, C.perc="extreme")
+table(IS.ext$Species)
+
+@
+
+
+
+Figure \ref{fig:ISC} shows the impact on the unbalanced iris data set of the changes made in the domain with Importance Sampling.
+<<ISC, fig.cap="Impact of Importance Sampling strategy in Iris unbalanced data set.", echo=FALSE>>=
+# visualizing the two classes that have changed (virginica and versicolor)
+
+  par(mfrow = c(2, 2))
+  plot(data[, 1], data[, 2], pch =as.integer(data[, 3]), col=as.integer(data[,3]), xlim=c(4,8), ylim=c(2,4.5),
+       main = "Original Unbalanced Data")
+  plot(jitter(nds[, 1]), jitter(nds[, 2]), pch=as.integer(nds[,3]), col=as.integer(nds[,3]),xlim=c(4,8),ylim=c(2,4.5),
+       main = "Importance Sampling with user defined parameter")
+  plot(jitter(IS.bal[, 1]), jitter(IS.bal[, 2]), pch=as.integer(IS.bal[,3]), col=as.integer(IS.bal[,3]),xlim=c(4,8),ylim=c(2,4.5),
+       main = "Importance Sampling for balancing the data set")
+  plot(jitter(IS.ext[, 1]), jitter(IS.ext[, 2]), pch=as.integer(IS.ext[,3]), col=as.integer(IS.ext[,3]),xlim=c(4,8),ylim=c(2,4.5),
+       main = "Importance Sampling for invert the class frequencies")
+
+
+@
+
+
+
+Figure \ref{fig:ISC_2} shows the impact of this strategy on the number of examples in the data set.
+
+<<ISC_2, fig.cap="Impact of Importance Sampling strategy.", echo=FALSE>>=
+DF <- rbind(data.frame(Dat="Original",obs=data$Species), data.frame(Dat="nds", obs=nds$Species), data.frame(Dat="IS.bal", obs=IS.bal$Species), data.frame(Dat="IS.ext", obs=IS.ext$Species))
+g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_histogram(binwidth=1, position="dodge", aes(group=Dat), colour="black")
+
+g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_histogram(binwidth=1, position="fill", aes(group=obs), colour="black")
+
+plots <- list(g1, g2)
+
+do.call(grid.arrange, plots)
+@
+
+We must highlight that random under- and over-sampling also allow to balance and invert the classes frequencies. Importance Sampling strategy, although also allowing this type of impact, acts differently because it combines both under- and over-sampling strategies. This means that a balanced data set can be obtained with random under-sampling or Importance Sampling strategy. However, the resulting data sets will be different. In the first possibility only under-sampling is applied and the final size of the data set is reduced, while on the second possibility both under and over-sampling strategies are applied and the changed data set has roughly the same number of examples than the original data set.
 
 \subsection{Tomek Links}\label{sec:Tomek}
 
@@ -1299,7 +1359,7 @@ plot(smE[,5], smE[,6], col= ifelse(smE[, 18]>5,2,3), pch=ifelse(smE[,18]>5,"+", 
 
 
 
-\subsection{Importance Sampling}\label{sec:IS}
+\subsection{Importance Sampling}\label{sec:ISRegress}
 
 The Importance Sampling method is a new proposal whose main idea is to use the relevance function defined for a regression problem as a probability for resampling the examples combining over with under-sampling. This method simply removes some of the examples and includes in the data set replicas of other existing examples. There is no generation of new synthetic examples. For the over-sampling strategy, replicas of examples are introduced by selecting examples according to the relevance function defined, i.e., the higher the relevance of an example, the higher is the probability of being selected as a new replica to include. The under-sampling strategy selects examples to remove according to the function $1-\phi(y)$, i.e, the higher the relevance value of an example, the lower will be the probability of removing it.
 
@@ -1676,192 +1736,192 @@ do.call(grid.arrange, plots)
 
 
 
+% 
+% % ====================================================================
+% \section{Experimental Comparison of Methods for Classification Tasks}
+% 
+% In this Section we present some results of the experimental comparison of the implemented methods for classification tasks. 
+% The experiences were made with data sets with a binary target class. The main characteristics of the used data sets are described in Table \ref{tab:ClassDataBinary}.
+% The used learning algorithms, their parameters variants an the corresponding R packages are described in Table \ref{tab:Sys}.
+% 
+% We tested 8 learning variants (4 random Forest and 4 svm) on 3 data sets with 29 strategies variants (the original data, 2 random undersampling, 2 random oversampling, 2 CNN, 4 Tomek links, 4 OSS, 2 ENN, 2 NCL, 6 Gaussian Noise and 4 smote).
+% 
+% \begin{table}[!tbp]
+% \begin{center}
+% \resizebox{0.7\textwidth}{!}{
+% \begin{tabular}{crrrrr}
+% \hline\hline
+% Data Set & N & Pnom & Pnum & nRare & \%Rare\tabularnewline
+% \hline
+% Ionosphere &351 &1&32&126&0.359\tabularnewline
+% 
+% thor &470& 13& 3& 70&0.149\tabularnewline
+% 
+% Pima&768&0&8&268&0.349\tabularnewline
+% \hline
+% \hline
+% \end{tabular}
+% }
+% \end{center}
+% \caption{Classification Data sets and characteristics(N: nr. of examples; Pnom: nr. of nominal predictors; Pnum: nr. of numeric predictors; nRare: nr. of examples in the rare class; \%Rare: nRare/N).}
+% \label{tab:ClassDataBinary}
+% \end{table}
+% 
+% \begin{table}[!tbp]
+% \begin{center}
+% \resizebox{\textwidth}{!} {
+% \begin{tabular}{lll}
+% \hline \hline
+% Learner & Parameter Variants & R package \\ 
+% \hline 
+% SVM & $cost=\{10,150\},gamma=\{0.01,0.001\}$ & \textbf{e1071}~\cite{e1071} \\ 
+% Random Forest & $mtry=\{4,6\},ntree=\{500,750\}$ & \textbf{randomForest}~\cite{rf} \\ 
+% \hline \hline
+% \end{tabular} 
+% }
+% \end{center}
+% \caption{Learning algorithms and parameter variants, and the respective R packages.}\label{tab:Sys}
+% \end{table}
+% 
+% 
+% Regarding the results obtained, we can observe the workflows that achieved the best scores for each metric and data set:
+% <<load_res1,echo=FALSE>>=
+% 
+% load("allResults2Class.Rdata")
+% @
+% 
+% 
+% <<res2class, warning=FALSE, echo=FALSE>>=
+% topPerformers(subset(res, workflows=glob2rx('*svm*|*random*')), maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
+% @
+% 
+% We can also observe which were the top performing workflows for each data set considered and each computed metric:
+% <<ionosphereRank, echo=FALSE>>=
+% rankWorkflows(subset(res, tasks='Ionosphere', workflows=glob2rx('*svm*|*random*')), maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
+% @
+% 
+% We can also visualize the results. However, since the results correspond to a very large set of experiences we only visualize some subsets of the experiences. So, we can observe some results for data set Ionosphere in Figure \ref{fig:Ionosphere_plot1}.
+% 
+% <<Ionosphere_plot1,echo=FALSE, fig.cap="Results of Ionosphere data for strategies Gaussian Noise and smote on variants of svm learner">>=
+% plot(subset(res, tasks='Ionosphere', workflows=glob2rx('*none.svm*|*GN.svm*|*smote.svm*'), metrics=glob2rx('F$')))
+% 
+% #metricsSummary(subset(res, workflows=glob2rx('*svm*'), tasks='Ionosphere'),summary='median')
+% @
+% 
+% Using package \texttt{performanceEstimation}, a summary of Ionosphere data set results for the svm learners can also be obtained for the $F$ measure, as follows:
+% <<summ_Ionosphere_F,  eval=FALSE >>=
+% summary(subset(res, tasks='Ionosphere', 
+%                     workflows=glob2rx('*svm*'),
+%                     metrics=glob2rx('F$')))
+% @
+% We do not present these results here due to its excessive length.
+% 
+% The results of thor data set for the svm learning variants and the $F$ measure, are displayed in Figure \ref{fig:thor_plot1}. Here it is clear that the existing methods for dealing with imbalanced domains do not always work for all the data sets. However, we must also highlight that this was a very restrict set of experiences, and some of the resampling approaches variants not tested could have a different impact in this data set.
+% 
+% 
+% <<thor_plot1, echo=FALSE,fig.cap="Results of thor data on variants of svm learner", warning=FALSE>>=
+% plot(subset(res, tasks='pima', workflows=glob2rx('*svm*'),metrics=glob2rx('F$')))
+% #plot(subset(res, tasks='thor', workflows=glob2rx('*svm*'),metrics='F', partial=FALSE))
+% @
+% 
+% Regarding the Pima data set, we can observe the workflows ranking:
+% <<pimaRankRes, echo=FALSE>>=
+% rankWorkflows(subset(res, tasks='pima', workflows=glob2rx('*svm*|*random*')), maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
+% @
+% 
+% Figure \ref{fig:pima_plot1} shows some partial results obtained for Pima data set with the $F$ measure. In this case we observe that the approaches that usually are more successful (random under-sample, smote and Gaussian noise strategies), here tend to present a worst performance.
+% <<pima_plot1, echo=FALSE, fig.cap="Results of pima data for strategies Random under-sampling, Gaussian Noise and smote on variants of svm learner">>=
+% plot(subset(res, tasks='pima',workflows=glob2rx('*none.svm|RU.svm|smote.svm|GN.svm*'), metrics=glob2rx('F$')))
+% #summary(subset(res, tasks='pima', workflows=glob2rx('*earth*'),metrics='F'))
+% 
+% #metricsSummary(subset(res, workflows=glob2rx('*svm*'), tasks='pima'),summary='median')
+% 
+% @
+% 
+% However, we can also observe in Figure \ref{fig:pima_plot2} that for this data set, the Tomek links and ENN strategies present an improved median performance when compared to using the original data set.  
+% <<pima_plot2, fig.cap="Results of pima data set for random Forest variants on original data set and data with ENN and Tomek links strategies applied.",echo=FALSE>>=
+% plot(subset(res, tasks='pima',workflows=glob2rx('*none.random|Tomek.random|ENN.random*'), metrics=glob2rx('F$')))
+% 
+% @
+% 
+% % ====================================================================
+% \section{Experimental Comparison of Methods for Regression Tasks}
+% 
+% In this Section we present some results of the experimental comparison of the implemented methods for regression tasks. 
+% The experiences were made with the data sets described in Table \ref{tab:RegressData}. The values in this Table were calculated for a relevance function automatically estimated using \texttt{uba} package and a relevance threshold of $0.8$.
+% 
+% \begin{table}[!tbp]
+% \begin{center}
+% \resizebox{0.9\textwidth}{!}{
+% \begin{tabular}{crrrrrrr}
+% \hline\hline
+% Data Set &tgt& N & Pnom & Pnum & nRare & \%Rare & Nrel bump\tabularnewline
+% \hline
+% algae &a1&198 &3&8&28&0.141& 1\tabularnewline
+% 
+% acceleration& acceleration& 1732& 3&11&89&0.051& 1\tabularnewline
+% 
+% boston& HousValue& 506& 0&14&65&0.128 & 1\tabularnewline
+% \hline
+% \hline
+% \end{tabular}
+% }
+% \end{center}
+% \caption{Regression Data sets and characteristics evaluated for a relevance function automatically determined with \texttt{uba} package and a relevance threshold of 0.8 (tgt: name of target variable; N: nr. of examples; Pnom: nr. of nominal predictors; Pnum: nr. of numeric predictors; nRare: nr. of examples in the rare class; \%Rare: nRare/N; Nrel bump: nr. of relevant bumps automatically determined).}
+% \label{tab:RegressData}
+% \end{table}
+% 
+% 
+% The used learning algorithms, their parameters variants an the corresponding R packages are described in Table \ref{tab:Sys2}. We tested three data sets with 18 learning algorithms variants (12 svm variants and 6 randomForest variants) and 6 types of resampling strategies. The resampling strategies tested were: "none" which represents not changing the original data set; random under-sampling (with 2 variants); random over-sampling (2 variants); Gaussian Noise (6 variants); smoteR (2 variants) and Importance Sampling (4 variants). The experiences were evaluated with the metrics available in package \texttt{uba} specially developed for this type of problems: precision, recall and F measure defined for regression tasks. In these experiences we have named precision, recall and F measure as ubaprec, ubarec and ubaF respectively.
+% 
+% 
+% \begin{table}[!tbp]
+% \begin{center}
+% \resizebox{\textwidth}{!} {
+% \begin{tabular}{lll}
+% \hline \hline
+% Learner & Parameter Variants & R package \\ 
+% \hline 
+% %MARS & $nk=\{10,17\},degree=\{1,2\},thresh=\{0.01,0.001\}$ & \textbf{earth}~\cite{earth} \\ 
+% SVM & $cost=\{10,150,300\},gamma=\{0.01,0.001\},epsilon=\{0.1, 0.01\}$ & \textbf{e1071}~\cite{e1071} \\ 
+% Random Forest & $mtry=\{5,7\},ntree=\{500,750, 1500\}$ & \textbf{randomForest}~\cite{rf} \\ 
+% \hline \hline
+% \end{tabular} 
+% }
+% \end{center}
+% \caption{Learning algorithms and parameter variants, and the respective R packages.}\label{tab:Sys2}
+% \end{table}
+% 
+% Regarding the results obtained, we can observe the workflows that acheived the best scores for each data set and metric:
+% <<load_res2,echo=FALSE>>=
+% 
+% load("allResultsRegress.Rdata")
+% @
+% 
+% 
+% <<resRegress, echo=FALSE>>=
+% topPerformers(res,maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
+% @
 
-% ====================================================================
-\section{Experimental Comparison of Methods for Classification Tasks}
+% We can also verify which were the best performing workflows for each tested data set and measure evaluated: 
+% <<rankWFRegress, echo=FALSE>>=
+% rankWorkflows(res,maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
+% @
+% 
+% 
+% We can observe visually the performance of subsets of the best performing strategies applied for the random Forest learning variants on Figures \ref{fig:algae_plot1}, \ref{fig:acceleration_plot1} and \ref{fig:boston_plot1} regarding the data sets algae, acceleration and boston respectively.
 
-In this Section we present some results of the experimental comparison of the implemented methods for classification tasks. 
-The experiences were made with data sets with a binary target class. The main characteristics of the used data sets are described in Table \ref{tab:ClassDataBinary}.
-The used learning algorithms, their parameters variants an the corresponding R packages are described in Table \ref{tab:Sys}.
-
-We tested 8 learning variants (4 random Forest and 4 svm) on 3 data sets with 29 strategies variants (the original data, 2 random undersampling, 2 random oversampling, 2 CNN, 4 Tomek links, 4 OSS, 2 ENN, 2 NCL, 6 Gaussian Noise and 4 smote).
-
-\begin{table}[!tbp]
-\begin{center}
-\resizebox{0.7\textwidth}{!}{
-\begin{tabular}{crrrrr}
-\hline\hline
-Data Set & N & Pnom & Pnum & nRare & \%Rare\tabularnewline
-\hline
-Ionosphere &351 &1&32&126&0.359\tabularnewline
-
-thor &470& 13& 3& 70&0.149\tabularnewline
-
-Pima&768&0&8&268&0.349\tabularnewline
-\hline
-\hline
-\end{tabular}
-}
-\end{center}
-\caption{Classification Data sets and characteristics(N: nr. of examples; Pnom: nr. of nominal predictors; Pnum: nr. of numeric predictors; nRare: nr. of examples in the rare class; \%Rare: nRare/N).}
-\label{tab:ClassDataBinary}
-\end{table}
-
-\begin{table}[!tbp]
-\begin{center}
-\resizebox{\textwidth}{!} {
-\begin{tabular}{lll}
-\hline \hline
-Learner & Parameter Variants & R package \\ 
-\hline 
-SVM & $cost=\{10,150\},gamma=\{0.01,0.001\}$ & \textbf{e1071}~\cite{e1071} \\ 
-Random Forest & $mtry=\{4,6\},ntree=\{500,750\}$ & \textbf{randomForest}~\cite{rf} \\ 
-\hline \hline
-\end{tabular} 
-}
-\end{center}
-\caption{Learning algorithms and parameter variants, and the respective R packages.}\label{tab:Sys}
-\end{table}
-
-
-Regarding the results obtained, we can observe the workflows that achieved the best scores for each metric and data set:
-<<load_res1,echo=FALSE>>=
-
-load("allResults2Class.Rdata")
-@
-
-
-<<res2class, warning=FALSE, echo=FALSE>>=
-topPerformers(subset(res, workflows=glob2rx('*svm*|*random*')), maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
-@
-
-We can also observe which were the top performing workflows for each data set considered and each computed metric:
-<<ionosphereRank, echo=FALSE>>=
-rankWorkflows(subset(res, tasks='Ionosphere', workflows=glob2rx('*svm*|*random*')), maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
-@
-
-We can also visualize the results. However, since the results correspond to a very large set of experiences we only visualize some subsets of the experiences. So, we can observe some results for data set Ionosphere in Figure \ref{fig:Ionosphere_plot1}.
-
-<<Ionosphere_plot1,echo=FALSE, fig.cap="Results of Ionosphere data for strategies Gaussian Noise and smote on variants of svm learner">>=
-plot(subset(res, tasks='Ionosphere', workflows=glob2rx('*none.svm*|*GN.svm*|*smote.svm*'), metrics=glob2rx('F$')))
-
-#metricsSummary(subset(res, workflows=glob2rx('*svm*'), tasks='Ionosphere'),summary='median')
-@
-
-Using package \texttt{performanceEstimation}, a summary of Ionosphere data set results for the svm learners can also be obtained for the $F$ measure, as follows:
-<<summ_Ionosphere_F,  eval=FALSE >>=
-summary(subset(res, tasks='Ionosphere', 
-                    workflows=glob2rx('*svm*'),
-                    metrics=glob2rx('F$')))
-@
-We do not present these results here due to its excessive length.
-
-The results of thor data set for the svm learning variants and the $F$ measure, are displayed in Figure \ref{fig:thor_plot1}. Here it is clear that the existing methods for dealing with imbalanced domains do not always work for all the data sets. However, we must also highlight that this was a very restrict set of experiences, and some of the resampling approaches variants not tested could have a different impact in this data set.
-
-
-<<thor_plot1, echo=FALSE,fig.cap="Results of thor data on variants of svm learner", warning=FALSE>>=
-plot(subset(res, tasks='pima', workflows=glob2rx('*svm*'),metrics=glob2rx('F$')))
-#plot(subset(res, tasks='thor', workflows=glob2rx('*svm*'),metrics='F', partial=FALSE))
-@
-
-Regarding the Pima data set, we can observe the workflows ranking:
-<<pimaRankRes, echo=FALSE>>=
-rankWorkflows(subset(res, tasks='pima', workflows=glob2rx('*svm*|*random*')), maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
-@
-
-Figure \ref{fig:pima_plot1} shows some partial results obtained for Pima data set with the $F$ measure. In this case we observe that the approaches that usually are more successful (random under-sample, smote and Gaussian noise strategies), here tend to present a worst performance.
-<<pima_plot1, echo=FALSE, fig.cap="Results of pima data for strategies Random under-sampling, Gaussian Noise and smote on variants of svm learner">>=
-plot(subset(res, tasks='pima',workflows=glob2rx('*none.svm|RU.svm|smote.svm|GN.svm*'), metrics=glob2rx('F$')))
-#summary(subset(res, tasks='pima', workflows=glob2rx('*earth*'),metrics='F'))
-
-#metricsSummary(subset(res, workflows=glob2rx('*svm*'), tasks='pima'),summary='median')
-
-@
-
-However, we can also observe in Figure \ref{fig:pima_plot2} that for this data set, the Tomek links and ENN strategies present an improved median performance when compared to using the original data set.  
-<<pima_plot2, fig.cap="Results of pima data set for random Forest variants on original data set and data with ENN and Tomek links strategies applied.",echo=FALSE>>=
-plot(subset(res, tasks='pima',workflows=glob2rx('*none.random|Tomek.random|ENN.random*'), metrics=glob2rx('F$')))
-
-@
-
-% ====================================================================
-\section{Experimental Comparison of Methods for Regression Tasks}
-
-In this Section we present some results of the experimental comparison of the implemented methods for regression tasks. 
-The experiences were made with the data sets described in Table \ref{tab:RegressData}. The values in this Table were calculated for a relevance function automatically estimated using \texttt{uba} package and a relevance threshold of $0.8$.
-
-\begin{table}[!tbp]
-\begin{center}
-\resizebox{0.9\textwidth}{!}{
-\begin{tabular}{crrrrrrr}
-\hline\hline
-Data Set &tgt& N & Pnom & Pnum & nRare & \%Rare & Nrel bump\tabularnewline
-\hline
-algae &a1&198 &3&8&28&0.141& 1\tabularnewline
-
-acceleration& acceleration& 1732& 3&11&89&0.051& 1\tabularnewline
-
-boston& HousValue& 506& 0&14&65&0.128 & 1\tabularnewline
-\hline
-\hline
-\end{tabular}
-}
-\end{center}
-\caption{Regression Data sets and characteristics evaluated for a relevance function automatically determined with \texttt{uba} package and a relevance threshold of 0.8 (tgt: name of target variable; N: nr. of examples; Pnom: nr. of nominal predictors; Pnum: nr. of numeric predictors; nRare: nr. of examples in the rare class; \%Rare: nRare/N; Nrel bump: nr. of relevant bumps automatically determined).}
-\label{tab:RegressData}
-\end{table}
-
-
-The used learning algorithms, their parameters variants an the corresponding R packages are described in Table \ref{tab:Sys2}. We tested three data sets with 18 learning algorithms variants (12 svm variants and 6 randomForest variants) and 6 types of resampling strategies. The resampling strategies tested were: "none" which represents not changing the original data set; random under-sampling (with 2 variants); random over-sampling (2 variants); Gaussian Noise (6 variants); smoteR (2 variants) and Importance Sampling (4 variants). The experiences were evaluated with the metrics available in package \texttt{uba} specially developed for this type of problems: precision, recall and F measure defined for regression tasks. In these experiences we have named precision, recall and F measure as ubaprec, ubarec and ubaF respectively.
-
-
-\begin{table}[!tbp]
-\begin{center}
-\resizebox{\textwidth}{!} {
-\begin{tabular}{lll}
-\hline \hline
-Learner & Parameter Variants & R package \\ 
-\hline 
-%MARS & $nk=\{10,17\},degree=\{1,2\},thresh=\{0.01,0.001\}$ & \textbf{earth}~\cite{earth} \\ 
-SVM & $cost=\{10,150,300\},gamma=\{0.01,0.001\},epsilon=\{0.1, 0.01\}$ & \textbf{e1071}~\cite{e1071} \\ 
-Random Forest & $mtry=\{5,7\},ntree=\{500,750, 1500\}$ & \textbf{randomForest}~\cite{rf} \\ 
-\hline \hline
-\end{tabular} 
-}
-\end{center}
-\caption{Learning algorithms and parameter variants, and the respective R packages.}\label{tab:Sys2}
-\end{table}
-
-Regarding the results obtained, we can observe the workflows that acheived the best scores for each data set and metric:
-<<load_res2,echo=FALSE>>=
-
-load("allResultsRegress.Rdata")
-@
-
-
-<<resRegress, echo=FALSE>>=
-topPerformers(res,maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
-@
-
-We can also verify which were the best performing workflows for each tested data set and measure evaluated: 
-<<rankWFRegress, echo=FALSE>>=
-rankWorkflows(res,maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
-@
-
-
-We can observe visually the performance of subsets of the best performing strategies applied for the random Forest learning variants on Figures \ref{fig:algae_plot1}, \ref{fig:acceleration_plot1} and \ref{fig:boston_plot1} regarding the data sets algae, acceleration and boston respectively.
-
-<<algae_plot1, fig.cap="Results on algae data set for strategies none, random over-sampling and random under-sampling for random forest learning variants",echo=FALSE>>=
-plot(subset(res, tasks='a1',workflows=glob2rx('*none.random|RO.rand|RU.rand*')))
-@
-
-<<acceleration_plot1, fig.cap="Results on acceleration data set for none and random over-sampling strategies with random forest learning variants",echo=FALSE>>=
-plot(subset(res, tasks='acceleration',workflows=glob2rx('*none.random|RO.rand*'), metrics='F'))
-@
-
-<<boston_plot1, fig.cap="Results on boston data set for none and Importance Sampling strategy on random forest learning variants",echo=FALSE>>=
-plot(subset(res, tasks='boston',workflows=glob2rx('*none.random|IS.rand*'), metrics='F'))
-@
+% <<algae_plot1, fig.cap="Results on algae data set for strategies none, random over-sampling and random under-sampling for random forest learning variants",echo=FALSE>>=
+% plot(subset(res, tasks='a1',workflows=glob2rx('*none.random|RO.rand|RU.rand*')))
+% @
+% 
+% <<acceleration_plot1, fig.cap="Results on acceleration data set for none and random over-sampling strategies with random forest learning variants",echo=FALSE>>=
+% plot(subset(res, tasks='acceleration',workflows=glob2rx('*none.random|RO.rand*'), metrics='F'))
+% @
+% 
+% <<boston_plot1, fig.cap="Results on boston data set for none and Importance Sampling strategy on random forest learning variants",echo=FALSE>>=
+% plot(subset(res, tasks='boston',workflows=glob2rx('*none.random|IS.rand*'), metrics='F'))
+% @
 
 
 % =======================================================

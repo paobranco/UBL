@@ -26,8 +26,6 @@ ImpSampClassif <- function(form, data, C.perc="balance")
   #       This parameter defaults to "balance".
 
 {
-#  require(uba, quietly=TRUE)
-  suppressWarnings(suppressPackageStartupMessages(library('uba'))) 
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
   names <- sort(unique(data[,tgt]))
@@ -41,7 +39,7 @@ ImpSampClassif <- function(form, data, C.perc="balance")
     names.same <- setdiff(names, union(names.und, names.ove))
     
     # include examples from classes unchanged
-    newdata <- data[which(data[,ncol(data)] %in% names.same),]
+    newdata <- data[which(data[,tgt] %in% names.same),]
     
     if(length(names.und)){  # perform under-sampling
       for(i in 1:length(names.und)){ 
