@@ -42,6 +42,10 @@ OSSClassif <- function(form, data, dist="Euclidean", p=2, Cl="smaller", start="C
   #         Tomek links are applied after. If set to "Tomek" the reverse order is applied.
 
 {
+  if(any(is.na(data))){
+    stop("The data set provided contains NA values!")
+  }
+  
   if(start=="CNN"){
   #  Obtain the reduced data set with CNN
   d1 <-CNNClassif(form, data, dist=dist, p=p, Cl=Cl)

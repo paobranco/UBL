@@ -47,6 +47,10 @@ ENNClassif <- function(form, data, k=3, dist="Euclidean", p=2, Cl="all")
   # a list with the cleaned dataframe and the indexes of the examples removed 
   
 {
+  if(any(is.na(data))){
+    stop("The data set provided contains NA values!")
+  }
+  
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
   nom.at <- which(sapply(data[,-tgt], is.numeric)==FALSE)
