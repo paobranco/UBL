@@ -54,10 +54,11 @@ ImpSampRegress <- function(form, data, rel="auto", thr.rel=NA, C.perc="balance",
     pc <- phi.control(y, method="range", control.pts=rel)
   }else if(rel=="auto"){
     pc <- phi.control(y, method="extremes")
-  }  else{ # TODO: handle other relevance functions and not using the threshold!
+  }else if(is.list(rel)){ 
+    pc <- rel
+  }else{# TODO: handle other relevance functions and not using the threshold!
     stop("future work!")
-  }
-    
+  }    
   
   if(!is.na(thr.rel)){
     s.y <- sort(y)
