@@ -33,12 +33,6 @@ export(
     #CV, Holdout, LOOCV,
     #MonteCarlo, Bootstrap, 
 
-    ## resampling.R
-    smoteClassif,
-    
-    ## costs.R file
-    metacostClassif
-
     )
 
 

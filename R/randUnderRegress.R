@@ -49,10 +49,10 @@ randUnderRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balanc
 
   if (is.matrix(rel)){ 
     pc <- phi.control(y, method="range", control.pts=rel)
-  }else if(rel=="auto"){
-    pc <- phi.control(y, method="extremes")
   }else if(is.list(rel)){ 
     pc <- rel
+  }else if(rel=="auto"){
+    pc <- phi.control(y, method="extremes")
   }else{# TODO: handle other relevance functions and not using the threshold!
     stop("future work!")
   }

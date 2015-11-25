@@ -76,10 +76,10 @@ gaussNoiseRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balan
   
   if (is.matrix(rel)){ 
     pc <- phi.control(y, method="range", control.pts=rel)
-  }else if(rel=="auto"){
-    pc <- phi.control(y, method="extremes")
   }else if(is.list(rel)){ 
     pc <- rel
+  }else if(rel=="auto"){
+    pc <- phi.control(y, method="extremes")
   }else{# TODO: handle other relevance functions and not using the threshold!
     stop("future work!")
   }
@@ -117,7 +117,7 @@ gaussNoiseRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balan
   }else if(C.perc=="balance"){ # estimate the percentages of over/under sampling
     B <- round(nrow(data)/nbump,0)
     C.perc <- B/sapply(obs.ind, length)        
-  } else if(C.perc == "extreme"){
+  }else if(C.perc == "extreme"){
     B <- round(nrow(data)/nbump,0)
     rescale <- nbump*B/sum(B^2/sapply(obs.ind,length))
     obj <- round((B^2/sapply(obs.ind, length))*rescale,2)
@@ -137,17 +137,15 @@ gaussNoiseRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balan
                         as.integer(C.perc[[i]]*length(obs.ind[[i]])),
                         replace=repl)
       newdata <- rbind(newdata, data[names(obs.ind[[i]][sel.maj]),])
-      
     }
   }
+  
   
   if (tgt < ncol(data)) {
     newdata <- newdata[,cols]
     data <- data[,cols]
   }
-  
   newdata
-  
 }
 
 
@@ -176,16 +174,17 @@ gn.exsRegress <- function(data, tgt, N, pert)
   nL <- dim(data)[1]
   nomatr <- c()
   T <- matrix(nrow=nL,ncol=nC)
-  for(col in seq.int(nC))
+  for(col in seq.int(nC)){
     if (class(data[,col]) %in% c('factor','character')) {
       T[,col] <- as.integer(data[,col])
       nomatr <- c(nomatr,col)
-    } else T[,col] <- data[,col]
+    }else T[,col] <- data[,col]
   
-  if(length(nomatr)){
-    numatr <- (1:nC)[-nomatr]    
-  } else{
-    numatr <- (1:nC)
+    if(length(nomatr)){
+      numatr <- (1:nC)[-nomatr]    
+    }else{
+      numatr <- (1:nC)
+    }
   }
 
   
@@ -197,36 +196,36 @@ gn.exsRegress <- function(data, tgt, N, pert)
   newdata <- matrix(nrow=nexs*nL+extra,ncol=nC)
   
   if(nexs){
-  for(i in 1:nL) {
-    for(n in 1:nexs) {
-      # the attribute values of the generated case
-      idx <- (i-1)*nexs+n 
-
-      for (num in 1:nC){
-        if(is.na(T[i,num])){
-          newdata[idx,num] <- NA
-        }else{
-          newdata[idx, num] <- T[i,num]+rnorm(1, 0, sd(T[,num], na.rm=TRUE)*pert)
-          if(num %in% nomatr){
-            probs <- c()
-            for(u in 1:length(unique(T[,num]))){
-              probs <- c(probs,length(which(T[,num]==unique(T[,num])[u])))
+    for(i in 1:nL) {
+      for(n in 1:nexs) {
+        # the attribute values of the generated case
+        idx <- (i-1)*nexs+n 
+        for (num in 1:nC){
+          if(is.na(T[i,num])){
+            newdata[idx,num] <- NA
+          }else{
+            newdata[idx, num] <- T[i,num]+rnorm(1, 0, sd(T[,num], na.rm=TRUE)*pert)
+            if(num %in% nomatr){
+              probs <- c()
+              if (length(unique(T[,num]))==1){
+                newdata[idx,num] <- T[1,num]
+              }else{
+                for(u in 1:length(unique(T[,num]))){
+                  probs <- c(probs,length(which(T[,num]==unique(T[,num])[u])))
+                }
+                newdata[idx, num] <- sample(unique(T[,num]), 1, prob=probs)
+              }
             }
-            newdata[idx, num] <- sample(unique(T[,num]), 1, prob=probs)
-          
-        }
+          }
         }
       }
     }
   }
-  }
-  
   
   
   if(extra){
     count<-1
-    for (i in id.ex){
-      
+    for (i in id.ex){    
       for (num in 1:nC){
         if(is.na(T[i,num])){
           newdata[nexs*nL+count, num] <- NA
@@ -234,14 +233,17 @@ gn.exsRegress <- function(data, tgt, N, pert)
           newdata[nexs*nL+count, num] <- T[i,num]+rnorm(1, 0, sd(T[,num], na.rm=TRUE)*pert)
           if(num %in% nomatr){
             probs <- c()
-            for(u in 1:length(unique(T[,num]))){
-              probs <- c(probs,length(which(T[,num]==unique(T[,num])[u])))
+            if(length(unique(T[,num]))==1){
+              newdata[nexs*nL+count, num] <- T[1,num]
+            }else{
+              for(u in 1:length(unique(T[,num]))){
+                probs <- c(probs,length(which(T[,num]==unique(T[,num])[u])))
+              }
+              newdata[nexs*nL+count, num] <- sample(unique(T[,num]), 1, prob=probs)
             }
-            newdata[nexs*nL+count, num] <- sample(unique(T[,num]), 1, prob=probs)
           }
         }
       }
-      
       count <- count+1
     }
   }
@@ -253,7 +255,5 @@ gn.exsRegress <- function(data, tgt, N, pert)
   
   colnames(newCases) <- colnames(data)
   newCases
-  
-  
+    
 }
-
