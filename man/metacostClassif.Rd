@@ -2,7 +2,7 @@
 \alias{metacostClassif}
 
 \title{
-METACOST algorithm for cost-sentive classification problems
+METACOST algorithm for cost-sensitive classification problems
 }
 \description{
 This function obtains the predicted classes that optimize the utility
@@ -22,7 +22,7 @@ metacostClassif(preds, cb.matrix)
     A square matrix with dimensions nClasses x nClasses where entry
   X_i,j corresponds to the cost/benefit of predicting a test case as
   belonging to class j when it is of class i. The diagonal of this
-  matrix (correct predicitons) should contain positive numbers
+  matrix (correct predictions) should contain positive numbers
   (benefits), whilst numbers outside of the matrix should contain
   negative numbers (costs of misclassifications).
   }

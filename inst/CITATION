@@ -10,4 +10,4 @@ bibentry(bibtype = "Manual",
                     person("Luis", "Torgo")),
          year = year,
          note = note,
-         url = "https://github.com/ltorgo/UBL")
+         url = "https://github.com/paobranco/UBL")

@@ -2,12 +2,12 @@ Package: UBL
 Type: Package
 Title: Implementation of Several Approaches to Utility-based Learning for both Classification and Regression Tasks
 Description: Provides a set of functions that can be used to obtain better predictive performance on cost-sensitive tasks (both regression and classification). This includes resampling approaches, cost-based methods, special purpose evaluation metrics as well as specific learning systems.
-Version: 0.0.1
+Version: 0.0.2
 Depends: R(>= 3.0), methods
 Date: 2014-12-02
-Authors@R: c(person("Paula", "Branco", email = "paobranco@gmail.com", role = c("aut", "cre")), person("Rita", "Ribeiro", email = "rpribeiro@dcc.fc.up.pt", role = c("aut", "cre")), person("Luis", "Torgo", email = "ltorgo@dcc.fc.up.pt", role = c("aut", "cre")))
-URL: https://github.com/ltorgo/UBL
-BugReports: https://github.com/ltorgo/UBL/issues
+Authors@R: c(person("Paula", "Branco", email = "paobranco@gmail.com", role = c("aut", "cre")), person("Rita", "Ribeiro", email = "rpribeiro@dcc.fc.up.pt", role = "aut"), person("Luis", "Torgo", email = "ltorgo@dcc.fc.up.pt", role = "aut"))
+URL: https://github.com/paobranco/UBL
+BugReports: https://github.com/paobranco/UBL/issues
 License: GPL (>=2)
 LazyLoad: yes
 LazyData: yes
