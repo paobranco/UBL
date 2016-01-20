@@ -26,7 +26,8 @@ randUnderRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balanc
   # thr.rel is the relevance threshold above which a case is considered
   #         as belonging to the rare "class"
   # C.perc is a list containing the under-sampling percentage/s to apply to all/each
-  #       "class" obtained with the relevance threshold. Examples 
+  #       "class" obtained with the relevance threshold. This percentage represents the 
+  #       percentage of examples that is maintained in each "class". Examples 
   #       are randomly removed in each "class". Moreover, different percentages may 
   #       be provided for each "class". Alternatively, it may be "balance" or "extreme",
   #       cases where the under-sampling percentages are automatically estimated.
@@ -90,7 +91,7 @@ randUnderRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balanc
   
   newdata <- NULL
   for(j in 1:length(ove)){
-  newdata <- data[names(obs.ind[[ove[j]]]),] # start with the examples from the minority "classes"
+  newdata <- rbind(newdata, data[names(obs.ind[[ove[j]]]),]) # start with the examples from the minority "classes"
   }
   
   # set the undersampling percentages
@@ -116,7 +117,7 @@ randUnderRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balanc
     sel <- sample(names(obs.ind[[und[j]]]),C.perc[[j]]*length(obs.ind[[und[j]]]), replace=repl)
     newdata <- rbind(newdata, data[sel,])
   }
-    
+  
   newdata
 }
 
