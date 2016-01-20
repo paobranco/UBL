@@ -38,7 +38,7 @@
 # 
 ## P.Branco, May 2015
 ## ---------------------------------------------------
-gaussNoiseRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balance", pert=0.1, repl=FALSE)
+gaussNoiseRegressNA <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balance", pert=0.1, repl=FALSE)
   
   # INPUTS:
   # form a model formula
@@ -126,7 +126,7 @@ gaussNoiseRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balan
     if(C.perc[[i]]==1){
       newdata <- rbind(newdata, data[names(obs.ind[[i]]),])
     }else if(C.perc[[i]]>1){
-      newExs <- gn.exsRegress(data[names(obs.ind[[i]]),], ncol(data), C.perc[[i]], pert)
+      newExs <- gn.exsRegressNA(data[names(obs.ind[[i]]),], ncol(data), C.perc[[i]], pert)
       # add original rare examples and synthetic generated examples
       newdata <- rbind(newdata, newExs, data[names(obs.ind[[i]]),])
       
@@ -160,7 +160,7 @@ gaussNoiseRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balan
 # 
 # P.Branco, May 2015
 # ---------------------------------------------------
-gn.exsRegress <- function(data, tgt, N, pert)
+gn.exsRegressNA <- function(data, tgt, N, pert)
   # INPUTS:
   # data are the rare cases (the minority "class" cases)
   # tgt the column nr of the target variable
