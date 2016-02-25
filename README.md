@@ -1,4 +1,5 @@
 # UBL
+[![Build Status](https://travis-ci.org/paobranco/UBL.svg?branch=master)](https://travis-ci.org/paobranco/UBL)
 
 An R package implementing several approaches to utility-based learning, both for classification and regression predictive tasks
 
