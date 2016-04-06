@@ -5,7 +5,7 @@ Description: Provides a set of functions that can be used to obtain better predi
 Version: 0.0.3
 Depends: R(>= 3.0), methods
 Imports: uba
-Remotes: rpribeiro/UBA
+Remotes: url::http://www.dcc.fc.up.pt/~rpribeiro/uba/uba_0.7.5.tar.gz
 Suggests: MASS, rpart, testthat, DMwR
 Date: 2016-03-11
 Authors@R: c(person("Paula", "Branco", email = "paobranco@gmail.com", role = c("aut", "cre")), person("Rita", "Ribeiro", email = "rpribeiro@dcc.fc.up.pt", role = "aut"), person("Luis", "Torgo", email = "ltorgo@dcc.fc.up.pt", role = "aut"))
