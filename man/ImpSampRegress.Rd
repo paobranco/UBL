@@ -44,14 +44,9 @@ ImpSampRegress(form, data, rel="auto", thr.rel=NA, C.perc="balance", O=0.5, U=0.
          during the under-sampling step also increases. Defaults to 0.5.
   }
 }
-\details{
-
-}
 \value{
   The function returns a data frame with
   the new data set resulting from the application of the importance sampling strategy. 
-}
-\references{
 }
 \author{ Paula Branco \email{paobranco@gmail.com}, Rita Ribeiro
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
@@ -74,4 +69,4 @@ ImpSampRegress(form, data, rel="auto", thr.rel=NA, C.perc="balance", O=0.5, U=0.
 
 }
 
-\keyword{models}
+\keyword{pre-processing regression}

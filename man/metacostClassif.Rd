@@ -77,5 +77,5 @@ table(metacost.preds,ts$Species)
 }
 }
 
-\keyword{models}
+\keyword{post-processing classification}
 

@@ -68,7 +68,7 @@ Tomek, I. (1976). \emph{Two modifications of CNN} IEEE Trans. Syst. Man Cybern.,
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
   
 \seealso{
-\code{\link{OSSClassif, CNNClassif}}
+\code{\link{OSSClassif}, \link{CNNClassif}}
 }
 \examples{
   library(DMwR)
@@ -90,5 +90,5 @@ Tomek, I. (1976). \emph{Two modifications of CNN} IEEE Trans. Syst. Man Cybern.,
   alg.EuM[[2]]
 }
 
-\keyword{models}
+\keyword{pre-processing classification}
 

@@ -47,10 +47,6 @@ This function performs a random under-sampling strategy for dealing with imbalan
   The function returns a data frame with
   the new data set resulting from the application of the random under-sampling strategy.
 }
-\references{
-
-
-}
 \author{ Paula Branco \email{paobranco@gmail.com}, Rita Ribeiro
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
   
@@ -68,4 +64,4 @@ This function performs a random under-sampling strategy for dealing with imbalan
 
 }
 
-\keyword{models}
+\keyword{pre-processing regression}

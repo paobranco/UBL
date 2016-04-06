@@ -25,7 +25,8 @@ randOverRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balance
   # thr.rel is the relevance threshold above which a case is considered
   #         as belonging to the rare "class"
 #   C.perc is a list containing the over-sampling percentage/s to apply to all/each
-#         "class" obtained with the relevance threshold. Replicas of the examples 
+#         "class" obtained with the relevance threshold. The percenatge represents the 
+#         percentage of replicas that are added. Replicas of the examples 
 #         are added randomly in each "class". Moreover, different percentages may 
 #         be provided for each "class". Alternatively, it may be "balance" or "extreme",
 #         cases where the over-sampling percentages are automatically estimated
@@ -38,7 +39,7 @@ randOverRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balance
   
 {
   #require(uba, quietly=TRUE)
-  suppressWarnings(suppressPackageStartupMessages(library('uba')))
+#  suppressWarnings(suppressPackageStartupMessages(library('uba')))
 #   if(any(is.na(data))){
 #     stop("The data set provided contains NA values!")
 #   }
@@ -46,47 +47,55 @@ randOverRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balance
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
     
-#  y <- resp(form,data)
   y <- data[,tgt]
   attr(y,"names") <- rownames(data)
 
   s.y <- sort(y)
   if (is.matrix(rel)){ 
-    pc <- phi.control(y, method="range", control.pts=rel)
+    pc <- uba::phi.control(y, method="range", control.pts=rel)
   }else if(is.list(rel)){ 
     pc <- rel
   }else if(rel=="auto"){
-    pc <- phi.control(y, method="extremes")
+    pc <- uba::phi.control(y, method="extremes")
   }else{# TODO: handle other relevance functions and not using the threshold!
     stop("future work!")
   }
 
-  temp <- y.relev <- phi(s.y,pc)
+  temp <- y.relev <- uba::phi(s.y,pc)
   if(!length(which(temp<1)))stop("All the points have relevance 1. Please, redefine your relevance function!")
   if(!length(which(temp>0)))stop("All the points have relevance 0. Please, redefine your relevance function!")
   temp[which(y.relev>thr.rel)] <- -temp[which(y.relev>thr.rel)]
   bumps <- c()
   for(i in 1:(length(y)-1)){if(temp[i]*temp[i+1]<0) bumps <- c(bumps,i)}
-  nbump <- length(bumps)+1 # number of different classes
-  # collect the indexes in each "class"
-  count <- 1
+  nbump <- length(bumps)+1 # number of different "classes"
+
+# collect the indexes in each "class"
+#   count <- 1
+#   obs.ind <- as.list(rep(NA, nbump))
+#   base <- s.y[1]
+#   last <- y.relev[1]
+#   for(i in 2:length(s.y)){
+#     if((last <= thr.rel & y.relev[i] <= thr.rel) | (last > thr.rel & y.relev[i] > thr.rel)){
+#       base <- c(base,s.y[i])
+#       last <- y.relev[i]
+#     } else{
+#       obs.ind[[count]] <- base
+#       last <- y.relev[i]
+#       base <- s.y[i]
+#       count <- count+1
+#     }
+#   }
+#   obs.ind[[count]] <- base
+
   obs.ind <- as.list(rep(NA, nbump))
-  base <- s.y[1]
-  last <- y.relev[1]
-  for(i in 2:length(s.y)){
-    if((last <= thr.rel & y.relev[i] <= thr.rel) | (last > thr.rel & y.relev[i] > thr.rel)){
-      base <- c(base,s.y[i])
-      last <- y.relev[i]
-    } else{
-      obs.ind[[count]] <- base
-      last <- y.relev[i]
-      base <- s.y[i]
-      count <- count+1
-    }
+  last <- 1
+  for(i in 1:length(bumps)) {
+    obs.ind[[i]] <- s.y[last:bumps[i]]
+    last <- bumps[i] +1
   }
-  obs.ind[[count]] <- base
-  
-  imp <- sapply(obs.ind, function(x)mean(phi(x,pc)))
+  obs.ind[[nbump]] <- s.y[last:length(s.y)]
+
+  imp <- sapply(obs.ind, function(x)mean(uba::phi(x,pc)))
   
   ove <- which(imp>thr.rel)
   und <- which(imp<thr.rel)

@@ -16,7 +16,7 @@
 # P. Branco, May 2015
 # ---------------------------------------------------
 
-randOverRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balance", repl=TRUE)
+randOverRegressNA <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balance", repl=TRUE)
   # INPUTS:
   # form a model formula
   # data the original training set (with the unbalanced distribution)
@@ -38,7 +38,7 @@ randOverRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balance
   
 {
   #require(uba, quietly=TRUE)
-  suppressWarnings(suppressPackageStartupMessages(library('uba')))
+#  suppressWarnings(suppressPackageStartupMessages(library('uba')))
 #   if(any(is.na(data))){
 #     stop("The data set provided contains NA values!")
 #   }
@@ -46,19 +46,18 @@ randOverRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balance
   # the column where the target variable is
   tgt <- which(names(data) == as.character(form[[2]]))
     
-  #y <- resp(form,data)
   y <- data[,tgt]
   attr(y,"names") <- rownames(data)
 
   s.y <- sort(y)
   if (is.matrix(rel)){ 
-    pc <- phi.control(y, method="range", control.pts=rel)
+    pc <- uba::phi.control(y, method="range", control.pts=rel)
   }else if(rel=="auto"){
-    pc <- phi.control(y, method="extremes")
+    pc <- uba::phi.control(y, method="extremes")
   }  else{ # TODO: handle other relevance functions and not using the threshold!
     stop("future work!")
   }
-  temp <- y.relev <- phi(s.y,pc)
+  temp <- y.relev <- uba::phi(s.y,pc)
   if(!length(which(temp<1)))stop("All the points have relevance 1. Please, redefine your relevance function!")
   if(!length(which(temp>0)))stop("All the points have relevance 0. Please, redefine your relevance function!")
   temp[which(y.relev>thr.rel)] <- -temp[which(y.relev>thr.rel)]
@@ -83,7 +82,7 @@ randOverRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balance
   }
   obs.ind[[count]] <- base
   
-  imp <- sapply(obs.ind, function(x)mean(phi(x,pc)))
+  imp <- sapply(obs.ind, function(x)mean(uba::phi(x,pc)))
   
   ove <- which(imp>thr.rel)
   und <- which(imp<thr.rel)
