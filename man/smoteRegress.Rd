@@ -91,9 +91,9 @@ Intelligence Research, 16:321-357.
   library(DMwR)
   data(algae)
   clean.algae <- algae[complete.cases(algae),]
-  mysmote.alg <- smoteRegress(a7~., clean.algae, C.perc=list(0.1, 8))
-  smoteBal.alg <- smoteRegress(a7~., clean.algae, C.perc="balance")
-  smoteExt.alg <- smoteRegress(a7~., clean.algae, C.perc="extreme")
+  mysmote.alg <- smoteRegress(a7~., clean.algae, dist="HEOM", C.perc=list(0.1, 8))
+  smoteBal.alg <- smoteRegress(a7~., clean.algae, dist="HEOM", C.perc="balance")
+  smoteExt.alg <- smoteRegress(a7~., clean.algae, dist="HEOM", C.perc="extreme")
 
   ir<- iris[-c(95:130),]
   mysmote.iris <- smoteRegress(Sepal.Width~., ir, dist="HEOM", C.perc=list(0.5,2.5))
@@ -115,4 +115,4 @@ Intelligence Research, 16:321-357.
 
 }
 
-\keyword{models}
+\keyword{pre-processing regression}

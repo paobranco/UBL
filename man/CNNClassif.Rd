@@ -40,7 +40,7 @@ Hart, P. E. (1968). \emph{The condensed nearest neighbor rule} IEEE Transactions
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
   
 \seealso{
-\code{\link{OSSClassif, TomekClassif}}
+\code{\link{OSSClassif}, \link{TomekClassif}}
 }
 \examples{
   library(DMwR)
@@ -68,5 +68,5 @@ Hart, P. E. (1968). \emph{The condensed nearest neighbor rule} IEEE Transactions
   CNN.cats <- CNNClassif(Sex~., cats, Cl="smaller")
 }
 
-\keyword{models}
+\keyword{pre-processing classification}
 

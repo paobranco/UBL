@@ -1,38 +1,39 @@
-##import(graphics)
-##import(abind)  # commented out as it does not have a name space
-##import(xts)
-##importFrom(zoo,as.zoo)
-import(methods)
-##import(ggplot2)
+
+## ------------------------------------------------------------------------------------------------
+
 useDynLib(UBL)
-exportPattern("^[[:alpha:]]+")
+
+## ------------------------------------------------------------------------------------------------
+
+#exportPattern("^[[:alpha:]]+")
 
 
-#exportClasses(
-#    CV, Holdout, LOOCV,
-#    MonteCarlo, Bootstrap, 
-#
-#    EstimationResults,
-#    ComparisonResults,
-#
-#    PredTask,
-#
-#    EstimationTask,
-#
-#    Workflow,
-#    WFoutput
-#    )
 
-#exportMethods(show)
-#exportMethods(summary)
-#exportMethods(plot)
-#exportMethods(subset)
+## ------------------------------------------------------------------------------------------------
+
+import(methods)
+
+## ------------------------------------------------------------------------------------------------
+
+## Functions
 
 export(
-    ## constructors (classDefs.R file)
-    #CV, Holdout, LOOCV,
-    #MonteCarlo, Bootstrap, 
-
-    )
-
-
+	##classification pre-processing methods
+	CNNClassif,
+	ENNClassif,
+	gaussNoiseClassif,
+	ImpSampClassif,
+	NCLClassif,
+	OSSClassif,
+	randOverClassif,
+	randUnderClassif,
+	smoteClassif,
+	TomekClassif,
+	## regression pre-processing methods
+	gaussNoiseRegress,
+	ImpSampRegress,
+	randOverRegress,
+	randUnderRegress,
+	smoteRegress	
+)
+       

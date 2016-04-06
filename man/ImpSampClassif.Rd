@@ -24,14 +24,9 @@ ImpSampClassif(form, data, C.perc="balance")
         cases where the sampling percentages are automatically estimated. 
   }
 }
-\details{
-
-}
 \value{
   The function returns a data frame with
   the new data set resulting from the application of the importance sampling strategy. 
-}
-\references{
 }
 \author{ Paula Branco \email{paobranco@gmail.com}, Rita Ribeiro
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
@@ -55,4 +50,4 @@ ImpSampClassif(form, data, C.perc="balance")
   table(myIS$Species)
 }
 
-\keyword{models}
+\keyword{pre-processing classification}

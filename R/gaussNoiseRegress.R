@@ -52,7 +52,7 @@ gaussNoiseRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balan
 
 {
 #  require(uba, quietly=TRUE)
-  suppressWarnings(suppressPackageStartupMessages(library('uba'))) 
+ # suppressWarnings(suppressPackageStartupMessages(library('uba'))) 
   if(any(is.na(data))){
     stop("The data set provided contains NA values!")
   }
@@ -70,45 +70,56 @@ gaussNoiseRegress <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balan
     stop("Future work!")
   }
   
-  y <- resp(form, data)
+  y <- data[,ncol(data)]
+  attr(y,"names") <- rownames(data)
   s.y <- sort(y)
   
   if (is.matrix(rel)){ 
-    pc <- phi.control(y, method="range", control.pts=rel)
+    pc <- uba::phi.control(y, method="range", control.pts=rel)
   }else if(is.list(rel)){ 
     pc <- rel
   }else if(rel=="auto"){
-    pc <- phi.control(y, method="extremes")
+    pc <- uba::phi.control(y, method="extremes")
   }else{# TODO: handle other relevance functions and not using the threshold!
     stop("future work!")
   }
   
-  temp <- y.relev <- phi(s.y,pc)
+  temp <- y.relev <- uba::phi(s.y,pc)
   if(!length(which(temp<1)))stop("All the points have relevance 1. Please, redefine your relevance function!")
   if(!length(which(temp>0)))stop("All the points have relevance 0. Please, redefine your relevance function!")
 
   temp[which(y.relev>thr.rel)] <- -temp[which(y.relev>thr.rel)]
   bumps <- c()
   for(i in 1:(length(y)-1)){if(temp[i]*temp[i+1]<0) bumps <- c(bumps,i)}
-  nbump <- length(bumps)+1 # number of different classes
+  nbump <- length(bumps)+1 # number of different "classes"
+
   # collect the indexes in each "class"
-  count <- 1
-  obs.ind <- as.list(rep(NA, nbump))
-  base <- s.y[1]
-  last <- y.relev[1]
-  for(i in 2:length(s.y)){
-    if((last <= thr.rel & y.relev[i] <= thr.rel) | (last > thr.rel & y.relev[i] > thr.rel)){
-      base <- c(base,s.y[i])
-      last <- y.relev[i]
-    } else{
-      obs.ind[[count]] <- base
-      last <- y.relev[i]
-      base <- s.y[i]
-      count <- count+1
-    }
-  }
-  obs.ind[[count]] <- base
+#   count <- 1
+#   obs.ind <- as.list(rep(NA, nbump))
+#   base <- s.y[1]
+#   last <- y.relev[1]
+#   for(i in 2:length(s.y)){
+#     if((last <= thr.rel & y.relev[i] <= thr.rel) | (last > thr.rel & y.relev[i] > thr.rel)){
+#       base <- c(base,s.y[i])
+#       last <- y.relev[i]
+#     } else{
+#       obs.ind[[count]] <- base
+#       last <- y.relev[i]
+#       base <- s.y[i]
+#       count <- count+1
+#     }
+#   }
+#   obs.ind[[count]] <- base
   
+    obs.ind <- as.list(rep(NA, nbump))
+    last <- 1
+    for(i in 1:length(bumps)) {
+      obs.ind[[i]] <- s.y[last:bumps[i]]
+      last <- bumps[i] +1
+    }
+    obs.ind[[nbump]] <- s.y[last:length(s.y)]
+
+
   newdata <- data.frame()
   
   if(is.list(C.perc)){

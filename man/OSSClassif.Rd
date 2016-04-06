@@ -30,9 +30,6 @@ OSSClassif(form, data, dist="Euclidean", p=2, Cl="smaller", start="CNN")
      A string which determines which strategy (CNN or Tomek links) should be performed first. The existing options are "CNN" and "Tomek". The first one, "CNN", which is the default, means that CNN strategy will be performed first and Tomek links are applied after. On the other hand, if \code{start} is set to "Tomek" then the reverse order is applied (first Tomek links and after CNN strategy).
    }
 }
-\details{
-
-}
 \value{
   The function returns a data frame with
   the new data set resulting from the application of the selected OSS strategy. 
@@ -47,7 +44,7 @@ Batista, G. E.; Prati, R. C. & Monard, M. C. (2004). \emph{A study of the behavi
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
   
 \seealso{
-\code{\link{TomekClassif, CNNClassif}}
+\code{\link{TomekClassif}, \link{CNNClassif}}
 }
 
 \examples{
@@ -66,5 +63,5 @@ Batista, G. E.; Prati, R. C. & Monard, M. C. (2004). \emph{A study of the behavi
   summary(alg5$season)
 }
 
-\keyword{models}
+\keyword{pre-processing classification}
 

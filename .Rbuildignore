@@ -1,6 +1,10 @@
 doc
 
 ^.*tar.gz$
+
+## Ignore travis config file
+^\.travis\.yml$
+
 README.md
 tests.R
 todo.txt

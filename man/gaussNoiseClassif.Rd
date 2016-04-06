@@ -28,19 +28,17 @@ gaussNoiseClassif(form, data, C.perc="balance", pert=0.1, repl=FALSE)
     A boolean value controlling the possibility of having repetition of examples when performing under-sampling by selecting among the majority class(es) examples.
   }
 }
-\details{
-
-}
 \value{
   The function returns a data frame with
   the new data set resulting from the application of random under-sampling and oversampling through the generation of synthetic examples using Gaussian noise. 
 }
 \references{
-Sauchi Stephen Lee. (1999)  \emph{Regularization in skewed binary classification.}
-Computational Statistics Vol.14, Issue 2, 277-292.
-Sauchi Stephen Lee. 2000.  \emph{Noisy replication in skewed binary classification.}
-Computational statistics & data analysis Vol. 34, Issue 2, 165–191.
+Sauchi Stephen Lee. (1999) \emph{Regularization in skewed binary classification.} Computational Statistics Vol.14, Issue 2, 277-292.
+
+Sauchi Stephen Lee. (2000) \emph{Noisy replication in skewed binary classification.} Computaional stistics and data analysis Vol.34, Issue 2, 165-191.
 }
+
+
 \author{ Paula Branco \email{paobranco@gmail.com}, Rita Ribeiro
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
   
@@ -76,5 +74,5 @@ table(new.gn$Species)
 
 }
 
-\keyword{models}
+\keyword{pre-processing classification}
 

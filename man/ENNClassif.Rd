@@ -70,5 +70,5 @@ D. Wilson. (1972). \emph{Asymptotic properties of nearest neighbor rules using e
   ir1norm[[2]]
 }
 
-\keyword{models}
+\keyword{pre-processing classification}
 
