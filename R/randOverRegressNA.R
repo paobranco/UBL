@@ -51,13 +51,13 @@ randOverRegressNA <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balan
 
   s.y <- sort(y)
   if (is.matrix(rel)){ 
-    pc <- uba::phi.control(y, method="range", control.pts=rel)
+    pc <- phi.control(y, method="range", control.pts=rel)
   }else if(rel=="auto"){
-    pc <- uba::phi.control(y, method="extremes")
+    pc <- phi.control(y, method="extremes")
   }  else{ # TODO: handle other relevance functions and not using the threshold!
     stop("future work!")
   }
-  temp <- y.relev <- uba::phi(s.y,pc)
+  temp <- y.relev <- phi(s.y,pc)
   if(!length(which(temp<1)))stop("All the points have relevance 1. Please, redefine your relevance function!")
   if(!length(which(temp>0)))stop("All the points have relevance 0. Please, redefine your relevance function!")
   temp[which(y.relev>thr.rel)] <- -temp[which(y.relev>thr.rel)]
@@ -82,7 +82,7 @@ randOverRegressNA <- function(form, data, rel="auto", thr.rel=0.5, C.perc="balan
   }
   obs.ind[[count]] <- base
   
-  imp <- sapply(obs.ind, function(x)mean(uba::phi(x,pc)))
+  imp <- sapply(obs.ind, function(x)mean(phi(x,pc)))
   
   ove <- which(imp>thr.rel)
   und <- which(imp<thr.rel)

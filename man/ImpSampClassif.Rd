@@ -5,17 +5,17 @@
 Importance Sampling algorithm for imbalanced classification problems
 }
 \description{
-This function handles imbalanced classification problems using the importance/relevance provided to resample the data set. The relevance is used to introduce replicas of the most important examples and to remove the least important examples. This function combines random over-sampling with random under-samplingwhich are applied in the problem classes according to the corresponding relevance.
+This function handles imbalanced classification problems using the importance/relevance provided to re-sample the data set. The relevance is used to introduce replicas of the most important examples and to remove the least important examples. This function combines random over-sampling with random under-sampling which are applied in the problem classes according to the corresponding relevance.
 }
 \usage{
-ImpSampClassif(form, data, C.perc="balance")
+ImpSampClassif(form, dat, C.perc = "balance")
 }
 
 \arguments{
   \item{form}{
     A formula describing the prediction problem
   }
-  \item{data}{
+  \item{dat}{
     A data frame containing the original (unbalanced) data set
   }
   \item{C.perc}{
@@ -33,16 +33,18 @@ ImpSampClassif(form, data, C.perc="balance")
   
   
 \seealso{
-\code{\link{randUnderClassif}, \link{randOverClassif}}
+\code{\link{RandUnderClassif}, \link{RandOverClassif}}
 }
 
 \examples{
   data(iris)
   # generating an artificially imbalanced data set
-  ir <- iris[-c(51:70,111:150),]
-  IS.ext <-ImpSampClassif(Species~., ir, C.perc="extreme")
-  IS.bal <-ImpSampClassif(Species~., ir, C.perc="balance")
-  myIS <-ImpSampClassif(Species~., ir, C.perc=list(setosa=0.2,versicolor=2,virginica=6))
+  ir <- iris[-c(51:70,111:150), ]
+  IS.ext <-ImpSampClassif(Species~., ir, C.perc = "extreme")
+  IS.bal <-ImpSampClassif(Species~., ir, C.perc = "balance")
+  myIS <-ImpSampClassif(Species~., ir, C.perc = list(setosa = 0.2,
+                                                    versicolor = 2,
+                                                    virginica = 6))
   # check the results
   table(ir$Species)
   table(IS.ext$Species)

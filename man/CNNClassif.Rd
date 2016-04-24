@@ -8,13 +8,13 @@ Condensed Nearest Neighbors strategy for multiclass imbalanced problems
 This function applies the Condensed Nearest Neighbors (CNN) strategy for imbalanced multiclass problems. It constructs a subset of examples which are able to correctly classify the original data set using a one nearest neighbor rule.
 }
 \usage{
-CNNClassif(form, data, dist="Euclidean", p=2, Cl="smaller")
+CNNClassif(form, dat, dist = "Euclidean", p = 2, Cl = "smaller")
 }
 \arguments{
   \item{form}{
     A formula describing the prediction problem.
   }
-  \item{data}{
+  \item{dat}{
     A data frame containing the original imbalanced data set.
   }
   \item{dist}{
@@ -45,27 +45,29 @@ Hart, P. E. (1968). \emph{The condensed nearest neighbor rule} IEEE Transactions
 \examples{
   library(DMwR)
   data(algae)
-  clean.algae <- algae[complete.cases(algae),]
-  myCNN <- CNNClassif(season~., clean.algae, Cl=c("summer", "spring", "winter"),dist="HEOM")
-  CNN1 <- CNNClassif(season~., clean.algae, Cl="smaller",dist="HEOM")
-  CNN2<- CNNClassif(season~., clean.algae, Cl="summer",dist="HVDM")
+  clean.algae <- algae[complete.cases(algae), ]
+  myCNN <- CNNClassif(season~., clean.algae, 
+                      Cl = c("summer", "spring", "winter"),
+                      dist = "HEOM")
+  CNN1 <- CNNClassif(season~., clean.algae, Cl = "smaller", dist = "HEOM")
+  CNN2<- CNNClassif(season~., clean.algae, Cl = "summer",dist = "HVDM")
   summary(myCNN[[1]]$season)
   summary(CNN1[[1]]$season)
   summary(CNN2[[1]]$season)
   
   
-  ir<- iris[-c(95:130),]
-  myCNN.iris <- CNNClassif(Species~., ir, Cl=c("setosa", "virginica"))
-  CNN.iris1 <- CNNClassif(Species~., ir, Cl="smaller")
-  CNN.iris2 <- CNNClassif(Species~., ir, Cl="versicolor")
+  ir <- iris[-c(95:130), ]
+  myCNN.iris <- CNNClassif(Species~., ir, Cl = c("setosa", "virginica"))
+  CNN.iris1 <- CNNClassif(Species~., ir, Cl = "smaller")
+  CNN.iris2 <- CNNClassif(Species~., ir, Cl = "versicolor")
   summary(myCNN.iris[[1]]$Species)
   summary(CNN.iris1[[1]]$Species)
   summary(CNN.iris2[[1]]$Species)
   
   library(MASS)
   data(cats)
-  CNN.catsF <- CNNClassif(Sex~., cats, Cl="F")
-  CNN.cats <- CNNClassif(Sex~., cats, Cl="smaller")
+  CNN.catsF <- CNNClassif(Sex~., cats, Cl = "F")
+  CNN.cats <- CNNClassif(Sex~., cats, Cl = "smaller")
 }
 
 \keyword{pre-processing classification}

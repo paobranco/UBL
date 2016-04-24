@@ -1,5 +1,5 @@
-\name{randUnderRegress}
-\alias{randUnderRegress}
+\name{RandUnderRegress}
+\alias{RandUnderRegress}
 
 \title{
 Random under-sampling for imbalanced regression problems
@@ -12,18 +12,19 @@ of the examples in each "class".
 
 }
 \usage{
-randUnderRegress(form, data,  rel="auto", thr.rel=0.5, C.perc= "balance", repl=FALSE)
+RandUnderRegress(form, dat,  rel = "auto", thr.rel = 0.5, 
+                 C.perc = "balance", repl = FALSE)
 }
 
 \arguments{
   \item{form}{
     A formula describing the prediction problem.
   }
-  \item{data}{
+  \item{dat}{
     A data frame containing the original imbalanced data set.
   }
   \item{rel}{
-    The relevance function which can be automatically ("auto") determined with uba package (the default) or may be provided by the user through a matrix.
+    The relevance function which can be automatically ("auto") determined (the default) or may be provided by the user through a matrix with interpolating points. 
   }
   \item{thr.rel}{
     A number indicating the relevance threshold below which a case is considered as belonging to the normal "class".
@@ -52,15 +53,18 @@ This function performs a random under-sampling strategy for dealing with imbalan
   
 
 \seealso{
-\code{\link{randOverRegress}}
+\code{\link{RandOverRegress}}
 }
 \examples{
   library(DMwR)
   data(algae)
-  clean.algae <- algae[complete.cases(algae),]
-  alg.myUnd <- randUnderRegress(a7~., clean.algae, C.perc=list(0.5) )
-  alg.Bal <- randUnderRegress(a7~., clean.algae, C.perc="balance")
-  alg.Ext <- randUnderRegress(a7~., clean.algae, C.perc="extreme")
+  clean.algae <- algae[complete.cases(algae), ]
+  alg.myUnd <- RandUnderRegress(a7~., clean.algae,
+                                C.perc = list(0.5))
+  alg.Bal <- RandUnderRegress(a7~., clean.algae,
+                                C.perc = "balance")
+  alg.Ext <- RandUnderRegress(a7~., clean.algae, 
+                                C.perc = "extreme")
 
 }
 
