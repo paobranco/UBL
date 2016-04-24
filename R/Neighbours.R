@@ -40,10 +40,11 @@ neighbours <- function(tgt, data, dist, p=2, k)
             "Overlap"=-2,
             "HEOM"=-3,
             "HVDM"=-4,
-            "DVDM"=-5,
-            "IVDM"=-6,
-            "WVDM"=-7,
-            "MVDM"=-8,
+# to be implemented
+#             "DVDM"=-5,
+#             "IVDM"=-6,
+#             "WVDM"=-7,
+#             "MVDM"=-8,
             "p-norm"=p,
             stop("Distance measure not available!"))
    
@@ -89,8 +90,7 @@ nomatr <- c()
   distm <- matrix(0.0,nrow=n, ncol=n)
   numD <- matrix(0.0,nrow=nnum, ncol=n)
   
-  
-                 
+
   storage.mode(numData) <- "double"
   storage.mode(nomData) <- "integer"
   storage.mode(res) <- "integer"

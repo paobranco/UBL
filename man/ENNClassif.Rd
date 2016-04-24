@@ -8,14 +8,14 @@ Edited Nearest Neighbor for multiclass imbalanced problems
 This function handles imbalanced classification problems using the Edited Nearest Neighbor (ENN) algorithm. It removes examples whose class label differs from the class of at least half of its k nearest neighbors. All the existing classes can be under-sampled with this technique. Alternatively a subset of classes to under-sample can be provided by the user.
 }
 \usage{
-ENNClassif(form, data, k=3, dist="Euclidean", p=2, Cl="all")
+ENNClassif(form, dat, k = 3, dist = "Euclidean", p = 2, Cl = "all")
 }
 
 \arguments{
   \item{form}{
     A formula describing the prediction problem.
   }
-  \item{data}{
+  \item{dat}{
     A data frame containing the original (imbalanced) data set.
   }
   \item{k}{
@@ -54,19 +54,21 @@ D. Wilson. (1972). \emph{Asymptotic properties of nearest neighbor rules using e
 \examples{
 
 # generate an small imbalanced data set
-  ir<- iris[-c(95:130),]
+  ir<- iris[-c(95:130), ]
 # use ENN technique with different metrics, number of neighbours and classes
-  ir1norm <- ENNClassif(Species~., ir, k=5, dist="p-norm", p=1, Cl="all")
+  ir1norm <- ENNClassif(Species~., ir, k = 5, dist = "p-norm", 
+                        p = 1, Cl = "all")
   irEucl <- ENNClassif(Species~., ir) # defaults to Euclidean distance
-  irCheby <- ENNClassif(Species~., ir, k=7, dist="Chebyshev", Cl=c("virginica", "setosa"))
-  irHVDM <- ENNClassif(Species~., ir, k=3, dist="HVDM")
+  irCheby <- ENNClassif(Species~., ir, k = 7, dist = "Chebyshev",
+                       Cl = c("virginica", "setosa"))
+  irHVDM <- ENNClassif(Species~., ir, k = 3, dist = "HVDM")
 # checking the impact
   summary(ir$Species)
   summary(ir1norm[[1]]$Species)
   summary(irEucl[[1]]$Species)
   summary(irCheby[[1]]$Species)
   summary(irHVDM[[1]]$Species)
-# check the removed indexes of ir1norm
+# check the removed indexes of the ir1norm data set
   ir1norm[[2]]
 }
 

@@ -5,14 +5,9 @@ useDynLib(UBL)
 
 ## ------------------------------------------------------------------------------------------------
 
-#exportPattern("^[[:alpha:]]+")
-
-
-
-## ------------------------------------------------------------------------------------------------
-
 import(methods)
-
+importFrom("grDevices", "boxplot.stats")
+importFrom("stats", "rnorm", "runif", "sd")
 ## ------------------------------------------------------------------------------------------------
 
 ## Functions
@@ -21,19 +16,25 @@ export(
 	##classification pre-processing methods
 	CNNClassif,
 	ENNClassif,
-	gaussNoiseClassif,
+	GaussNoiseClassif,
 	ImpSampClassif,
 	NCLClassif,
 	OSSClassif,
-	randOverClassif,
-	randUnderClassif,
-	smoteClassif,
+	RandOverClassif,
+	RandUnderClassif,
+	SmoteClassif,
 	TomekClassif,
 	## regression pre-processing methods
-	gaussNoiseRegress,
+	GaussNoiseRegress,
 	ImpSampRegress,
-	randOverRegress,
-	randUnderRegress,
-	smoteRegress	
+	RandOverRegress,
+	RandUnderRegress,
+	SmoteRegress,	
+	## phi related function
+	phi.control,
+#	phi.setup,
+#	phi.extremes,
+#	phi.range,
+	phi
 )
        
