@@ -6,7 +6,7 @@ Version: 0.0.3
 Depends: R(>= 3.0), methods, grDevices, stats
 Suggests: MASS, rpart, testthat, DMwR
 Date: 2016-04-22
-Authors@R: c(person("Paula", "Branco", email = "paobranco@gmail.com", role = c("aut", "cre")), person("Rita", "Ribeiro", email = "rpribeiro@dcc.fc.up.pt", role = "aut"), person("Luis", "Torgo", email = "ltorgo@dcc.fc.up.pt", role = "aut"))
+Authors@R: c(person("Paula", "Branco", email = "paobranco@gmail.com", role = c("aut", "cre")), person("Rita", "Ribeiro", email = "rpribeiro@dcc.fc.up.pt", role = c("aut", "ctb")), person("Luis", "Torgo", email = "ltorgo@dcc.fc.up.pt", role = c("aut", "ctb")))
 URL: https://github.com/paobranco/UBL
 BugReports: https://github.com/paobranco/UBL/issues
 License: GPL (>=2)
