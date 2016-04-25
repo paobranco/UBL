@@ -44,14 +44,16 @@ The function returns the relevance values.
 }
 
 \examples{
+
 # example of a relevance function where the extremes are the important values.
-library(DMwR)
-data(algae)
-clean.algae <- algae[complete.cases(algae),]
-y <- clean.algae$a7
+data(morley)
+# the target variable
+y <- morley$Speed
+
 phiF.args <- phi.control(y,method="extremes",extr.type="both")
-y.phi <- phi(y,control.parms=phiF.args)
-plot(y,y.phi)
+y.phi <- phi(y, control.parms=phiF.args)
+plot(y, y.phi)
+
 }
 
 \keyword{relevance function}

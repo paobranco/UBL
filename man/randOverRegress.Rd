@@ -56,13 +56,13 @@ This function performs a random over-sampling strategy for dealing with imbalanc
 \code{\link{RandUnderRegress}}
 }
 \examples{
-  library(DMwR)
-  data(algae)
-  clean.algae <- algae[complete.cases(algae), ]
-  C.perc = list(4) 
-  alg.myover <- RandOverRegress(a7~., clean.algae, C.perc = C.perc)
-  alg.Bal <- RandOverRegress(a7~., clean.algae, C.perc = "balance")
-  alg.Ext <- RandOverRegress(a7~., clean.algae, C.perc = "extreme")
+
+data(morley)
+
+C.perc = list(2, 4)
+myover <- RandOverRegress(Speed~., morley, C.perc=C.perc)
+Bal <- RandOverRegress(Speed~., morley, C.perc= "balance")
+Ext <- RandOverRegress(Speed~., morley, C.perc= "extreme")
 
 }
 

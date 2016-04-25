@@ -48,6 +48,7 @@ Batista, G. E.; Prati, R. C. & Monard, M. C. (2004). \emph{A study of the behavi
 }
 
 \examples{
+  \dontrun{
   library(DMwR)
   data(algae)
   clean.algae <- algae[complete.cases(algae), ]
@@ -63,7 +64,7 @@ Batista, G. E.; Prati, R. C. & Monard, M. C. (2004). \emph{A study of the behavi
   summary(alg3$season)
   summary(alg4$season)
   summary(alg5$season)
+  }
 }
-
 \keyword{pre-processing classification}
 

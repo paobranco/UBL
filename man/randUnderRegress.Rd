@@ -56,15 +56,13 @@ This function performs a random under-sampling strategy for dealing with imbalan
 \code{\link{RandOverRegress}}
 }
 \examples{
-  library(DMwR)
-  data(algae)
-  clean.algae <- algae[complete.cases(algae), ]
-  alg.myUnd <- RandUnderRegress(a7~., clean.algae,
-                                C.perc = list(0.5))
-  alg.Bal <- RandUnderRegress(a7~., clean.algae,
-                                C.perc = "balance")
-  alg.Ext <- RandUnderRegress(a7~., clean.algae, 
-                                C.perc = "extreme")
+
+data(morley)
+
+C.perc = list(0.5)
+myUnd <- RandUnderRegress(Speed~., morley, C.perc=C.perc)
+Bal <- RandUnderRegress(Speed~., morley, C.perc= "balance")
+Ext <- RandUnderRegress(Speed~., morley, C.perc= "extreme")
 
 }
 

@@ -88,15 +88,6 @@ Intelligence Research, 16:321-357.
 }
 
 \examples{
-  library(DMwR)
-  data(algae)
-  clean.algae <- algae[complete.cases(algae), ]
-  mysmote.alg <- SmoteRegress(a7~., clean.algae, dist = "HEOM",
-                              C.perc = list(0.1, 8))
-  smoteBal.alg <- SmoteRegress(a7~., clean.algae, dist = "HEOM",
-                              C.perc = "balance")
-  smoteExt.alg <- SmoteRegress(a7~., clean.algae, dist = "HEOM",
-                              C.perc = "extreme")
 
   ir <- iris[-c(95:130), ]
   mysmote1.iris <- SmoteRegress(Sepal.Width~., ir, dist = "HEOM",
