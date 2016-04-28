@@ -1,3 +1,7 @@
-VERSION 0.1.1 (2016-04-15)
+VERSION 0.0.4 (2016-04-28)
+- correction of bugs related with FORTRAN code
 
-- first stable version
+VERSION 0.0.3 (2016-04-15)
+
+- first version
+

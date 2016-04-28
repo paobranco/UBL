@@ -12,9 +12,9 @@ phi <- function(y, control.parms) {
   npts <- control.parms[[2]]
   lparms <- length(control.parms[[3]])
   phiParms <- control.parms[[3]]
-  yPhi <- rep(0.0, n)
-  ydPhi <- rep(0.0, n)
-  yddPhi <- rep(0.0, n)  
+  yPhi <- rep(0.0, times=n)
+  ydPhi <- rep(0.0, times=n)
+  yddPhi <- rep(0.0, times=n)  
 
   storage.mode(n) <- "integer"
   storage.mode(y) <- "double"

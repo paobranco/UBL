@@ -155,10 +155,10 @@ end subroutine callChebyshev
 subroutine callHVDM(distm, numD, nomData, nnum, nnom, tgtData, n, Cl)
 	implicit none
 	!Arguments
+	integer(kind=4), intent(in) :: nnum, nnom, n, Cl
 	real(kind=8), intent(inout) :: distm(n,n)
 	real   (kind=8), intent(in) :: numD(nnum,n)
 	integer(kind=4), intent(in) :: nomData(nnom,n)
-	integer(kind=4), intent(in) :: nnum, nnom, n, Cl
 	real   (kind=8), intent(in) :: tgtData(n)
 
 	!Local Variables
@@ -260,17 +260,18 @@ end subroutine callHEOM
 !!functions definitions
 double precision function pNorm(p,a,b,d)
 	implicit none
-	real   (kind=8), intent(in) :: a(d), b(d)
 	integer(kind=4), intent(in) :: p, d
-	
+	real   (kind=8), intent(in) :: a(d), b(d)
+
 	pNorm = (sum((abs(a-b))**p))**(1.0/dble(p))
 
 end function pNorm
 
 double precision function HEOMnum(a,b,d,ranges)
 	implicit none
-	real   (kind=8), intent(in) :: a(d), b(d), ranges(d)
 	integer(kind=4), intent(in) :: d
+	real   (kind=8), intent(in) :: a(d), b(d), ranges(d)
+
 
 	HEOMnum = sum((abs(a-b)/ranges)**2)
 
@@ -278,8 +279,9 @@ end function HEOMnum
 
 double precision function chebyshev(a,b,d)
 	implicit none
-	real   (kind=8), intent(in) :: a(d), b(d)
 	integer(kind=4), intent(in) :: d
+	real   (kind=8), intent(in) :: a(d), b(d)
+
 
 	chebyshev = maxval(abs(a-b))
 
@@ -287,8 +289,8 @@ end function chebyshev
 
 double precision function overlap(a,b,d)
 	implicit none
-	integer(kind=4), intent(in) :: a(d), b(d)
 	integer(kind=4), intent(in) :: d
+	integer(kind=4), intent(in) :: a(d), b(d)
 	integer            (kind=4) :: i,s
 	
 	s = 0
@@ -304,8 +306,8 @@ end function overlap
 
 double precision function canberra(a,b,d)
 	implicit none
-	real   (kind=8), intent(in) :: a(d), b(d)
 	integer(kind=4), intent(in) :: d
+	real   (kind=8), intent(in) :: a(d), b(d)
 	
 	canberra = sum(abs(a-b)/(abs(a)+abs(b)))
 
@@ -314,9 +316,9 @@ end function canberra
 ! Heterogenous Value Difference Metric
 double precision function HVDM(numa, numb, sd, nom, dimnum, dimnom, tgtData, n, i, j, Cl)
 	implicit none
+	integer(kind=4), intent(in) :: dimnum, dimnom, n, i, j, Cl
 	real   (kind=8), intent(in) :: numa(dimnum), numb(dimnum)
 	integer(kind=4), intent(in) :: nom(dimnom, n)
-	integer(kind=4), intent(in) :: dimnum, dimnom, n, i, j, Cl
 	real   (kind=8), intent(in) :: tgtData(n)
 	real   (kind=8), intent(in) :: sd(dimnum)
 
@@ -340,8 +342,9 @@ end function HVDM
 
 double precision function HVDMnum(numa, numb, dimnum, sd)
 	implicit none
-	real   (kind=8), intent(in) :: numa(dimnum), numb(dimnum), sd(dimnum)
 	integer(kind=4), intent(in) :: dimnum
+	real   (kind=8), intent(in) :: numa(dimnum), numb(dimnum), sd(dimnum)
+
 
 	integer            (kind=4) :: i
 

@@ -71,11 +71,11 @@
 
 \newcommand{\pUBL}{package \texttt{UBL}\ }
 \newcommand{\UBLp}{\texttt{UBL}\ package  }
-\newcommand{\version}{0.0.3}
+\newcommand{\version}{0.0.4}
 
-\author{Paula Branco, Rita Ribeiro and Luis Torgo\\FCUP - LIAAD/INESC Tec\\University of Porto\\
+\author{Paula Branco, Rita P. Ribeiro and Luis Torgo\\FCUP - LIAAD/INESC Tec\\University of Porto\\
   \texttt{ \{paula.branco,rpribeiro,ltorgo\}@dcc.fc.up.pt}}
-\title{UBL: an R package for Utility-based Learning}
+\title{UBL: an R Package for Utility-Based Learning}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
@@ -87,18 +87,18 @@
 
 \begin{abstract}
   
-  This document describes the R \pUBL that allows the use of several methods for handling utility-based learning problems. Classification and regression problems that assume non-uniform costs and/or benefits pose serious challenges to predictive analytics tasks. In the context of meteorology, finance, medicine, ecology, among many other, specific domain information concerning the preference bias of the users must be taken into account to enhance the models predictive performance. To deal with this problem, a large number of techniques was proposed by the research community for both classification and regression tasks. 
-  The main goal of \UBLp is to facilitate the utility-based predicitive analytics task by providing a set of methods to deal with this type of problems in the R environment. It is a versatile tool that provides mechanisms to handle both regression and classification (binary and multiclass) tasks. Moreover, \UBLp allows the user to specify his domain preferences, but it also provides some automatic methods that try to infer those preference bias from the domain, considering some common known settings. 
+  This document describes the R \pUBL that allows the use of several methods for handling utility-based learning problems. Classification and regression problems that assume non-uniform costs and/or benefits pose serious challenges to predictive analytic tasks. In the context of meteorology, finance, medicine, ecology, among many other, specific domain information concerning the preference bias of the users must be taken into account to enhance the models predictive performance. To deal with this problem, a large number of techniques was proposed by the research community for both classification and regression tasks. 
+  The main goal of \UBLp is to facilitate the utility-based predictive analytic task by providing a set of methods to deal with this type of problems in the R environment. It is a versatile tool that provides mechanisms to handle both regression and classification (binary and multiclass) tasks. Moreover, \UBLp allows the user to specify his domain preferences, but it also provides some automatic methods that try to infer those preference bias from the domain, considering some common known settings. 
 
 \end{abstract}
 
 % ====================================================================
 \section{Introduction}
 
-This document describes the methods available in \pUBL \footnote{This document was written for version \version of \UBLp.} to deal with utility-based problems. \UBLp aims at providing a diverse set of methods to address predictive tasks where the user has a non-uniform preference bias across the domain. The package provides tools suitable for both classification and regression tasks. All the methods available in \UBLp were extended for being able to deal with multiclass problems and with regression problems possibly containing several relevant regions across the target variable domain. 
+This document describes the methods available in \pUBL \footnote{This document was written for \UBLp version \version.} to deal with utility-based problems. \UBLp aims at providing a diverse set of methods to address predictive tasks where the user has a non-uniform preference bias across the domain. The package provides tools suitable for both classification and regression tasks. All the methods available in \UBLp were extended for being able to deal with multiclass problems and with regression problems possibly containing several relevant regions across the target variable domain. 
 
 
-Utility-based problems are defined in the context of predictive tasks where the user has a differenciated interest over the domain. This means that, in this type of problems, the user has non-uniform benefits for the correct predictions and/or assumes non-uniform costs for different errors. Many real world applications are utility-based learning problems because they encompass domain specific information which, if disregarded, may strongly penalize the performance of predictive models. This happens in the context of meteorology, finance, medicine, ecology, among many other, where specific domain information concerning the user preferences must be taken into account to enhance the models predictive performance.
+Utility-based problems are defined in the context of predictive tasks where the user has a differentiated interest over the domain. This means that, in this type of problems, the user has non-uniform benefits for the correct predictions and/or assumes non-uniform costs for different errors. Many real world applications are utility-based learning problems because they encompass domain specific information which, if disregarded, may strongly penalize the performance of predictive models. This happens in the context of meteorology, finance, medicine, ecology, among many other, where specific domain information concerning the user preferences must be taken into account to enhance the models predictive performance.
 
 
 In the utility-based learning framework we can frequently witness the conjugation of two important factors: i) an increased interest in some particular range(s)/class(es) of the target variable values and ii) a scarce representation of the examples belonging to that range(s)/class(es). This situation occurs in both classification and regression tasks and is usually known as the problem of imbalanced domains \cite{branco2015survey}.
@@ -109,7 +109,7 @@ Utility-based learning assumes non-uniform costs and/or benefits which are usual
 
 % The methods implemented in \UBL are pre-processing approaches which aim at altering the original data set to match the user preferences. This means that the methods for dealing with imbalanced domains are only relevant when the user preferences are focused on the least represented examples. In fact, if the most frequent cases are the most important, then the learning algorithms will naturally tend to focus on these examples, and therefore there is no need to change the original distribution. On the other hand, when the most relevant examples are scarcely represented any learning algorithm used will focus on the normal cases and will fail the most important predictions on the rare examples.
 
-Several types of approaches exist for handling utiltiy-based learning problems. These approaches were categorized into: pre-processing, change the learning algorithms, post-processing or hybrid \cite{branco2015survey}. The \textbf{pre-processing} approaches act before the learning stage by manipulating the examples distribution to match the user preferences. The methods that \textbf{change the learning algorithms} try to incorporate the user preference bias into the selected learning algorithm. There are also strategies that are applied as a \textbf{post-processing} step by changing the predictions made by a standard learner using the original data set. Finally there are \textbf{hybrid} approaches that combine some of the previous strategies.
+Several types of approaches exist for handling utility-based learning problems. These approaches were categorized into: pre-processing, change the learning algorithms, post-processing or hybrid \cite{branco2015survey}. The \textbf{pre-processing} approaches act before the learning stage by manipulating the examples distribution to match the user preferences. The methods that \textbf{change the learning algorithms} try to incorporate the user preference bias into the selected learning algorithm. There are also strategies that are applied as a \textbf{post-processing} step by changing the predictions made by a standard learner using the original data set. Finally there are \textbf{hybrid} approaches that combine some of the previous strategies.
 
 
 In \pUBL we have focused on pre-processing strategies to address the problem of utility-based learning. These strategies change the original distribution of examples by removing or/and adding examples, i.e., by performing under-sampling or over-sampling. The under-sampling strategies may be random or focused. By focused under-sampling we mean that the discarded examples satisfy a given requirement, such as: are possibly noisy examples, are too distant from the decision border, are too close to the border, etc. Regarding the over-sampling methods there are two main options: over-sampling is accomplished by the introduction of replicas of examples or by the generation of new synthetic examples. For the strategies which include copies of existing examples, the cases may be selected randomly or in an informed fashion. Approaches that build synthetic cases differ among themselves in the generation process adopted. Several strategies combine under-sampling and over-sampling methods in different ranges/classes of the target variable.
@@ -142,7 +142,7 @@ To install the development version from GitHub you should do the following in R:
 \end{kframe}
 \end{knitrout}
 
-Furter instructions may be found at the mentioned GitHub page. 
+Further instructions may be found at the mentioned GitHub page. 
 For reporting issues related with \UBLp you can use: \url{https://github.com/paobranco/UBL/issues}.
 
 
@@ -457,9 +457,9 @@ Figure \ref{fig:Iris_RO2} shows the impact of this strategy on the number of exa
 
 \subsection{Importance Sampling}\label{sec:ISClassif}
 
-The main idea of Importance Sampling strategy is to perform random over- or under-sampling in each class according to the importance assigned by the user. This means that for each class the user can specify its relevance. Then, this relevance is used to change each class frequency by selecting randomly examples from each class. Alternatively, the user may consider that each class is equaly important or may chose to invert the classes frequencies.
+The main idea of Importance Sampling strategy is to perform random over- or under-sampling in each class according to the importance assigned by the user. This means that for each class the user can specify its relevance. Then, this relevance is used to change each class frequency by selecting randomly examples from each class. Alternatively, the user may consider that each class is equally important or may chose to invert the classes frequencies.
 
-This strategy is available in \UBLp through the function \texttt{ImpSampClassif}. The user may specify using parameter \texttt{C.perc} the classes where over-/under-sampling must be applied, by indicating the corresponding percentages. If all classes are equally important and a perfectly balanced data set should be obtained, the \texttt{C.perc} parameter must be set to ``balance". On the other hand, if the classes frequencies sould be inverted, then this parameter should be ``extreme". The following example illustrate the use of this function.
+This strategy is available in \UBLp through the function \texttt{ImpSampClassif}. The user may specify using parameter \texttt{C.perc} the classes where over-/under-sampling must be applied, by indicating the corresponding percentages. If all classes are equally important and a perfectly balanced data set should be obtained, the \texttt{C.perc} parameter must be set to ``balance". On the other hand, if the classes frequencies should be inverted, then this parameter should be ``extreme". The following example illustrate the use of this function.
 
 
 \begin{knitrout}\footnotesize
@@ -838,7 +838,7 @@ The Edited Nearest Neighbor (ENN) algorithm was proposed by \cite{wilson1972asym
 
 We have implemented this approach for being able to tackle multiclass problems, allowing the user to specify through the \texttt{Cl} parameter a subset of classes which should be under-sampled. Moreover, in our implementation, the user may also define the number of nearest neighbors that should be considered by the algorithm. This means that an example is removed if its class label is different from the class label of at least half of its k-nearest neighbors and if it belongs to the subset of classes candidates for removal. The ENN algorithm is available in \UBL through the function \texttt{ENNClassif}. The number of neighbors to consider is set through the parameter \texttt{k} and the subset of classes that are candidates for being under-sampled are defined through the \texttt{Cl} parameter. The default of \texttt{Cl} is ``all", meaning that all classes are candidates for having examples removed. The user can also specify which distance metric he wants to use in the nearest neighbors computation. The function \texttt{ENNClassif} returns a list containing the new under-sampled data set and the indexes of the examples removed.
 
-It is possible that ENN finds no examples to remove, which means that, for the parameters selected, teher are no examples satisfying the necessary conditions to be removed. In this case, a warning is issued with the goal of adverting the user that the strategy is not modifying the data set provided.
+It is possible that ENN finds no examples to remove, which means that, for the parameters selected, there are no examples satisfying the necessary conditions to be removed. In this case, a warning is issued with the goal of adverting the user that the strategy is not modifying the data set provided.
 
 
 \begin{knitrout}\footnotesize
@@ -1278,7 +1278,7 @@ In order to facilitate the user task, we also provide an automatic mechanism pro
 
 All the implemented methods for utility-based regression tasks depend on the definition of a relevance function, and the majority of them also rely on a relevance threshold established by the user.
 
-In the next sections we describe the following methods for takling utility-based regression tasks:
+In the next sections we describe the following methods for tackling utility-based regression tasks:
 \begin{itemize}
 \item \ref{sec:RURegress} Random Under-sampling
 \item \ref{sec:RORegress} Random Over-sampling
@@ -1608,8 +1608,10 @@ Figure \ref{fig:smoteR_rel1} shows that we are considering two different bumps: 
 \hlcom{# Thus, we can chose the following percentages: }
 \hlstd{thr.rel}\hlkwb{=}\hlnum{0.8}
 \hlstd{C.perc}\hlkwb{=}\hlkwd{list}\hlstd{(}\hlnum{0.1}\hlstd{,} \hlnum{8}\hlstd{)}
-\hlcom{# using these percentages and the relevance threshold of 0.8 with all the other parameters default values}
-\hlcom{# it is necessary to set the distance function to "HEOM" because the data set contains nominal and numeric features}
+\hlcom{# using these percentages and the relevance threshold of 0.8 with all}
+\hlcom{# the other parameters default values}
+\hlcom{# it is necessary to set the distance function to "HEOM" because the}
+\hlcom{# data set contains nominal and numeric features}
 \hlstd{mysm} \hlkwb{<-} \hlkwd{SmoteRegress}\hlstd{(a7}\hlopt{~}\hlstd{., clean.algae,} \hlkwc{thr.rel}\hlstd{=thr.rel,} \hlkwc{dist}\hlstd{=}\hlstr{"HEOM"}\hlstd{,} \hlkwc{C.perc}\hlstd{=C.perc)}
 
 \hlcom{# use the automatic method for obtaining a balanced data set}

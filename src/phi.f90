@@ -9,7 +9,7 @@ subroutine rtophi(n, y, method, npts, lparms, phiParms, yPhi, ydPhi, yddPhi)
 ! Subroutine rtophi is used for obtaining and evaluating the relevance&
 ! function for a set of points of the target variable provided.
 !----------------------------------------------------------------
-!                n :: input, integer, the nr of points.
+!                n :: input, integer, the nr of points in y.
 !              y(n):: input, real values, the target values.
 !           method :: input, integer, the method used for obtaining &
 !                     the relevance (0:extremes, 1:range)
@@ -39,10 +39,16 @@ subroutine rtophi(n, y, method, npts, lparms, phiParms, yPhi, ydPhi, yddPhi)
 	real(kind=8), intent (inout) :: yPhi(n), ydPhi(n), yddPhi(n)
 	
 	!Local Variables
-	real   (kind=8) :: x(npts), a(npts), b(npts), c(npts), d(npts),&
-						y_phi, yd_phi, ydd_phi
+	real   (kind=8) :: x(npts), a(npts), b(npts), c(npts), d(npts) !,&
+!						y_phi, yd_phi, ydd_phi
 	integer(kind=4) :: i
-
+	
+	x=0.0d0
+	a=0.0d0
+	b=0.0d0
+	c=0.0d0
+	d=0.0d0
+	i=1
 	call phiSplInit(lparms, phiParms, npts, x, a, b, c, d)
 
 	call phiEval(n, y, method, npts, x, a, b, c, d, yPhi, ydPhi, yddPhi)
@@ -59,7 +65,6 @@ subroutine phiEval(n, y, method, npts, x, a, b, c, d, yPhi, ydPhi, yddPhi)
 	!Local Variables 
 	integer(kind=4) :: i
 	real   (kind=8) :: yval, yvald, yvaldd
-
 	do i=1, n
 		call phiSplValue(y(i), method, n, npts, x, a, b, c, d, yval, yvald, yvaldd)
 		yPhi(i) = yval
@@ -318,11 +323,11 @@ subroutine findInterval(xt, npts, x, rightmostClosed, allInside, ilo,&
 						mflag, left)
 !----------------------------------------------------------------
 ! Subroutine findInterval determines in which interval a case is.
-! Adaptation of findInterval function in Applic.h
+! Adaptation of findInterval function in Applic.h in c to fortran 90
 !----------------------------------------------------------------
-!           xt(n) :: input, real values, numeric vector of length n,&
+!        xt(npts) :: input, real values, numeric vector of length n,&
 !                    assumed to be nondecreasing
-!               n :: input, integer, length of xt
+!            npts :: input, integer, length of xt
 !               x :: input, real value, the point whose location with&
 !                    respect to the sequence  xt  is to be determined.
 ! rightmostClosed :: input, integer, binary parameter setting if right&
@@ -404,12 +409,8 @@ subroutine findInterval(xt, npts, x, rightmostClosed, allInside, ilo,&
 		do while (ihi < npts)
 			ilo = ihi
 			ihi = ilo + istep
-			if(ihi >= npts) then
-				if (x >= xt(n)) then
-					ihi = npts
-					call rightBoundary(xt, npts, x, mflag, allInside,&
-										rightmostClosed, left)
-				end if
+			if (ihi >= npts) then
+				exit
 			end if
 			if (x < xt(ihi)) then
 				call gotoL50(xt, npts, x, ilo, ihi, mflag, left)
@@ -417,6 +418,7 @@ subroutine findInterval(xt, npts, x, rightmostClosed, allInside, ilo,&
 			end if
 			istep = istep * 2
 		end do
+		
 		if (x >= xt(npts)) then
 			call rightBoundary(xt, npts, x, mflag, allInside, &
 								rightmostClosed, left)
@@ -424,7 +426,8 @@ subroutine findInterval(xt, npts, x, rightmostClosed, allInside, ilo,&
 		end if
 		ihi = npts
 	end if
-
+	
+	call gotoL50(xt, npts, x, ilo, ihi, mflag, left)
 
 end subroutine findInterval
 
