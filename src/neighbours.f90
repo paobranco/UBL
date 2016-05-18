@@ -243,7 +243,7 @@ subroutine callHEOM(distm, numD, nnum, nomData, nnom, n)
 	real   (kind=8) :: ranges(nnum)
 
 	do i=1,nnum
-		ranges(i) = maxval(numD(:,i)) - minval(numD(:,i))
+		ranges(i) = maxval(numD(i,:)) - minval(numD(i,:))
 	end do
 
 	do j=1,n-1
