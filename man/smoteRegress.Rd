@@ -1,5 +1,5 @@
-\name{smoteRegress}
-\alias{smoteRegress}
+\name{SmoteRegress}
+\alias{SmoteRegress}
 
 \title{
 SMOTE algorithm for imbalanced regression problems
@@ -10,19 +10,19 @@ method. Namely, it can generate a new "SMOTEd" data set that addresses
 the problem of imbalanced domains. 
 }
 \usage{
-smoteRegress(form, data, rel="auto", thr.rel=0.5, C.perc="balance",
-                         k=5, repl=FALSE, dist="Euclidean", p=2)
+SmoteRegress(form, dat, rel = "auto", thr.rel = 0.5, C.perc = "balance",
+                         k = 5, repl = FALSE, dist = "Euclidean", p = 2)
 }
 
 \arguments{
   \item{form}{
     A formula describing the prediction problem
   }
-  \item{data}{
+  \item{dat}{
     A data frame containing the original (unbalanced) data set
   }
   \item{rel}{
-    The relevance function which can be automatically ("auto") determined with uba package (the default) or may be provided by the user through a matrix.
+    The relevance function which can be automatically ("auto") determined (the default) or may be provided by the user through a matrix.
   }
   \item{thr.rel}{
     A number indicating the relevance threshold above which a case is considered as belonging to the rare "class".
@@ -48,7 +48,7 @@ smoteRegress(form, data, rel="auto", thr.rel=0.5, C.perc="balance",
     A character string indicating which distance metric to use when determining the k nearest neighbors.
   }
     \item{p}{
-    A number indicating the value of p if the "p-norm" distance is chosen.
+    A number indicating the value of p if the "p-norm" distance is chosen. Only necessary if a "p-norm" is choosen in the \code{dist} argument.
   }
 }
 \details{
@@ -84,35 +84,34 @@ Intelligence Research, 16:321-357.
   
   
 \seealso{
-\code{\link{randUnderRegress}, \link{randOverRegress}}
+\code{\link{RandUnderRegress}, \link{RandOverRegress}}
 }
 
 \examples{
-  library(DMwR)
-  data(algae)
-  clean.algae <- algae[complete.cases(algae),]
-  mysmote.alg <- smoteRegress(a7~., clean.algae, C.perc=list(0.1, 8))
-  smoteBal.alg <- smoteRegress(a7~., clean.algae, C.perc="balance")
-  smoteExt.alg <- smoteRegress(a7~., clean.algae, C.perc="extreme")
 
-  ir<- iris[-c(95:130),]
-  mysmote.iris <- smoteRegress(Sepal.Width~., ir, dist="HEOM", C.perc=list(0.5,2.5))
-  mysmote.iris <- smoteRegress(Sepal.Width~., ir, dist="HEOM", C.perc=list(0.2,4), thr.rel=0.8)
-  smoteBalan.iris <- smoteRegress(Sepal.Width~., ir, dist="HEOM", C.perc="balance")
-  smoteExtre.iris <- smoteRegress(Sepal.Width~., ir, dist="HEOM", C.perc="extreme")
+  ir <- iris[-c(95:130), ]
+  mysmote1.iris <- SmoteRegress(Sepal.Width~., ir, dist = "HEOM",
+                                C.perc=list(0.5,2.5))
+  mysmote2.iris <- SmoteRegress(Sepal.Width~., ir, dist = "HEOM",
+                                C.perc = list(0.2, 4), thr.rel = 0.8)
+  smoteBalan.iris <- SmoteRegress(Sepal.Width~., ir, dist = "HEOM",
+                                C.perc = "balance")
+  smoteExtre.iris <- SmoteRegress(Sepal.Width~., ir, dist = "HEOM",
+                                C.perc = "extreme")
   
   # checking visually the results 
   plot(sort(ir$Sepal.Width))
   plot(sort(smoteExtre.iris$Sepal.Width))
   
   # using a relevance function provided by the user
-  rel <- matrix(0,ncol=3,nrow=0)
-  rel <- rbind(rel,c(2,1,0))
-  rel <- rbind(rel,c(3,0,0))
-  rel <- rbind(rel,c(4,1,0))
+  rel <- matrix(0, ncol = 3, nrow = 0)
+  rel <- rbind(rel, c(2, 1, 0))
+  rel <- rbind(rel, c(3, 0, 0))
+  rel <- rbind(rel, c(4, 1, 0))
 
-  sP.ir <- smoteRegress(Sepal.Width~., ir, rel=rel, dist="HEOM", C.perc=list(4,0.5,4))
+  sP.ir <- SmoteRegress(Sepal.Width~., ir, rel = rel, dist = "HEOM",
+                        C.perc = list(4, 0.5, 4))
 
 }
 
-\keyword{models}
+\keyword{pre-processing regression}

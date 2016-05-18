@@ -18,11 +18,15 @@
  pdfstartview={XYZ null null 1}}
 \usepackage{breakurl}
 
-\newcommand{\UBL}{package \texttt{UBL}\ }
+\newcommand{\UBL}{\texttt{UBL}\ }
 
-\author{Paula Branco, Rita Ribeiro and Luis Torgo\\FCUP - LIAAD/INESC Tec\\University of Porto\\
-  \texttt{paobranco@gmail.com}, \texttt{rpribeiro@dcc.fc.up.pt}, \texttt{ltorgo@dcc.fc.up.pt}}
-\title{Utility-based Learning in R}
+\newcommand{\pUBL}{package \texttt{UBL}\ }
+\newcommand{\UBLp}{\texttt{UBL}\ package  }
+\newcommand{\version}{0.0.4}
+
+\author{Paula Branco, Rita P. Ribeiro and Luis Torgo\\FCUP - LIAAD/INESC Tec\\University of Porto\\
+  \texttt{ \{paula.branco,rpribeiro,ltorgo\}@dcc.fc.up.pt}}
+\title{UBL: an R Package for Utility-Based Learning}
 
 \begin{document}
 
@@ -35,7 +39,6 @@ options(replace.assign=TRUE,width=90)
 ##
 ##library(devtools)
 ##load_all("~/Software/R/MyPackages/UBLn")
-library(uba)
 library(UBL)
 library(ggplot2)
 library(reshape2)
@@ -50,97 +53,100 @@ library(performanceEstimation)
 
 \begin{abstract}
   
-  This document describes the R \UBL package that allows the use of several methods for handling imbalanced data distributions. Imbalanced domains pose serious problems in the predictive analytics context. To deal with this problem a large number of techniques was proposed by the research community for both classification and regression tasks.
-  The main goal of the R \UBL package is to facilitate the task of addressing the problem of imbalanced data distributions by providing a set of methods to deal with this problem. 
-   
+  This document describes the R \pUBL that allows the use of several methods for handling utility-based learning problems. Classification and regression problems that assume non-uniform costs and/or benefits pose serious challenges to predictive analytic tasks. In the context of meteorology, finance, medicine, ecology, among many other, specific domain information concerning the preference bias of the users must be taken into account to enhance the models predictive performance. To deal with this problem, a large number of techniques was proposed by the research community for both classification and regression tasks. 
+  The main goal of \UBLp is to facilitate the utility-based predictive analytic task by providing a set of methods to deal with this type of problems in the R environment. It is a versatile tool that provides mechanisms to handle both regression and classification (binary and multiclass) tasks. Moreover, \UBLp allows the user to specify his domain preferences, but it also provides some automatic methods that try to infer those preference bias from the domain, considering some common known settings. 
+
 \end{abstract}
 
 % ====================================================================
 \section{Introduction}
 
-The goal of this document is to describe the methods available in package \UBL to deal with imbalanced domains. \texttt{UBL} package aims at providing a diverse set of methods to address predictive tasks under imbalanced data distributions. The package provides tools suitable for both classification and regression tasks.
-All the methods were extended for being able to deal with multiclass problems and with regression problems which may possibly contain several relevant bumps across the domain of the target variable.
-
-The problem of imbalanced domains is related to conjunction of two aspects: i) an asymmetric distribution of the examples over the target variable domain, and ii) a user preference bias towards the rare cases. In this context, the least represented ranges/classes of the target variable are also the most important to the user. However, being cases poorly represented, the learning algorithms will have difficulty in focusing on these cases. The algorithms will tend to present a good performance on the normal and frequent cases and will display a worst performance on the most relevant and scarce cases.
+This document describes the methods available in \pUBL \footnote{This document was written for \UBLp version \version.} to deal with utility-based problems. \UBLp aims at providing a diverse set of methods to address predictive tasks where the user has a non-uniform preference bias across the domain. The package provides tools suitable for both classification and regression tasks. All the methods available in \UBLp were extended for being able to deal with multiclass problems and with regression problems possibly containing several relevant regions across the target variable domain. 
 
 
-The methods implemented in \UBL are pre-processing approaches which aim at altering the original data set to match the user preferences. This means that the methods for dealing with imbalanced domains are only relevant when the user preferences are focused on the least represented examples. In fact, if the most frequent cases are the most important, then the learning algorithms will naturally tend to focus on these examples, and therefore there is no need to change the original distribution. On the other hand, when the most relevant examples are scarcely represented any learning algorithm used will focus on the normal cases and will fail the most important predictions on the rare examples.
-
-Several types of approaches exist for handling imbalanced domains. Some approaches act as a \textbf{pre-processing} step by manipulating the examples distribution to match the user preferences. Other methods \textbf{change the learning algorithms} for dealing with a specific imbalanced task. There are also strategies that are applied as a \textbf{post-processing} step and change the predictions made by a standard learner using the original data set.
+Utility-based problems are defined in the context of predictive tasks where the user has a differentiated interest over the domain. This means that, in this type of problems, the user has non-uniform benefits for the correct predictions and/or assumes non-uniform costs for different errors. Many real world applications are utility-based learning problems because they encompass domain specific information which, if disregarded, may strongly penalize the performance of predictive models. This happens in the context of meteorology, finance, medicine, ecology, among many other, where specific domain information concerning the user preferences must be taken into account to enhance the models predictive performance.
 
 
-In \UBL we have focused on pre-processing strategies to address the problem of imbalanced distributions. These strategies change the original distribution of examples by removing or/and adding examples, i.e., by performing under-sampling or over-sampling. The under-sampling strategies may be random or focused. By focused under-sampling we mean that the discarded examples satisfy a given requirement, such as: are possibly noisy examples, are too distant from the decision border, are too close to the border, etc. Regarding the over-sampling methods there are two main options: over-sampling is accomplished by the introduction of replicas of examples or by the generation of new synthetic examples. For the strategies which include copies of existing examples the cases may be selected randomly or in an informed fashion. Approaches that build synthetic cases differ among themselves in the generation process adopted. Several strategies combine under-sampling and over-sampling methods in different ranges/classes of the target variable.
+In the utility-based learning framework we can frequently witness the conjugation of two important factors: i) an increased interest in some particular range(s)/class(es) of the target variable values and ii) a scarce representation of the examples belonging to that range(s)/class(es). This situation occurs in both classification and regression tasks and is usually known as the problem of imbalanced domains \cite{branco2015survey}.
+
+Utility-based learning assumes non-uniform costs and/or benefits which are usually expressed through a cost/benefit matrix (in classification) or a cost/benefit surface (in regression). However, frequently this information is just not available, or is hard/expensive to obtain because it often requires the intervention of a domain expert. This means that for many domains, there is only an informal knowledge regarding which are the most costly mistakes and which are the most important classes/ranges of the target variable. In fact, considering the particular problem of imbalanced classes it is frequent to observe the assumption that ``the minority class is the most important one". This is an important information regarding the preferences of the user. However, it is stated in a very informal way, an no cost/benefit matrix is available in this situation. The approaches proposed in \pUBL are able to deal with these situations because they allow the use of both user specified preferences and automatic methods.
 
 
+
+% The methods implemented in \UBL are pre-processing approaches which aim at altering the original data set to match the user preferences. This means that the methods for dealing with imbalanced domains are only relevant when the user preferences are focused on the least represented examples. In fact, if the most frequent cases are the most important, then the learning algorithms will naturally tend to focus on these examples, and therefore there is no need to change the original distribution. On the other hand, when the most relevant examples are scarcely represented any learning algorithm used will focus on the normal cases and will fail the most important predictions on the rare examples.
+
+Several types of approaches exist for handling utility-based learning problems. These approaches were categorized into: pre-processing, change the learning algorithms, post-processing or hybrid \cite{branco2015survey}. The \textbf{pre-processing} approaches act before the learning stage by manipulating the examples distribution to match the user preferences. The methods that \textbf{change the learning algorithms} try to incorporate the user preference bias into the selected learning algorithm. There are also strategies that are applied as a \textbf{post-processing} step by changing the predictions made by a standard learner using the original data set. Finally there are \textbf{hybrid} approaches that combine some of the previous strategies.
+
+
+In \pUBL we have focused on pre-processing strategies to address the problem of utility-based learning. These strategies change the original distribution of examples by removing or/and adding examples, i.e., by performing under-sampling or over-sampling. The under-sampling strategies may be random or focused. By focused under-sampling we mean that the discarded examples satisfy a given requirement, such as: are possibly noisy examples, are too distant from the decision border, are too close to the border, etc. Regarding the over-sampling methods there are two main options: over-sampling is accomplished by the introduction of replicas of examples or by the generation of new synthetic examples. For the strategies which include copies of existing examples, the cases may be selected randomly or in an informed fashion. Approaches that build synthetic cases differ among themselves in the generation process adopted. Several strategies combine under-sampling and over-sampling methods in different ranges/classes of the target variable.
+
+This document is organized as follows. In Section \ref{sec:instal} some general installation guidelines for \UBLp are provided. Section \ref{sec:example} presents a simple example to show how \UBLp can be used and its impact on the models performance. Sections \ref{sec:methClass} and \ref{sec:methRegres} describe with detail each method currently implemented in \UBL for classification and regression tasks. Section \ref{sec:distFunc} describes the distance functions available in \pUBL which allow to asses the distance between examples in data sets containing nominal and/or numeric features. Finally, Section \ref{sec:conc} concludes this document.
 
 % ====================================================================
-\section{Package Installation Guidelines}
+\section{Package Installation Guidelines}\label{sec:instal}
 
-The \UBL has two releases which can be installed: the stable and the development. To install the latest stable release (from github) do the following in R:
-
-<<message=FALSE, eval=FALSE>>=    
-library(devtools)  # You need to install this package!
-install_github("paobranco/UBL",ref="master") # to install the stable release
+The installation of any R package available on CRAN is performed as follows:
+<<message=FALSE, eval=FALSE>>=
+install.packages("UBL")
 @
 
-If you want to install the development release you need to do the following in R:
+This is mandatory, if you want to use the approaches available in \pUBL or even if you just want to try out the examples presented in the next sections. This installs the current stable version of \texttt{UBL} package which is version \version.
+
+You may also install the development version of the package, that is available on the following GitHub Web page: \url{https://github.com/paobranco/UBL}. However, we strongly recommend the use of the CRAN stable version. If you still want to install the development version, you should do this with extreme care because this version is still being tested and therefore is more prone to bugs.
+To install the development version from GitHub you should do the following in R:
 
 <<message=FALSE, eval=FALSE>>=
-library(devtools)  # You need to install this package!
-install_github("paobranco/UBL",ref="develop") # to install the development release
-@
-
-
-If somehow the previous instructions fail (there are reports of problems with different libcurl library version on Linux hosts) you may try as an alternative the following in R:
-<<message=FALSE, eval=FALSE >>=
 library(devtools)
-# to install the development release
-install_git("https://github.com/paobranco/UBL",branch="develop")
-# to install the stable release
-install_git("https://github.com/paobranco/UBL",branch="master")
+install_github("paobranco/UBL",ref="development")
 @
+
+Further instructions may be found at the mentioned GitHub page. 
+For reporting issues related with \UBLp you can use: \url{https://github.com/paobranco/UBL/issues}.
+
 
 After installation using any of the above procedures, the package can be used as any other R package by doing:
 
-<<>>=
+<<message=FALSE, eval=FALSE>>=
 library(UBL)
 @
 
-Further help and illustrations can be obtained through the many help pages of each function defined in the package that contain lots of illustrative examples. Again, these help pages can be accessed as any other R package, through R help system (e.g. running \texttt{help.start()} at R command line).
+%Further help and illustrations can be obtained through the many help pages of each function defined in the package that contain lots of illustrative examples. Again, these help pages can be accessed as any other R package, through R help system (e.g. running \texttt{help.start()} at R command line). If you just want to run some examples of a particular function you can simply use \texttt{example(<function name>)}.
+
 
 % ====================================================================
-\section{A Simple Illustrative Example}
+\section{A Simple Illustrative Example}\label{sec:example}
 
-We will start with a classification task with 3 classes. 
+Let us consider a classification task with 3 classes with different frequency. For illustration purposes, we will use the well-known iris data set with some examples removed to simulate a distribution with a rare class. Let us also suppose that the most important class for the user is this rare class (in our example, the virginica class). 
+
 <<iris_data>>=
 library(UBL)  # Loading our infra-structure
 library(e1071) # packge containing the svm we will use
-data(iris)                      # The data set we are going to use
-# transforming into a multiclass imbalanced problem
-data <- iris[-c(91:125), c(1, 2, 5)] 
-table(data$Species) 
+data(iris)          # The data set we are going to use
+# transforming into an imbalanced problem
+dat <- iris[-c(91:125), c(1, 2, 5)] 
+table(dat$Species) 
 @ 
 
 
-If we now train a svm in this data, we obtain the following:
+If we now train a svm in a sample of 70\% of our data, we obtain the following:
 
 <<iris_svm_unbalanced>>=
 set.seed(123)
-samp <- sample(1:nrow(data), nrow(data)*0.7)
-train <- data[samp,]
-test <- data[-samp,]
+samp <- sample(1:nrow(dat), nrow(dat)*0.7)
+train <- dat[samp,]
+test <- dat[-samp,]
 
 model <- svm(Species~., train)
 preds <- predict(model,test)
 table(preds, test$Species) # confusion matrix
 @
 
-Clearly, the model presents a poor performance on least represented class, the \Sexpr{names(which(table(test[,3])==min(table(test[,3]))))} class. However, for the most common class, the \Sexpr{names(which(table(test[,3])==max(table(test[,3]))))} the learner always predicts correctly.
+Clearly, the model presents a poor performance on least represented class, the \Sexpr{names(which(table(test[,3])==min(table(test[,3]))))} class. However, for the most common class, the \Sexpr{names(which(table(dat[,3])==max(table(dat[,3]))))} the learner always predicts correctly.
 
-Now, we can try to apply a strategy for dealing with imbalanced domains, and check again the models performance. 
+Now, we can try to apply a strategy for dealing with utility-based problems, and check again the models performance. 
 <<iris_svm_unbalanced2>>=
-# change the examples in train by apllying the smote strategy
-newtrain <- smoteClassif(Species~., train, C.perc="balance")
+# change the train data by applying the smote strategy
+newtrain <- SmoteClassif(Species~., train, C.perc="balance")
 
 # generate a new model with the changed data
 newmodel <- svm(Species~., newtrain)
@@ -149,15 +155,15 @@ table(preds, test$Species)
 
 @
 
-We can observe that the least represented class, virginica, now presents an improved result.
-If the previous model was unable to correctly classify any examples with class label of virginica, now there are three virginica cases which have a correct prediction!
+We can observe that the least represented class, \Sexpr{names(which(table(test[,3])==min(table(test[,3]))))}, now presents an improved result.
+If the previous model was unable to correctly classify any examples with class label of virginica, now there are three virginica cases which have a correct prediction.
 
 
 We can also try a simple random under-sampling method:
 
 <<iris_svm_unbalanced3>>=
-# apply random under-sampling strategy
-newtrain2 <- randOverClassif(Species~., train, C.perc="balance")
+# apply random over-sampling strategy
+newtrain2 <- RandOverClassif(Species~., train, C.perc="balance")
 
 #generate a new model with the modified data set
 newmodel2 <- svm(Species~., newtrain2)
@@ -166,29 +172,46 @@ table(preds, test$Species)
 
 @
 
-% ====================================================================
-\section{Methods for Addressing Classification Tasks under Imbalanced Domains}
+Again, the pre-processing method applied allowed to improve the performance of the model on the least represented (and more important) class.
 
+
+% ====================================================================
+\section{Methods for Addressing Utility-based Classification Tasks }\label{sec:methClass}
+
+In this section we describe the methods implemented in \pUBL. We provide detailed examples of each function, and discuss how the several parameters can be used and their impact.
+The methods explained in this section are the following:
+\begin{itemize}
+\item \ref{sec:RUClassif}: Random Under-sampling
+\item \ref{sec:ROClassif}: Random Over-sampling
+\item \ref{sec:ISClassif}: Importance Sampling
+\item \ref{sec:Tomek}: Tomek Links
+\item \ref{sec:CNN}: Condensed Nearest Neighbors
+\item \ref{sec:OSS}: One-sided Selection
+\item \ref{sec:ENN}: Edited Nearest Neighbors
+\item \ref{sec:NCL}: Neighborhood Cleaning Rule
+\item \ref{sec:gnClassif}: Gaussian Noise Introduction
+\item \ref{sec:smoteClassif}: Smote Algorithm
+\end{itemize}
 
 \subsection{Random Under-sampling}\label{sec:RUClassif}
 
 The random under-sampling strategy is among the simplest strategies for dealing with the class imbalanced problem. To force the learners to focus on the most important and least represented class(es) this technique randomly removes examples from the most represented and less important classes. This process allows to obtain a more balanced data set, although some important data may have been discarded with this technique. Another side effect of this strategy is a big reduction on the number of examples in the data set which facilitates the learners task although some important data may be ignored.
 
-This strategy is implemented in \UBL taking into consideration the possible existence of several minority classes. The user may define through \texttt{C.perc} parameter which are the normal and less important classes and the under-sampling percentages to apply in each one of them. Another possibility is to select \texttt{"balance"} or \texttt{"extreme"} for the parameter \texttt{C.perc}. These two options automatically estimate the classes and under-sampling percentages to apply. The \texttt{"balance"} option obtains a balanced number of examples in all the existing classes, and the \texttt{"extreme"} option inverts the existing frequencies, transforming the most frequent classes into the less frequent and vice-versa. The following examples shows how these options can be used and their impact:
+This strategy is implemented in \UBL taking into consideration the possible existence of several minority classes. The user may define through \texttt{C.perc} parameter which are the normal and less important classes and the under-sampling percentages to apply in each one of them. Another possibility is to select ``balance" or ``extreme" for the parameter \texttt{C.perc}. These two options automatically estimate the under-sampling percentages to apply to the classes. The ``balance" option obtains a balanced number of examples in all the existing classes, and the ``extreme" option inverts the existing frequencies, transforming the most frequent classes into the less frequent and vice-versa. The following examples show how these options can be used and their impact.
 
 <<iris_ru>>=
 library(UBL)  # Loading our infra-structure
 library(e1071) # packge containing the svm we will use
 data(iris)                      # The data set we are going to use
 # transforming into a multiclass imbalanced problem
-data <- iris[-c(91:125), c(1, 2, 5)] 
+dat <- iris[-c(91:125), c(1, 2, 5)] 
 # check the unbalanced data
-table(data$Species)
+table(dat$Species)
 
 ## now, using random under-sampling to create a more 
 ## "balanced problem" automatically
 
-newData <- randUnderClassif(Species ~ ., data)
+newData <- RandUnderClassif(Species ~ ., dat)
 table(newData$Species)
 @
 
@@ -197,18 +220,18 @@ Figure \ref{fig:Iris_RU1} shows the impact of this strategy in the examples dist
 
 <<Iris_RU1,fig.cap="The impact of random under-sampling strategy.",out.width="0.8\\textwidth", echo=FALSE>>=
   par(mfrow = c(1, 2))
-  plot(data[, 1], data[, 2], pch = as.integer(data[, 3]), col=as.integer(data[,3]),
+  plot(dat[, 1], dat[, 2], pch = as.integer(dat[, 3]), col=as.integer(dat[,3]),
        main = "Original Data")
   plot(newData[, 1], newData[, 2], pch = as.integer(newData[,3]), col=as.integer(newData[,3]),
        main = "Under-sampled Data")
 @ 
 
-Another example with iris data:
+Another example with the iris data set:
 
 <<another_iris_exRU>>=
-  RUmy.ir <- randUnderClassif(Species~., data, list(setosa=0.3, versicolor=0.7))
-  RUB.ir <- randUnderClassif(Species~., data, "balance")
-  RUE.ir <- randUnderClassif(Species~., data, "extreme")
+  RUmy.ir <- RandUnderClassif(Species~., dat, list(setosa=0.3, versicolor=0.7))
+  RUB.ir <- RandUnderClassif(Species~., dat, "balance")
+  RUE.ir <- RandUnderClassif(Species~., dat, "extreme")
 
 @
 
@@ -216,9 +239,9 @@ Another example with iris data:
 <<RU_tab, echo=FALSE, results='asis'>>=
 nm <- c("Original","RUmy.ir", "RUB.ir","RUE.ir")
 
-res <- c(table(data$Species),table(RUmy.ir$Species), table(RUB.ir$Species), table(RUE.ir$Species))
+res <- c(table(dat$Species),table(RUmy.ir$Species), table(RUB.ir$Species), table(RUE.ir$Species))
 
-m <- matrix(res, nrow=4,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(data$Species))))
+m <- matrix(res, nrow=4,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(dat$Species))))
 
 xt <-xtable(m, caption="Number of examples in each class for different parameters of random under-sampling strategy.",label="tab:RU_tab")
 print(xt,comment = FALSE, type = 'latex')
@@ -230,10 +253,12 @@ The impact of the strategies on the number of examples in each class of the data
 
 
 <<Iris_RU2, fig.cap="Random Under-sampling strategy for different parameters values.", echo=FALSE>>=
-DF <- rbind(data.frame(Dat="Original",obs=data$Species), data.frame(Dat="RUmy.ir", obs=RUmy.ir$Species), data.frame(Dat="RUB.ir", obs=RUB.ir$Species), data.frame(Dat="RUE.ir", obs=RUE.ir$Species))
-g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_histogram(binwidth=1, position="dodge", aes(group=Dat), colour="black")
+DF <- rbind(data.frame(Dat="Original",obs=dat$Species), data.frame(Dat="RUmy.ir", obs=RUmy.ir$Species), data.frame(Dat="RUB.ir", obs=RUB.ir$Species), data.frame(Dat="RUE.ir", obs=RUE.ir$Species))
+g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_bar(stat="count", position="dodge", aes(group=Dat), colour="black")
 
-g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_histogram(binwidth=1, position="fill", aes(group=obs), colour="black")
+g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_bar( position="dodge", aes(group=Dat), colour="black")
+
+g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_bar( position="fill", aes(group=obs), colour="black")
 
 plots <- list(g1, g2)
 
@@ -242,22 +267,22 @@ do.call(grid.arrange, plots)
 
 
 
-\subsection{Random Oversampling}\label{sec:ROClassif}
+\subsection{Random Over-sampling}\label{sec:ROClassif}
 
-The random over-sampling strategy introduces replicas of already existing examples in the data set. The replicas to include are randomly selected among the least populated classes. This allows to obtain a better balanced data set without discarding any examples. However, this method has a strong impact on the number of examples of the new data set which can represent a difficulty to the used learner.
+The random over-sampling strategy introduces replicas of already existing examples in the data set. The replicas to include are randomly selected among the least populated and more important classes. This allows to obtain a better balanced data set without discarding any examples. However, this method has a strong impact on the number of examples of the new data set which can represent a difficulty to the used learner.
 
-This strategy is implemented in \UBL taking into consideration the possible existence of several minority classes. The user may define through \texttt{C.perc} parameter which are the most important classes and their respective over-sampling percentages. The parameter \texttt{C.perc} may also be set to \texttt{"balance"} or \texttt{"extreme"}. These two options automatically estimate the classes and over-sampling percentages to apply. Similarly to the previous strategy the \texttt{"balance"} option allows to obtain a balanced number of examples in all the existing classes, and the \texttt{"extreme"} option inverts the existing frequencies, transforming the most frequent classes into the less frequent and vice-versa. The following examples show how these options can be used and their impact:
+This strategy is implemented in \pUBL taking into consideration the possible existence of several minority classes. The user may define through \texttt{C.perc} parameter which are the most important classes and their respective over-sampling percentages. The parameter \texttt{C.perc} may also be set to ``balance" or ``extreme". These two options automatically estimate the classes and over-sampling percentages to apply. Similarly to the previous strategy the ``balance" option allows to obtain a balanced number of examples in all the existing classes, and the ``extreme" option inverts the existing frequencies, transforming the most frequent classes into the less frequent and vice-versa. The following examples show how these options can be used and their impact:
 
 <<iris_RO>>=
 ## now using random over-sampling to create a 
 ## data with more 600% of examples in the 
 ## virginica class
-RO.U1<- randOverClassif(Species ~ ., data, 
+RO.U1<- RandOverClassif(Species ~ ., dat, 
                         C.perc=list(virginica=5))
-RO.U2<- randOverClassif(Species ~ ., data, 
+RO.U2<- RandOverClassif(Species ~ ., dat, 
                         C.perc=list(versicolor=4, virginica=2.5))
-RO.B <- randOverClassif(Species ~ ., data, C.perc="balance")
-RO.E <- randOverClassif(Species ~ ., data, C.perc="extreme")
+RO.B <- RandOverClassif(Species ~ ., dat, C.perc="balance")
+RO.E <- RandOverClassif(Species ~ ., dat, C.perc="extreme")
 @
 
 
@@ -266,20 +291,21 @@ RO.E <- randOverClassif(Species ~ ., data, C.perc="extreme")
 
 nm <- c("Original","RO.U1", "RO.U2", "RO.B","RO.E")
 
-res <- c(table(data$Species),table(RO.U1$Species), table(RO.U2$Species), table(RO.B$Species), table(RO.E$Species))
+res <- c(table(dat$Species),table(RO.U1$Species), table(RO.U2$Species), table(RO.B$Species), table(RO.E$Species))
 
-m <- matrix(res, nrow=5,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(data$Species))))
+m <- matrix(res, nrow=5,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(dat$Species))))
 
 
 xt <-xtable(m, caption="Number of examples in each class for different Random over-sampling parameters.",label="tab:RO_tab")
 print(xt,comment = FALSE, type = 'latex')
 
 @
+
 Figure \ref{fig:IrisRO} shows the impact of this strategy in the examples distribution. We have introduced a small perturbation on the examples position to be more clear the replicas that were introduced.
 
 <<IrisRO,fig.cap="The impact of random over-sampling Strategy.",out.width="0.8\\textwidth", echo=FALSE>>=
   par(mfrow = c(2, 2))
-  plot(data[, 1], data[, 2], pch =as.integer(data[, 3]), col=as.integer(data[,3]),
+  plot(dat[, 1], dat[, 2], pch =as.integer(dat[, 3]), col=as.integer(dat[,3]),
        main = "Original Data")
   plot(jitter(RO.U1[, 1]), jitter(RO.U1[, 2]), pch=as.integer(RO.U1[,3]), col=as.integer(RO.U1[,3]),
        main = "over-sampled Data with user defined parameter")
@@ -294,10 +320,10 @@ Figure \ref{fig:IrisRO} shows the impact of this strategy in the examples distri
 Figure \ref{fig:Iris_RO2} shows the impact of this strategy on the number of examples in the data set.
 
 <<Iris_RO2, fig.cap="Impact of Random over-sampling strategy for different parameters values.", echo=FALSE>>=
-DF <- rbind(data.frame(Dat="Original",obs=data$Species), data.frame(Dat="RO.U1", obs=RO.U1$Species), data.frame(Dat="RO.B", obs=RO.B$Species), data.frame(Dat="RO.E", obs=RO.E$Species))
-g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_histogram(binwidth=1, position="dodge", aes(group=Dat), colour="black")
+DF <- rbind(data.frame(Dat="Original",obs=dat$Species), data.frame(Dat="RO.U1", obs=RO.U1$Species), data.frame(Dat="RO.B", obs=RO.B$Species), data.frame(Dat="RO.E", obs=RO.E$Species))
+g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_bar(position="dodge", aes(group=Dat), colour="black")
 
-g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_histogram(binwidth=1, position="fill", aes(group=obs), colour="black")
+g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_bar( position="fill", aes(group=obs), colour="black")
 
 plots <- list(g1, g2)
 
@@ -306,25 +332,25 @@ do.call(grid.arrange, plots)
 
 \subsection{Importance Sampling}\label{sec:ISClassif}
 
-The main idea of Importance Sampling strategy is to perform random over- or under-sampling in each class according to the user importance assigned. This means that for each class the user can specify its relevance. Then, this relevance is used to change each class frequency by selecting randomly examples from each class. Alternatively, the user may consider that each class is equaly important or may chose to invert the classes frequencies.
+The main idea of Importance Sampling strategy is to perform random over- or under-sampling in each class according to the importance assigned by the user. This means that for each class the user can specify its relevance. Then, this relevance is used to change each class frequency by selecting randomly examples from each class. Alternatively, the user may consider that each class is equally important or may chose to invert the classes frequencies.
 
-This strategy is available in \UBL through the function \texttt{ImpSampClassif}. The user may specify using parameter \texttt{C.perc} the classes where over-/under-sampling must be aaplied, by indicating the corresponding percentages. If all classes are equally important and a perfectly balanced data set should be obtained, the \texttt{C.perc} parameter must be set to "balance". On the other hand, if the classes frequencies sould be inverted, then this parameter should be "extreme". The following example illustrate the use of this function.
+This strategy is available in \UBLp through the function \texttt{ImpSampClassif}. The user may specify using parameter \texttt{C.perc} the classes where over-/under-sampling must be applied, by indicating the corresponding percentages. If all classes are equally important and a perfectly balanced data set should be obtained, the \texttt{C.perc} parameter must be set to ``balance". On the other hand, if the classes frequencies should be inverted, then this parameter should be ``extreme". The following example illustrate the use of this function.
 
 
 <<ISClass>>=
 # reuse the same unbalanced data obtained from iris data set
-table(data$Species)
+table(dat$Species)
 
-nds <- ImpSampClassif(Species~.,data, C.perc=list(setosa=0.5, virginica=6))
+nds <- ImpSampClassif(Species~.,dat, C.perc=list(setosa=0.5, virginica=6))
 # notice that when a certain class is not specified it remains unaltered
 table(nds$Species)
 
 # to obtain a balanced data set
-IS.bal <- ImpSampClassif(Species~., data) # or use C.perc="balance"
+IS.bal <- ImpSampClassif(Species~., dat) # or use C.perc="balance"
 table(IS.bal$Species)
 
 # to obtain a data set with inverted frequencies 
-IS.ext <- ImpSampClassif(Species~., data, C.perc="extreme")
+IS.ext <- ImpSampClassif(Species~., dat, C.perc="extreme")
 table(IS.ext$Species)
 
 @
@@ -332,11 +358,12 @@ table(IS.ext$Species)
 
 
 Figure \ref{fig:ISC} shows the impact on the unbalanced iris data set of the changes made in the domain with Importance Sampling.
+
 <<ISC, fig.cap="Impact of Importance Sampling strategy in Iris unbalanced data set.", echo=FALSE>>=
 # visualizing the two classes that have changed (virginica and versicolor)
 
   par(mfrow = c(2, 2))
-  plot(data[, 1], data[, 2], pch =as.integer(data[, 3]), col=as.integer(data[,3]), xlim=c(4,8), ylim=c(2,4.5),
+  plot(dat[, 1], dat[, 2], pch =as.integer(dat[, 3]), col=as.integer(dat[,3]), xlim=c(4,8), ylim=c(2,4.5),
        main = "Original Unbalanced Data")
   plot(jitter(nds[, 1]), jitter(nds[, 2]), pch=as.integer(nds[,3]), col=as.integer(nds[,3]),xlim=c(4,8),ylim=c(2,4.5),
        main = "Importance Sampling with user defined parameter")
@@ -353,17 +380,17 @@ Figure \ref{fig:ISC} shows the impact on the unbalanced iris data set of the cha
 Figure \ref{fig:ISC_2} shows the impact of this strategy on the number of examples in the data set.
 
 <<ISC_2, fig.cap="Impact of Importance Sampling strategy.", echo=FALSE>>=
-DF <- rbind(data.frame(Dat="Original",obs=data$Species), data.frame(Dat="nds", obs=nds$Species), data.frame(Dat="IS.bal", obs=IS.bal$Species), data.frame(Dat="IS.ext", obs=IS.ext$Species))
-g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_histogram(binwidth=1, position="dodge", aes(group=Dat), colour="black")
+DF <- rbind(data.frame(Dat="Original",obs=dat$Species), data.frame(Dat="nds", obs=nds$Species), data.frame(Dat="IS.bal", obs=IS.bal$Species), data.frame(Dat="IS.ext", obs=IS.ext$Species))
+g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_bar(position="dodge", aes(group=Dat), colour="black")
 
-g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_histogram(binwidth=1, position="fill", aes(group=obs), colour="black")
+g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_bar( position="fill", aes(group=obs), colour="black")
 
 plots <- list(g1, g2)
 
 do.call(grid.arrange, plots)
 @
 
-We must highlight that random under- and over-sampling also allow to balance and invert the classes frequencies. Importance Sampling strategy, although also allowing this type of impact, acts differently because it combines both under- and over-sampling strategies. This means that a balanced data set can be obtained with random under-sampling or Importance Sampling strategy. However, the resulting data sets will be different. In the first possibility only under-sampling is applied and the final size of the data set is reduced, while on the second possibility both under and over-sampling strategies are applied and the changed data set has roughly the same number of examples than the original data set.
+We must highlight that random under- and over-sampling also allow to balance and invert the classes frequencies. Importance Sampling strategy, although also allowing this type of impact, acts differently because it combines both under- and over-sampling strategies. This means that a balanced data set can be obtained through random under-sampling, random over-sampling or importance sampling strategy. However, the resulting data sets will be different. If we use random under-sampling the final size of the data set is reduced, while if we use the random over-sampling approach the changed data set is significantly larger than the original one. If we select the importance sampling, the combination of the strategies allows to roughly maintain the data set size.
 
 \subsection{Tomek Links}\label{sec:Tomek}
 
@@ -381,35 +408,35 @@ Therefore, there are two possibilities of using Tomek links to accomplish under-
 These two options correspond to using Tomek link as cleaning technique (by removing both borderline examples) or as an under-sampling method for balancing the classes (by removing the majority class example).
 
 
-In \UBL we have adapted this technique for being able to deal with multiclass imbalanced problems. 
+In \pUBL we have adapted this technique for being able to deal with multiclass imbalanced problems. 
 For working with more than two classes some issues were considered: 
 \begin{itemize}
 \item allow the user to select which classes should be under-sampled (if not defined, the default is to under-sample all the existing classes);
 \item if the user selects a given number of classes what to do to break the link, i.e., how to decide which example(s) to remove (if any). 
 \end{itemize}
-So, in \UBL the user may chose for which classes he is interested in removing examples through the \texttt{Cl} parameter. Moreover, the user can also decide if both examples are removed or if just one is discarded using the \texttt{rem} parameter. If this can be easily understood in two class problems, the impact of these parameters may no be so clear for multiclass imbalanced tasks. 
-In fact,the options set for \texttt{Cl} and \texttt{rem} parameters may "disagree". In those cases, the preference is given to the \texttt{Cl} options once the user choose that specific set of classes to under-sample and not the other ones (even if the defined classes are not the larger ones). This means that, when making a decision on how many and which examples will be removed the first criteria used will be the \texttt{Cl} definition.
+So, in \UBL the user may chose from which classes he is interested in removing examples through the \texttt{Cl} parameter. Moreover, the user can also decide if both examples are removed or if just one is discarded using the \texttt{rem} parameter. If this can be easily understood in two class problems, the impact of these parameters may not be so clear for multiclass imbalanced tasks. 
+In fact,the options set for \texttt{Cl} and \texttt{rem} parameters may ``disagree". In those cases, the preference is given to the \texttt{Cl} options once the user choose that specific set of classes to under-sample and not the other ones (even if the defined classes are not the larger ones). This means that, when making a decision on how many and which examples will be removed the first criteria used will be the \texttt{Cl} definition.
 
 
 For a better clarification of the behavior stated we now provide some possible scenarios for multiclass problems and the corresponding expected behavior:
 
 \begin{itemize}
-\item \texttt{Cl} is set to one class which is neither the more nor the less frequent, and \texttt{rem} is set to "maj". The expected behavior is the following:
+\item \texttt{Cl} is set to one class which is neither the most nor the least frequent, and \texttt{rem} is set to ``maj". The expected behavior is the following:
 - if a Tomek link exists connecting the largest class and another class(not included in \texttt{Cl}): no example is removed;
 - if a Tomek link exists connecting the larger class and the class defined in \texttt{Cl}: the example from the \texttt{Cl} class is removed (because the user expressly indicates that only examples from class \texttt{Cl} should be removed);
 
-\item \texttt{Cl} includes two classes and \texttt{rem} is set to "both". This function will do the following:
+\item \texttt{Cl} includes two classes and \texttt{rem} is set to ``both". This function will do the following:
 - if a Tomek link exists between an example with class in \texttt{Cl} and another example with class not in \texttt{Cl}, then, only the example with class in \texttt{Cl} is removed;
 - if the Tomek link exists between two examples with classes in \texttt{Cl}, then, both are removed.
 
-\item \texttt{Cl} includes two classes and \texttt{rem} is set to "maj". The behavior of this function is the following:
+\item \texttt{Cl} includes two classes and \texttt{rem} is set to ``maj". The behavior of this function is the following:
 -if a Tomek link exists connecting two classes included in \texttt{Cl}, then only the example belonging to the more populated class is removed;
 -if a Tomek link exists connecting an example from a class included in \texttt{Cl} and another example whose class is not in \texttt{Cl} and is the largest class, then, no example is removed.
 
 \end{itemize}
 
 
-We must also highlight that this strategy strongly depends on the distance metric considered for the nearest neighbors computation. We provide in \UBL several different distance measures which are able to deal with numeric and/or nominal features, such as Manhattan distance, Euclidean Distance, HEOM or HVDM. For more details on the available distance functions check Section \ref{sec:distFunc}. The user may set the desired distance metric through the \texttt{dist} parameter.
+We must also highlight that this strategy strongly depends on the distance metric considered for the nearest neighbors computation. We provide in \pUBL several different distance measures which are able to deal with numeric and/or nominal features, such as Manhattan distance, Euclidean Distance, HEOM or HVDM. For more details on the available distance functions check Section \ref{sec:distFunc}. The user may set the desired distance metric through the \texttt{dist} parameter.
 
 
 The implementation provided in this package returns a list containing: the new data set modified through the Tomek links strategy and the indexes of the examples removed. Under certain situations, this strategy is not able to remove any example of the data set. In this case, a warning is issued to advert the user that no example was removed.
@@ -419,14 +446,14 @@ The following examples with iris data set shows how Tomek links can be applied.
 
 <<iris_TL>>=
 # using the default in all parameters
-  ir <- TomekClassif(Species~., data)
+  ir <- TomekClassif(Species~., dat)
 # using chebyshev distance metric, and selecting only two classes to under-sample
-  irCheb <- TomekClassif(Species~., data, dist="Chebyshev", 
+  irCheb <- TomekClassif(Species~., dat, dist="Chebyshev", 
                          Cl=c("virginica", "setosa"))
 # using Manhattan distance, enable the removal of examples from all classes, and
 # select to break the link by only removing the example from the majority class
-  irManM <- TomekClassif(Species~., data, dist="Manhattan", Cl="all", rem="maj") 
-  irManB <- TomekClassif(Species~., data, dist="Manhattan", Cl="all", rem="both")
+  irManM <- TomekClassif(Species~., dat, dist="Manhattan", Cl="all", rem="maj") 
+  irManB <- TomekClassif(Species~., dat, dist="Manhattan", Cl="all", rem="both")
 
 # check the new irCheb data set
 summary(irCheb[[1]])
@@ -439,9 +466,9 @@ irCheb[[2]]
 
 nm <- c("Original","ir", "irCheb", "irManM","irManB")
 
-res <- c(table(data$Species),table(ir[[1]]$Species), table(irCheb[[1]]$Species), table(irManM[[1]]$Species), table(irManB[[1]]$Species))
+res <- c(table(dat$Species),table(ir[[1]]$Species), table(irCheb[[1]]$Species), table(irManM[[1]]$Species), table(irManB[[1]]$Species))
 
-m <- matrix(res, nrow=5,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(data$Species))))
+m <- matrix(res, nrow=5,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(dat$Species))))
 
 xt <-xtable(m, caption="Number of examples in each class for different Tomek Links parameters.",label="tab:TL_table")
 print(xt,comment = FALSE, type = 'latex')
@@ -450,9 +477,10 @@ print(xt,comment = FALSE, type = 'latex')
 
 
 Figure \ref{fig:TL_difPar} shows the impact on the virginica and versicolor classes of the last experiences.
+
 <<TL_difPar, fig.cap="Impact of Tomek links strategy in versicolor and virginica classes.", echo=FALSE>>=
 # visualizing the two classes that have changed (virginica and versicolor)
-dO <- subset(data, Species!="setosa")
+dO <- subset(dat, Species!="setosa")
 dC <- subset(irCheb[[1]], Species!="setosa")
 dM <- subset(irManM[[1]], Species!="setosa")
 dB <- subset(irManB[[1]], Species!="setosa")
@@ -471,7 +499,8 @@ plot(dB[,1], dB[,2], col=as.integer(dB[,3]), main="Tomek links removing both exa
 
 The Condensed nearest neighbors rule (CNN) was presented by \cite{cnn}. The goal of this strategy is to perform under-sampling by building a subset of examples which is consistent with the original data. A subset is consistent with another if the elements in the subset classify correctly all the original examples using a 1-NN. 
 
-To build a consistent subset we have adapted the proposal of \cite{KM97} to multiclass problems. The user starts by defining which are the most relevant classes in the data set using the \texttt{Cl} parameter. If the user prefers, an automatic option that corresponds to setting \texttt{Cl} to "smaller", evaluates the distribution of the classes and determines which classes are candidates for being the smaller and most important. By default, this parameter is set to "smaller" which means that the most relevant classes are automatically estimated from the data and correspond to those classes containing less than $\frac{number of examples}{number of classes}$ examples. For instance, if a data set has 5 classes and a total number of examples of 100, the classes with less than 20 $(\frac{100}{5})$ examples will be considered the most important. The examples of the most relevant classes are then joined with one randomly selected example from each of the other classes. A 1-NN is computed with the distance metric provided by the user through the \texttt{dist} parameter. Then, all the examples from the original data set which were mislabeled in this procedure are also added to the reduced data set. This allows to obtain a smaller data set by removing examples from the larger and less important classes which are farther from the decision border.
+
+To build a consistent subset we have adapted the proposal of \cite{KM97} to multiclass problems. The user starts by defining which are the most relevant classes in the data set using the \texttt{Cl} parameter. If the user prefers, an automatic option that corresponds to setting \texttt{Cl} to ``smaller", evaluates the distribution of the classes and determines which classes are candidates for being the smaller and most important. By default, this parameter is set to ``smaller" which means that the most relevant classes are automatically estimated from the data and correspond to those classes containing less than $\frac{\text{total number of examples}}{\text{number of classes}}$ examples. For instance, if a data set has 5 classes and a total number of examples of 100, the classes with less than 20 $(\frac{100}{5})$ examples will be considered the most important. The examples of the most relevant classes are then joined with one randomly selected example from each of the other classes. A 1-NN is computed with the distance metric provided by the user through the \texttt{dist} parameter. Then, all the examples from the original data set which were mislabeled in this procedure are also added to the reduced data set. This allows to obtain a smaller data set by removing examples from the larger and less important classes which are farther from the decision border.
 
 This strategy is available through the \texttt{CNNClassif} function. This function returns a list containing: the modified data set, the classes that were considered important, and finally the unimportant classes.
 
@@ -480,10 +509,10 @@ We can now see some examples of this approach to the modified iris data.
 
 <<Iris_CNN>>=
 set.seed(123)
-  myCNN <- CNNClassif(Species~., data, Cl=c("setosa", "virginica"))
-  CNN1 <- CNNClassif(Species~., data, Cl="smaller")
-  CNN2 <- CNNClassif(Species~., data, Cl="versicolor")
-  CNN3 <- CNNClassif(Species~., data, dist="Chebyshev", Cl="virginica")
+  myCNN <- CNNClassif(Species~., dat, Cl=c("setosa", "virginica"))
+  CNN1 <- CNNClassif(Species~., dat, Cl="smaller")
+  CNN2 <- CNNClassif(Species~., dat, Cl="versicolor")
+  CNN3 <- CNNClassif(Species~., dat, dist="Chebyshev", Cl="virginica")
 
 # check the new data set obtained in CNN1
 summary(CNN1[[1]]$Species)
@@ -501,9 +530,9 @@ CNN1[[3]]
 
 nm <- c("Original","myCNN", "CNN1", "CNN2","CNN3")
 
-res <- c(table(data$Species),table(myCNN[[1]]$Species), table(CNN1[[1]]$Species), table(CNN2[[1]]$Species), table(CNN3[[1]]$Species))
+res <- c(table(dat$Species),table(myCNN[[1]]$Species), table(CNN1[[1]]$Species), table(CNN2[[1]]$Species), table(CNN3[[1]]$Species))
 
-m <- matrix(res, nrow=5,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(data$Species))))
+m <- matrix(res, nrow=5,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(dat$Species))))
 
 
 xt <-xtable(m, caption="Number of examples in each class for different CNN parameters.",label="tab:CNN_table")
@@ -518,7 +547,7 @@ It is clear from these examples that this method entails a significant reduction
 
 <<CNN_plot, echo=FALSE, fig.cap="Impact of CNN method for different values of parameter Cl.">>=
 par(mfrow=c(2,2))
-plot(data[,1], data[,2], col=as.integer(data[,3]), main="original data")
+plot(dat[,1], dat[,2], col=as.integer(dat[,3]), main="original data")
 plot(myCNN[[1]][,1], myCNN[[1]][,2], col=as.integer(myCNN[[1]][,3]), main="setosa and virginica are the  important classes")
 plot(CNN1[[1]][,1], CNN1[[1]][,2], col=as.integer(CNN1[[1]][,3]), main="Smaller classes automatically estimated")
 plot(CNN2[[1]][,1], CNN2[[1]][,2], col=as.integer(CNN2[[1]][,3]), main="versicolor is the most important class")
@@ -530,17 +559,17 @@ plot(CNN2[[1]][,1], CNN2[[1]][,2], col=as.integer(CNN2[[1]][,3]), main="versicol
 
 \cite{KM97} proposed a new method for modifying a given data set by applying the Tomek links under-sampling strategy and afterwards the CNN technique. \cite{batista2004study} also tested the reverse order for applying the techniques: first apply CNN method and then Tomek links. The main motivation for this was to apply Tomek links to an already reduced data set because Tomek links technique is a more computationally demanding task.
 
-In \UBL we have gathered under the same function, \texttt{OSSClassif}, both techniques. To distinguish between the two methods, we included a parameter \texttt{start} which defaults to CNN. The user may therefore select the order in which we want to apply the two techniques: CNN and Tomek links. In this implementation, when Tomek links are applied, they always imply the removal of both examples forming the Tomek link. 
+In \UBL we have gathered under the same function, \texttt{OSSClassif}, both techniques. To distinguish between the two methods, we included a parameter \texttt{start} which defaults to ``CNN". The user may therefore select the order in which we want to apply the two techniques: CNN and Tomek links. In this implementation, when Tomek links are applied, they always imply the removal of both examples forming the Tomek link. 
 
-We have adapted both methods for dealing with multiclass imbalanced problems. To do so, we have included the parameter \texttt{Cl} which allows the user to specify the most important classes. Similarly to the behavior of CNN strategy, the user may define for the \texttt{Cl} parameter the value "smaller". In this case, the most important classes are automatically determined using the same method presented in CNN strategy. When the relevant classes are chosen with this automatic method, the less frequent classes (which are considered the most relevant ones) are those which have a frequency below $\frac{number of examples}{number of classes}$. This means that all the classes with a frequency below the mean frequency of the data set classes is considered a minority class. The \texttt{OSSClassif} function also allows to specify which distance metric should be used in the neighbors computation. For more details on the available distance functions see Section \ref{sec:distFunc}. We must also mention that this strategy may potentially produce warnings due to the use of Tomek links strategy. As previously mentioned when Tomek links approach was presented, this method may not change the provided data set. Iin this case a warning is issued to advert the user. This warning may also occur when using OSS strategy if the Tomek links method produce it.
+We have adapted both methods for dealing with multiclass imbalanced problems. To do so, we have included the parameter \texttt{Cl} which allows the user to specify the most important classes. Similarly to the behavior of CNN strategy, the user may define for the \texttt{Cl} parameter the value ``smaller". In this case, the most important classes are automatically determined using the same method presented in CNN strategy. When the relevant classes are chosen with this automatic method, the less frequent classes (which are considered the most relevant ones) are those which have a frequency below $\frac{number of examples}{number of classes}$. This means that all the classes with a frequency below the mean frequency of the data set classes is considered a minority class. The \texttt{OSSClassif} function also allows to specify which distance metric should be used in the neighbors computation. For more details on the available distance functions see Section \ref{sec:distFunc}. We must also mention that this strategy may potentially produce warnings due to the use of Tomek links strategy. As previously mentioned when Tomek links approach was presented, this method may not change the provided data set. In this case a warning is issued to advert the user. This warning may also occur when using OSS strategy if the Tomek links method produce it.
 
 
 <<Iris_OSS>>=
 set.seed(1234)
 
-ir2 <- OSSClassif(Species~., data, dist="p-norm", p=3, Cl="virginica")
-ir3 <- OSSClassif(Species~., data, Cl=c("versicolor", "virginica"), start="Tomek")
-ir4 <- OSSClassif(Species~., data)
+ir2 <- OSSClassif(Species~., dat, dist="p-norm", p=3, Cl="virginica")
+ir3 <- OSSClassif(Species~., dat, Cl=c("versicolor", "virginica"), start="Tomek")
+ir4 <- OSSClassif(Species~., dat)
 
 summary(ir2$Species)
 summary(ir3$Species)
@@ -553,9 +582,9 @@ summary(ir4$Species)
 <<oss_table, echo=FALSE, results='asis'>>=
 nm <- c("Original","ir2", "ir3","ir4")
 
-res <- c(table(data$Species),table(ir2$Species), table(ir3$Species), table(ir4$Species))
+res <- c(table(dat$Species),table(ir2$Species), table(ir3$Species), table(ir4$Species))
 
-m <- matrix(res, nrow=4, ncol=3, byrow=TRUE, dimnames=list(nm, names(table(data$Species))))
+m <- matrix(res, nrow=4, ncol=3, byrow=TRUE, dimnames=list(nm, names(table(dat$Species))))
 
 xt <-xtable(m, caption="Number of examples in each class for different OSS parameters.",label="tab:oss_table")
 print(xt,comment = FALSE, type = 'latex')
@@ -567,7 +596,7 @@ The impact of these methods on the number of examples in each class are in Table
 
 <<OSS_plot, fig.cap="OSS techniques applied to a multiclass imbalanced problem.", echo=FALSE>>=
 par(mfrow=c(2,2))
-plot(data[,1], data[,2], col=as.integer(data[,3]), main="original data")
+plot(dat[,1], dat[,2], col=as.integer(dat[,3]), main="original data")
 plot(ir2[,1], ir2[,2], col=as.integer(ir2[,3]), main="virginica is the most important class")
 plot(ir3[,1], ir3[,2], col=as.integer(ir3[,3]), main="versicolor and virginica are the important classes. First apply Tomek links")
 plot(ir4[,1], ir4[,2], col=as.integer(ir4[,3]), main="default values applied")
@@ -581,19 +610,19 @@ plot(ir4[,1], ir4[,2], col=as.integer(ir4[,3]), main="default values applied")
 
 The Edited Nearest Neighbor (ENN) algorithm was proposed by \cite{wilson1972asymptotic}. This method falls within the under-sampling approaches and has been used to address imbalanced classification problems. The original ENN algorithm uses a 3-NN classifier to remove the examples whose class is different from the class of at least two of its neighbors. 
 
-We have implemented this approach for being able to tackle multiclass problems, allowing the user to specify through the \texttt{Cl} parameter a subset of classes which should be under-sampled. Moreover, in our implementation, the user may also define the number of nearest neighbors that should be considered by the algorithm. This means that an example is removed if its class label is different from the class label of at least half of its k-nearest neighbors and if it belongs to the subset of classes candidates for removal. The ENN algorithm is available in \UBL through the function\texttt{ENNClassif}. The number of neighbors to consider is set through the parameter \texttt{k} and the subset of classes that are candidates for being under-sampled are defined through the \texttt{Cl} parameter. The default of \texttt{Cl} is "all", meaning that all classes are candidates for having examples removed. The user can also specify which distance metric he wants to use in the nearest neighbors computation. The function \texttt{ENNClassif} returns a list containing the new under-sampled data set and the indexes of the examples removed.
+We have implemented this approach for being able to tackle multiclass problems, allowing the user to specify through the \texttt{Cl} parameter a subset of classes which should be under-sampled. Moreover, in our implementation, the user may also define the number of nearest neighbors that should be considered by the algorithm. This means that an example is removed if its class label is different from the class label of at least half of its k-nearest neighbors and if it belongs to the subset of classes candidates for removal. The ENN algorithm is available in \UBL through the function \texttt{ENNClassif}. The number of neighbors to consider is set through the parameter \texttt{k} and the subset of classes that are candidates for being under-sampled are defined through the \texttt{Cl} parameter. The default of \texttt{Cl} is ``all", meaning that all classes are candidates for having examples removed. The user can also specify which distance metric he wants to use in the nearest neighbors computation. The function \texttt{ENNClassif} returns a list containing the new under-sampled data set and the indexes of the examples removed.
 
-It is possible that ENN find no examples to remove, which means that, for the parameters selected, teher are no examples satisfying the necessary conditions to be removed. In this case, a warning is issued with the goal or adveting the user that the satrtey is not modifying the data set provided.
+It is possible that ENN finds no examples to remove, which means that, for the parameters selected, there are no examples satisfying the necessary conditions to be removed. In this case, a warning is issued with the goal of adverting the user that the strategy is not modifying the data set provided.
 
 
 <<Iris_ENN>>=
   set.seed(123)
-  Man5 <- ENNClassif(Species~., data, k=5, dist="Manhattan", Cl="all") 
-  Default <- ENNClassif(Species~., data)
-  ChebSub7 <- ENNClassif(Species~., data, k=7, dist="Chebyshev", 
+  Man5 <- ENNClassif(Species~., dat, k=5, dist="Manhattan", Cl="all") 
+  Default <- ENNClassif(Species~., dat)
+  ChebSub7 <- ENNClassif(Species~., dat, k=7, dist="Chebyshev", 
                          Cl=c("virginica", "setosa"))
-  ChebAll7 <- ENNClassif(Species~., data, k=7, dist="Chebyshev")
-  HVDM3 <- ENNClassif(Species~., data, k=3, dist="HVDM")
+  ChebAll7 <- ENNClassif(Species~., dat, k=7, dist="Chebyshev")
+  HVDM3 <- ENNClassif(Species~., dat, k=3, dist="HVDM")
 @
 
 In Table \ref{tab:iris_ENN_table} we can observe the examples distributions for some parameters settings in ENN strategy and in Figure \ref{fig:ir_ENN_plot} we can visualize that distribution.
@@ -601,7 +630,7 @@ In Table \ref{tab:iris_ENN_table} we can observe the examples distributions for 
 <<iris_ENN_table, results='asis', echo=FALSE>>=
 nm <- c("Original","Man5", "Default","ChebSub7", "ChebAll7", "HVDM3")
 
-res <- c(table(data$Species),table(Man5[[1]]$Species), table(Default[[1]]$Species), table(ChebSub7[[1]]$Species), table(ChebAll7[[1]]$Species), table(HVDM3[[1]]$Species))
+res <- c(table(dat$Species),table(Man5[[1]]$Species), table(Default[[1]]$Species), table(ChebSub7[[1]]$Species), table(ChebAll7[[1]]$Species), table(HVDM3[[1]]$Species))
 
 m <- matrix(res, nrow=6,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(Man5[[1]]$Species))))
 
@@ -611,12 +640,12 @@ print(xt,comment = FALSE, type = 'latex')
 
 
 <<ir_ENN_plot, echo=FALSE, fig.cap="Impact in the Original data set of several parameters for ENN strategy",out.height="0.5\\textheight">>=
-DF <- rbind(data.frame(Dat="Original",obs=as.factor(data$Species)), data.frame(Dat="Manhattan5NN", obs=as.factor(Man5[[1]]$Species)), data.frame(Dat="Default", obs=as.factor(Default[[1]]$Species)), data.frame(Dat="Chebyshev7NNSub", obs=as.factor(ChebSub7[[1]]$Species)), data.frame(Dat="Chebyshev7NNAll", obs=as.factor(ChebAll7[[1]]$Species)), data.frame(Dat="HVDM3", obs=as.factor(HVDM3[[1]]$Species)))
+DF <- rbind(data.frame(Dat="Original",obs=as.factor(dat$Species)), data.frame(Dat="Manhattan5NN", obs=as.factor(Man5[[1]]$Species)), data.frame(Dat="Default", obs=as.factor(Default[[1]]$Species)), data.frame(Dat="Chebyshev7NNSub", obs=as.factor(ChebSub7[[1]]$Species)), data.frame(Dat="Chebyshev7NNAll", obs=as.factor(ChebAll7[[1]]$Species)), data.frame(Dat="HVDM3", obs=as.factor(HVDM3[[1]]$Species)))
 
-g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_histogram(binwidth=1, position="dodge", aes(group=Dat), colour="black")
+g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_bar(position="dodge", aes(group=Dat), colour="black")
 
 
-g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_histogram(binwidth=1, position="fill", aes(group=obs), colour="black")+theme(axis.text.x  = element_text(angle=90, vjust=0.5))
+g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_bar(position="fill", aes(group=obs), colour="black")+theme(axis.text.x  = element_text(angle=90, vjust=0.5))
 
 plots <- list(g1, g2)
 
@@ -667,15 +696,15 @@ Finally, the examples in $A_1$ and $A_2$ are removed from the original data set.
 
 Since this strategy internally uses the ENN approach we highlight that it is possible that warnings are issued. As mentioned before, the user is always adverted if ENN does not alter the data set. This can also happen with NCL if internally the ENN does not remove any example.
 
-The NCL approach is available in \UBL through the \texttt{NCLClassif} function. In addition to providing a formula describing the prediction problem (\texttt{form}) and a data set (\texttt{data}) the user may set the parameters corresponding to the number of neighbors considered (\texttt{k}), the distance function used (\texttt{dist}) and the classes that should be under-sampled (\texttt{Cl}). This last parameter may be set to \texttt{smaller}. In this case, the smaller classes are automatically estimated, and assumed to be the most important ones. All the other least important classes are candidates for the under-sampling of NCL method to be applied. We now provide some examples of application of the NCL method. Table \ref{tab:iris_NCL_table} provides the number of examples in each class for different parameters of NCL method and in Figure \ref{fig:NCL_plot} the changes produced by the use of this method may be visualized.
+The NCL approach is available in \UBL through the \texttt{NCLClassif} function. In addition to providing a formula describing the prediction problem (\texttt{form}) and a data set (\texttt{dat}) the user may set the parameters corresponding to the number of neighbors considered (\texttt{k}), the distance function used (\texttt{dist}) and the classes that should be under-sampled (\texttt{Cl}). This last parameter may be set to \texttt{smaller}. In this case, the smaller classes are automatically estimated, and assumed to be the most important ones. All the other least important classes are candidates for the under-sampling of NCL method to be applied. We now provide some examples of application of the NCL method. Table \ref{tab:iris_NCL_table} provides the number of examples in each class for different parameters of NCL method and in Figure \ref{fig:NCL_plot} the changes produced by the use of this method may be visualized.
 
 <<Iris_NCL>>=
 set.seed(1234)
-ir.M1 <- NCLClassif(Species~., data, k=3, dist="p-norm", p=1, Cl="smaller")
-ir.M2<- NCLClassif(Species~., data, k=1, dist="p-norm", p=1, Cl="smaller")
-ir.Def <- NCLClassif(Species~., data)
-ir.Ch <- NCLClassif(Species~., data, k=7, dist="Chebyshev", Cl="virginica")
-ir.Eu <- NCLClassif(Species~., data, k=3, dist="Euclidean", 
+ir.M1 <- NCLClassif(Species~., dat, k=3, dist="p-norm", p=1, Cl="smaller")
+ir.M2<- NCLClassif(Species~., dat, k=1, dist="p-norm", p=1, Cl="smaller")
+ir.Def <- NCLClassif(Species~., dat)
+ir.Ch <- NCLClassif(Species~., dat, k=7, dist="Chebyshev", Cl="virginica")
+ir.Eu <- NCLClassif(Species~., dat, k=3, dist="Euclidean", 
                     Cl=c("setosa", "virginica"))
 @
 
@@ -683,7 +712,7 @@ ir.Eu <- NCLClassif(Species~., data, k=3, dist="Euclidean",
 <<iris_NCL_table, results='asis', echo=FALSE>>=
 nm <- c("Original","ir.M1", "ir.M2","ir.Def", "ir.Ch", "ir.Eu")
 
-res <- c(table(data$Species),table(ir.M1$Species), table(ir.M2$Species), table(ir.Def$Species), table(ir.Ch$Species), table(ir.Eu$Species))
+res <- c(table(dat$Species),table(ir.M1$Species), table(ir.M2$Species), table(ir.Def$Species), table(ir.Ch$Species), table(ir.Eu$Species))
 
 m <- matrix(res, nrow=6, ncol=3, byrow=TRUE, dimnames=list(nm, names(table(Man5[[1]]$Species))))
 
@@ -693,7 +722,7 @@ print(xt,comment = FALSE, type = 'latex')
 
 
 <<NCL_plot,fig.cap="NCL techniques applied to a multiclass imbalanced problem.", echo=FALSE>>=
-g1 <- ggplot(data, aes(x=data[,1], y=data[,2],color=data[,3]))+xlab("Length")+ylab("Width")+geom_point()+ggtitle("Original data")+scale_color_discrete(name="Species")
+g1 <- ggplot(dat, aes(x=dat[,1], y=dat[,2],color=dat[,3]))+xlab("Length")+ylab("Width")+geom_point()+ggtitle("Original data")+scale_color_discrete(name="Species")
 g2 <- ggplot(ir.M1, aes(x=ir.M1[,1], y=ir.M1[,2],color=ir.M1[,3]))+xlab("Length")+ylab("Width")+geom_point()+ggtitle("Manhattan distance and 3-NN")+scale_color_discrete(name="Species")
 g3 <- ggplot(ir.M2, aes(x=ir.M2[,1], y=ir.M2[,2],color=ir.M2[,3]))+xlab("Length")+ylab("Width")+geom_point()+ggtitle("Manhattan distance and 1-NN")+scale_color_discrete(name="Species")
 g4 <- ggplot(ir.Def, aes(x=ir.Def[,1], y=ir.Def[,2],color=ir.Def[,3]))+xlab("Length")+ylab("Width")+geom_point()+ggtitle("Default values")+scale_color_discrete(name="Species")
@@ -715,19 +744,19 @@ We have adapted this technique to multiclass imbalanced problems. Moreover, we h
 
 Regarding the over-sampling method, a new example from an important class is obtained by perturbing each numeric feature according to a random value following a normally distributed percentage of its standard deviation (with the standard deviation evaluated on the examples of that class). This means that, for a given value of \texttt{pert} defined by the user, each feature value ($i$) of the new example ($new_i$) is built as follows: $new_i=ex_i+rnorm(0,sd(i)\times pert) $, where $ex_i$ represents the original example value for feature $i$, and $sd(i)$ represents the evaluated standard deviation for feature $i$ in the class under consideration. For nominal features, the new example selects a label with a probability directly proportional to the frequency of the existing labels(with the frequency evaluated on the examples of that class).
 
-The user may express which are the most relevant and the less important classes of the data set through the parameter \texttt{C.perc}. With this parameter the user also indicates the percentages of under and over-sampling to apply in each class. If a class is not referred in this parameter it will remain unchanged. Moreover, this parameter can also be set to "balance" or "extreme", cases where the under and over-sampling percentages are automatically estimated to achieve a balanced data set or a data set with the frequencies of the classes inverted. The perturbation applied to the numeric features is set using the \texttt{pert} parameter. Finally, the user may also specify if, when performing the random under-sampling strategy, it is allowed to perform sampling with repetition or not.
+The user may express which are the most relevant and the less important classes of the data set through the parameter \texttt{C.perc}. With this parameter the user also indicates the percentages of under and over-sampling to apply in each class. If a class is not referred in this parameter it will remain unchanged. Moreover, this parameter can also be set to ``balance" or ``extreme", cases where the under and over-sampling percentages are automatically estimated to achieve a balanced data set or a data set with the frequencies of the classes inverted. The perturbation applied to the numeric features is set using the \texttt{pert} parameter. Finally, the user may also specify if, when performing the random under-sampling strategy, it is allowed to perform sampling with repetition or not.
 
 We present an example of the impact of applying this technique for different values of the parameters.
 
 
 <<ir_GN>>=
 set.seed(1234)
-irB<- gaussNoiseClassif(Species~., data, C.perc="balance")
-irE <- gaussNoiseClassif(Species~., data,C.perc="extreme")
-irU1 <- gaussNoiseClassif(Species~., data,
+irB<- GaussNoiseClassif(Species~., dat, C.perc="balance")
+irE <- GaussNoiseClassif(Species~., dat,C.perc="extreme")
+irU1 <- GaussNoiseClassif(Species~., dat,
                           C.perc=list(setosa=0.3, versicolor=1.5, virginica=4),
                           pert=0.5, repl=TRUE)
-irU2 <- gaussNoiseClassif(Species~., data,
+irU2 <- GaussNoiseClassif(Species~., dat,
                           C.perc=list(versicolor=3, virginica=2), 
                           pert=0.05)
 @
@@ -740,11 +769,11 @@ Table \ref{tab:iris_GN_table} presents the impact on the number of examples for 
 <<iris_GN_table, results='asis',echo=FALSE>>=
 nm <- c("Original", "irB", "irE","irU1", "irU2")
 
-nm2 <- list(data, irB, irE,irU1, irU2)
+nm2 <- list(dat, irB, irE,irU1, irU2)
 
-res <- c(table(data$Species), table(irB$Species), table(irE$Species), table(irU1$Species), table(irU2$Species))
+res <- c(table(dat$Species), table(irB$Species), table(irE$Species), table(irU1$Species), table(irU2$Species))
 
-m <- matrix(res, nrow=5,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(data$Species))))
+m <- matrix(res, nrow=5,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(dat$Species))))
 
 xt <-xtable(m, caption="Number of examples in each class for different parameters of Gaussian Noise strategy.",label="tab:iris_GN_table")
 print(xt,comment = FALSE, type = 'latex')
@@ -754,10 +783,10 @@ print(xt,comment = FALSE, type = 'latex')
 
 
 <<ir_GN_plot, echo=FALSE, fig.cap="Impact in the Original data set of several parameters in Gaussian noise strategy. ",out.height="0.5\\textheight">>=
-DF <- rbind(data.frame(Dat="Original",obs=data$Species), data.frame(Dat="irB", obs=irB$Species), data.frame(Dat="irE", obs=irE$Species), data.frame(Dat="irU1", obs=irU1$Species), data.frame(Dat="irU2", obs=irU2$Species))
-g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_histogram(binwidth=1, position="dodge", aes(group=Dat), colour="black")
+DF <- rbind(data.frame(Dat="Original",obs=dat$Species), data.frame(Dat="irB", obs=irB$Species), data.frame(Dat="irE", obs=irE$Species), data.frame(Dat="irU1", obs=irU1$Species), data.frame(Dat="irU2", obs=irU2$Species))
+g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_bar( position="dodge", aes(group=Dat), colour="black")
 
-g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_histogram(binwidth=1, position="fill", aes(group=obs), colour="black")
+g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_bar( position="fill", aes(group=obs), colour="black")
 
 plots <- list(g1, g2)
 
@@ -769,7 +798,7 @@ do.call(grid.arrange, plots)
 
 <<ir_GN_plot2, echo=FALSE, fig.cap="The examples distribution for different parameters in Gaussian Noise strategy.">>=
   par(mfrow = c(2, 2))
-  plot(data[, 1], data[, 2], pch =as.integer(data[, 3]), col=as.integer(data[,3]),
+  plot(dat[, 1], dat[, 2], pch =as.integer(dat[, 3]), col=as.integer(dat[,3]),
        main = "Original Data")
   plot(irB[,1], irB[,2], pch=as.integer(irB[,3]), col=as.integer(irB[,3]),
        main = "Balanced Data")
@@ -799,21 +828,21 @@ points(17.6, 0.25*17.6-4.25, pch="+")
 This over-sampling strategy was also combined with random under-sampling of the majority class in \cite{CBOK02}. 
 
 
-Our implementation of this method is available through the \texttt{SmoteClassif} function and is able to deal with multiclass tasks. The user can specify which are the most important and the less relevant classes using the \texttt{C.perc} parameter. Using the same parameter the user also expresses the percentages of over and under-sampling that should be applied to each class. When the data set includes nominal features, the interpolation of two examples for these features is solved by randomly selecting among the two values of the seed examples. Two automatic methods are provided for both the estimation of the relevant classes and the percentages of over and under-sampling to apply. These methods are available through the \texttt{C.perc} parameter which can be set to "balance" or "extreme". In both cases, it is ensured that the new obtained data set includes roughly the same number of examples as the original data set. When "balance" or "extreme" are chosen, both the minority/majority classes and the percentages of over/under-sampling are automatically estimated. The "balance" option provides a balanced data set and the "extreme" option provides a data set with the classes frequencies inverted, i.e., the most frequent classes in the original data set are the less frequent on the new data set and vice-versa.
+Our implementation of this method is available through the \texttt{SmoteClassif} function and is able to deal with multiclass tasks. The user can specify which are the most important and the less relevant classes using the \texttt{C.perc} parameter. Using the same parameter the user also expresses the percentages of over and under-sampling that should be applied to each class. When the data set includes nominal features, the interpolation of two examples for these features is solved by randomly selecting among the two values of the seed examples. Two automatic methods are provided for both the estimation of the relevant classes and the percentages of over and under-sampling to apply. These methods are available through the \texttt{C.perc} parameter which can be set to ``balance" or ``extreme". In both cases, it is ensured that the new obtained data set includes roughly the same number of examples as the original data set. When ``balance" or ``extreme" are chosen, both the minority/majority classes and the percentages of over/under-sampling are automatically estimated. The ``balance" option provides a balanced data set and the ``extreme" option provides a data set with the classes frequencies inverted, i.e., the most frequent classes in the original data set are the less frequent on the new data set and vice-versa.
 
 Finally, the user may also express if the under-sampling process may include repetition of examples or not (using the \texttt{repl} parameter), may choose the number of nearest neighbors to use (parameter \texttt{k}) and can select the distance metric to be used in the nearest neighbors evaluation (parameter \texttt{dist}). 
 
 
 <<smote>>=
-  mysmote1 <- smoteClassif(Species~., data, 
+  mysmote1 <- SmoteClassif(Species~., dat, 
                            C.perc=list(setosa=0.6, virginica=1.5))
-  mysmote2 <- smoteClassif(Species~., data, 
+  mysmote2 <- SmoteClassif(Species~., dat, 
                            C.perc=list(setosa=0.2, versicolor=4), repl=TRUE)
-  mysmote3 <- smoteClassif(Species~., data, 
+  mysmote3 <- SmoteClassif(Species~., dat, 
                            C.perc=list(virginica=6, versicolor=2))
-  smoteB <- smoteClassif(Species~., data, 
+  smoteB <- SmoteClassif(Species~., dat, 
                            C.perc="balance")
-  smoteE <- smoteClassif(Species~., data, 
+  smoteE <- SmoteClassif(Species~., dat, 
                            C.perc="extreme")
 
 @
@@ -824,9 +853,9 @@ Table \ref{tab:iris_smote_table} show the impact on the number of examples in ea
 <<smote_table, echo=FALSE, results='asis'>>=
 nm <- c("Original", "mysmote1", "mysmote2","mysmote3", "smoteB", "smoteE")
 
-res <- c(table(data$Species), table(mysmote1$Species), table(mysmote2$Species), table(mysmote3$Species), table(smoteB$Species), table(smoteE$Species))
+res <- c(table(dat$Species), table(mysmote1$Species), table(mysmote2$Species), table(mysmote3$Species), table(smoteB$Species), table(smoteE$Species))
 
-m <- matrix(res, nrow=6,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(data$Species))))
+m <- matrix(res, nrow=6,ncol=3, byrow=TRUE, dimnames=list(nm, names(table(dat$Species))))
 
 xt <-xtable(m, caption="Number of examples in each class for different parameters of smote strategy.",label="tab:iris_smote_table")
 print(xt,comment = FALSE, type = 'latex')
@@ -836,11 +865,11 @@ print(xt,comment = FALSE, type = 'latex')
 Figures \ref{fig:smote_plot_hist} and \ref{fig:smote_plot} present the impact of applying smote strategy on an imbalanced data set.
 
 <<smote_plot_hist, echo=FALSE, fig.cap="Impact in the Original data set of several parameters in smote strategy. ",out.height="0.5\\textheight">>=
-DF <- rbind(data.frame(Dat="Original",obs=data$Species), data.frame(Dat="mysmote1", obs=mysmote1$Species), data.frame(Dat="mysmote2", obs=mysmote2$Species), data.frame(Dat="mysmote3", obs=mysmote3$Species), data.frame(Dat="smoteB", obs=smoteB$Species), data.frame(Dat="smoteE", obs=smoteE$Species))
-g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_histogram(binwidth=1, position="dodge", aes(group=Dat), colour="black")
+DF <- rbind(data.frame(Dat="Original",obs=dat$Species), data.frame(Dat="mysmote1", obs=mysmote1$Species), data.frame(Dat="mysmote2", obs=mysmote2$Species), data.frame(Dat="mysmote3", obs=mysmote3$Species), data.frame(Dat="smoteB", obs=smoteB$Species), data.frame(Dat="smoteE", obs=smoteE$Species))
+g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_bar( position="dodge", aes(group=Dat), colour="black")
 
 
-g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_histogram(binwidth=1, position="fill", aes(group=obs), colour="black")
+g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_bar( position="fill", aes(group=obs), colour="black")
 
 plots <- list(g1, g2)
 
@@ -850,7 +879,7 @@ do.call(grid.arrange, plots)
 
 <<smote_plot, fig.cap="Smote strategy applied with different parameters", echo=FALSE>>=
 par(mfrow = c(3, 2))
-plot(data[, 1], data[, 2], pch = as.integer(data[, 3]), col=as.integer(data[,3]),
+plot(dat[, 1], dat[, 2], pch = as.integer(dat[, 3]), col=as.integer(dat[,3]),
         main = "Original Data")
 plot(mysmote1[, 1], mysmote1[, 2], pch = as.integer(mysmote1[,3]), col=as.integer(mysmote1[,3]),
         main = "User settings1")
@@ -867,11 +896,14 @@ plot(smoteE[, 1], smoteE[, 2], pch = as.integer(smoteE[,3]), col=as.integer(smot
 
 
 % ====================================================================
-\section{Methods for Addressing Regression Tasks under Imbalanced Domains}
+\section{Methods for Addressing Utility-based Regression Tasks}\label{sec:methRegres}
 
-The problem of imbalanced domains also occurs for regression tasks. However, for these problems there are no classes defined. Instead, there are ranges of the target variable domain which are more important to the user (and usually less represented) while other regions of that variable are less important. Therefore, the notion of imbalanced domains for regression tasks depends on the definition of a continuous relevance function ($\phi()$) which expresses the importance of the target variable values across its domain. This function $\phi()$, varies between 0 and 1, where 0 represents points in the target variable domain which are not relevant and 1 identifies the most important values. Usually, the user is also asked to provide a relevance threshold (a numeric value in $[0,1]$) which helps to clearly distinguish between the important and unimportant values.
+Utility-based problems also occur for regression tasks. However, for these problems we have a continuous target variable and therefore are no classes defined. Instead, the user may consider some ranges of the target variable domain more important (which are usually less represented) while other regions of that variable are less important. As proposed by \cite{torgo2007utility, ribeiro2011utility}, utility-based regression problems depend on the definition of a continuous relevance function ($\phi()$) which expresses the importance of the target variable values across its domain. This function $\phi()$, varies between 0 and 1, where 0 represents points in the target variable domain which are not relevant and 1 identifies the most important values. Usually, the user is also asked to provide a relevance threshold (a numeric value in $[0,1]$) which helps to clearly distinguish between the important and unimportant values.
 
-For a target variable with domain $[0,10]$ a possible relevance function could be the one represented in Figure \ref{fig:relev_ex}.
+\cite{ribeiro2011utility} proposed a framework for defining the relevance function of a given continuous target variable. This framework has an automatic method that allows to obtain the relevance function from the target variable distribution. The assumption made to achieve this goal regards the most usual setting, where the extreme rare values are the most important to the user. This framework also allows the user to manually specify which are the relevant and irrelevant values using a matrix. The R package \texttt{uba} \cite{uba}, available in \url{http://www.dcc.fc.up.pt/~rpribeiro/uba/}, includes several other functionalities for dealing with utility-based regression. We use in \UBLp the functions regarding the relevance function.
+
+
+Considering a target variable with domain $[0,10]$, a possible relevance function could be the one represented in Figure \ref{fig:relev_ex}.
 
 <<relev_ex, fig.cap="Example of a relevance function", echo=FALSE>>=
   y <- 0:10
@@ -883,12 +915,12 @@ For a target variable with domain $[0,10]$ a possible relevance function could b
    rel <- rbind(rel,c(7,0.5,1))
    rel <- rbind(rel,c(10,0,0))
 phiF.args <- phi.control(y,method="range",control.pts=rel)
-#y.phi <- phi(y,phi.parms=phiF.args)
+#y.phi <- phi(y,parms=phiF.args)
 
 
 yrange <- range(y)
 yplot <- seq(yrange[1],yrange[2],len=100)
-yplot.phi <- phi(yplot,phi.parms=phiF.args)
+yplot.phi <- phi(yplot,control.parms=phiF.args)
 
 plot(yplot,yplot.phi,type="l",
      ylab=expression(phi(y)),xlab=expression(y))
@@ -911,10 +943,10 @@ lines(c(7,7), c(0.5,0), col=4, lty=2)
 
 @
 
-For this particular regression task, the relevance function selected and the chosen relevance threshold of 0.5 characterize the most important ranges of the target variable and the bumps of relevance. In this case, we have established two bumps which include the most important values (also named "rare" cases) of the target variable ($[0, 1.5]$ and $[4.5, 7]$ represented in green in Figure \ref{fig:relev_ex}). On the other hand, the target values falling in the intervals $]1.5, 4.5[$ and $]7,10]$ (represented in red in Figure \ref{fig:relev_ex}) are the less relevant and "normal" cases.
+For this particular regression task, the relevance function selected and the chosen relevance threshold of 0.5 characterize the most important ranges of the target variable and the bumps of relevance. In this case, we have established two bumps which include the most important values (also named ``rare" cases) of the target variable ($[0, 1.5]$ and $[4.5, 7]$ represented in green in Figure \ref{fig:relev_ex}). On the other hand, the target values falling in the intervals $]1.5, 4.5[$ and $]7,10]$ (represented in red in Figure \ref{fig:relev_ex}) are the less relevant and ``normal" cases.
 
 
-The user has the responsibility of defining a relevance function suitable for the regression task he is considering. The \texttt{uba} package provides a mechanism to assist the user in this task. This method is called \texttt{range}, and depends on the introduction by the user of reference points for the $y$, and corresponding $\phi()$ and $\phi'()$ values. Using the capabilities provided by \texttt{uba} package, the relevance function may be manually defined with a 3-column matrix as follows:
+The user has the responsibility of defining a relevance function suitable for the regression task he is considering. We provide the mechanism proposed by \cite{ribeiro2011utility} and implemented in \texttt{uba} package to assist the user in this task. This method is called \texttt{range}, and depends on the introduction by the user of reference points for the $y$, and corresponding $\phi()$ and $\phi'()$ values. Alternatively, the relevance function may be manually defined with a 3-column matrix as follows:
 
 <<method_range>>=
 # relevance function represented in the previous example
@@ -940,11 +972,11 @@ rel <- rbind(rel,c(10,0,0))
 phiF.args <- phi.control(y,method="range",control.pts=rel)
 
 # obtain the relevance values for the target variable y
-y.phi <- phi(y,phi.parms=phiF.args)
+y.phi <- phi(y,control.parms=phiF.args)
 
 @
 
-In order to facilitate the user task, \texttt{uba} package also provides an automatic mechanism for defining the relevance function. This automatic method, called \texttt{extremes} is based on the boxplot of the target variable values and assigns a larger importance to the least represented values. We now provide an example of how to use this automatic method.
+In order to facilitate the user task, we also provide an automatic mechanism proposed by \cite{ribeiro2011utility} and implemented in \texttt{uba} package, for defining the relevance function. This automatic method, called \texttt{extremes} is based on the boxplot of the target variable values and assigns a larger importance to the least represented values. We now provide an example of how to use this automatic method.
 
 <<method_extremes>>=
 
@@ -952,28 +984,37 @@ In order to facilitate the user task, \texttt{uba} package also provides an auto
 
 ## for considering only the high extremes
 phiF.args <- phi.control(y,method="extremes",extr.type="high")
-y.phi <- phi(y,phi.parms=phiF.args)
+y.phi <- phi(y,control.parms=phiF.args)
 
 ## for considering only the low extremes
 phiF.args <- phi.control(y,method="extremes",extr.type="low")
-y.phi <- phi(y,phi.parms=phiF.args)
+y.phi <- phi(y,control.parms=phiF.args)
 
 ## for considering both extreme types (low and high)
 phiF.args <- phi.control(y,method="extremes",extr.type="both")
-y.phi <- phi(y,phi.parms=phiF.args)
+y.phi <- phi(y,control.parms=phiF.args)
 
 
 @
 
-All the existing methods for regression tasks under imbalanced domains depend on the definition of a relevance function, and the majority of them also rely on a relevance threshold established by the user.
+All the implemented methods for utility-based regression tasks depend on the definition of a relevance function, and the majority of them also rely on a relevance threshold established by the user.
 
+In the next sections we describe the following methods for tackling utility-based regression tasks:
+\begin{itemize}
+\item \ref{sec:RURegress} Random Under-sampling
+\item \ref{sec:RORegress} Random Over-sampling
+\item \ref{sec:gnRegress} Gaussian Noise Introduction
+\item \ref{sec:smoteR} SmoteR Algorithm
+\item \ref{sec:ISRegress} Importance Sampling
+
+\end{itemize}
 
 \subsection{Random Under-sampling}\label{sec:RURegress}
 
-Random under-sampling strategy for regression problems was first proposed by \cite{torgo2013smote}. This strategy is similar to the strategy presented for classification. It depends on the definition of both a relevance function and a relevance threshold. In this proposal, all the target values below the relevance threshold were considered normal and uninteresting and thus were regarded as candidates to be under-sampled. The user was also asked another parameter $n_u$ which represented the number of unimportant cases that should be selected for each important case. This means that the $n_u$ value established the proportion between normal (unimportant) and rare (important) cases that the under-sampled data set should contain.
+Random under-sampling strategy for regression problems was first proposed by \cite{torgo2013smote}. This strategy is similar to the strategy presented for classification. It depends on the definition of both a relevance function and a relevance threshold. In this proposal, all the target values below the relevance threshold were considered normal and uninteresting and thus were regarded as candidates to be under-sampled. The user was also asked another parameter that established the proportion between normal (unimportant) and rare (important) cases that the under-sampled data set should contain.
 
 
-In the implementation of this strategy in \UBL, regarding the relevance function definition, the user has available the two methods (range and extremes) provided by \texttt{uba} package that were previously described. This means that the user may define as many relevance bumps as wanted. Parameter \texttt{rel} is used to indicate the relevance function. This can be accomplished by either using the automatic method (setting \texttt{rel} to "auto"- the default) or using the range method by providing a 3-column matrix.  It is also necessary for the user to point out a relevance threshold through the \texttt{thr.rel} parameter. Having this defined, all the target variable values with relevance below the relevance threshold are candidates to be under-sampled. Finally, the user can express using the \texttt{C.perc} parameter which under-sampling percentage should be applied in each bump with uninteresting values, or alternatively this parameter may be set to "balance" or "extreme". If "balance" is chosen the under-sampling percentage is automatically estimated in order to balance the normal/important and rare/unimportant cases. On the other hand, the "extreme" option will invert the existing frequencies. The following example shows how these parameters can be set.
+In the implementation of this strategy in \pUBL, we ask for the user to define the relevance function (manually through the method ``range" or using the automatic method, called ``extremes", previously described). This means that the user may define as many relevance bumps as wanted. Parameter \texttt{rel} is used to indicate the relevance function. For using the automatic method the parameter \texttt{rel} should be set to ``auto" (the default). If the user want to apply the range method, then he should provide a 3-column matrix. It is also necessary for the user to define a relevance threshold through the \texttt{thr.rel} parameter. Having this set, all the target variable values with relevance below the relevance threshold are candidates to be under-sampled. Finally, the user can also express using the \texttt{C.perc} parameter which under-sampling percentage should be applied in each bump with uninteresting values, or alternatively this parameter may be set to ``balance" or ``extreme". If ``balance" is chosen the under-sampling percentage is automatically estimated in order to balance the normal/important and rare/unimportant cases. On the other hand, the ``extreme" option will invert the existing frequencies. The following example shows how these parameters can be set.
 
 <<dat>>=
 # use algae data set with NA's removed
@@ -985,12 +1026,12 @@ clean.algae <- algae[complete.cases(algae),]
 # Since this is the default behaviour, we can simply not mention the
 # "rel" parameter
 
-algB <- randUnderRegress(a7~., clean.algae, C.perc="balance")
-algE <- randUnderRegress(a7~., clean.algae, C.perc="extreme")
+algB <- RandUnderRegress(a7~., clean.algae, C.perc="balance")
+algE <- RandUnderRegress(a7~., clean.algae, C.perc="extreme")
 
 # the automatic method for the relevance function provides only one bump 
 # with values to be under-sampled, thus we only need to indicate one percentage
-algMy <- randUnderRegress(a7~., clean.algae, C.perc=list(0.5))
+algMy <- RandUnderRegress(a7~., clean.algae, C.perc=list(0.5))
 
 @
 
@@ -1043,15 +1084,16 @@ rel <- rbind(rel, c(30,1,0))
 Now, having defined the relevance threshold as 0.7, we will apply the random under-sampling strategy in the two ranges with uninteresting values of the target variable:
 
 <<RRU>>=
-RUnew <- randUnderRegress(a7~., clean.algae, rel=rel, thr.rel=0.7,
+RUnew <- RandUnderRegress(a7~., clean.algae, rel=rel, thr.rel=0.7,
                           C.perc=list(0.2,0.8))
-RUB2 <- randUnderRegress(a7~., clean.algae, rel=rel, thr.rel=0.7, 
+RUB2 <- RandUnderRegress(a7~., clean.algae, rel=rel, thr.rel=0.7, 
                          C.perc="balance")
-RUE2 <- randUnderRegress(a7~., clean.algae, rel=rel, thr.rel=0.7, 
+RUE2 <- RandUnderRegress(a7~., clean.algae, rel=rel, thr.rel=0.7, 
                          C.perc="extreme")
 @
 
 The impact of the new strategies and the relevance function defined can be visualized in Figure \ref{fig:RU_ex2}.
+
 <<RU_ex2, fig.cap="Relevance function and density of the target variable in the original and new data sets with Random Under-sampling strategy.", echo=FALSE>>=
 par(mar = c(5,5,2,5))
 plot(density(clean.algae$a7),xlab=expression(y), main="")
@@ -1089,20 +1131,20 @@ print(xt,comment = FALSE, type = 'latex')
 
 
 
-\subsection{Random Oversampling}\label{sec:RORegress}
+\subsection{Random Over-sampling}\label{sec:RORegress}
 
-The Random over-sampling method here presented is an adaptation of the Random over-sampling method proposed for classification tasks using the previously presented relevance function for regression tasks under imbalanced domains. This technique is available with \texttt{randomOverRegress} function, and is simply based on the introduction of random copies of examples of the original data set. These replicas are only introduced in the most important ranges of the target variable, i.e., in the ranges where the relevance is above a user-defined threshold. Similarly to what happened in Random Under-sampling, the user may define its own relevance function or use the automatic method provided by \texttt{uba} package to generate one. It is also the user responsibility to define the relevance threshold (using the \texttt{thr.rel} parameter) and the percentages of over-sampling to apply in each bump of relevance (through the \texttt{C.perc} parameter). Alternatively, the user may set the \texttt{C.perc} parameter as "balance" or "extreme", cases which automatically evaluate the percentages of over-sampling to apply for obtaining a new balanced data set or for inverting the frequencies of examples in the defined bumps.
+The Random over-sampling method here presented is an adaptation of the Random over-sampling method proposed for classification tasks using the previously presented relevance function for utility-based regression tasks. This technique is available through \texttt{randomOverRegress} function, and is simply based on the introduction of random copies of examples of the original data set. These replicas are only introduced in the most important ranges of the target variable, i.e., in the ranges where the relevance is above a user-defined threshold. Similarly to what happened in Random Under-sampling, the user may define its own relevance function or use the automatic method provided to generate one. It is also the user responsibility to define the relevance threshold (using the \texttt{thr.rel} parameter) and the percentages of over-sampling to apply in each bump of relevance (through the \texttt{C.perc} parameter). Alternatively, the user may set the \texttt{C.perc} parameter as ``balance" or ``extreme", cases which automatically evaluate the percentages of over-sampling to apply for obtaining a new balanced data set or for inverting the frequencies of examples in the defined bumps.
 In the following example we can see how to use this function.
 
 <<RO_autoRel>>=
 # using the automatic method for defining the relevance function and
 # the default threshold of 0.5
-Alg.my <- randOverRegress(a7~., clean.algae, C.perc=list(2.5))
-Alg.Bal <- randOverRegress(a7~., clean.algae, C.perc="balance")
-Alg.Ext0.5 <- randOverRegress(a7~., clean.algae, C.perc="extreme")
+Alg.my <- RandOverRegress(a7~., clean.algae, C.perc=list(2.5))
+Alg.Bal <- RandOverRegress(a7~., clean.algae, C.perc="balance")
+Alg.Ext0.5 <- RandOverRegress(a7~., clean.algae, C.perc="extreme")
 
 # change the relevance threshold to 0.9
-Alg.Ext0.9 <- randOverRegress(a7~., clean.algae, thr.rel=0.9, C.perc="extreme")
+Alg.Ext0.9 <- RandOverRegress(a7~., clean.algae, thr.rel=0.9, C.perc="extreme")
 @
 
 
@@ -1141,7 +1183,7 @@ xt <-xtable(m, caption="Total number of examples in each data set for different 
 print(xt,comment = FALSE, type = 'latex')
 @
 
-As expected, all the data sets have an increased size. However, for the \texttt{Alg.Ext0.9} data set, the size was increased approximately \Sexpr{round(nrow(Alg.Ext0.9)*100/nrow(clean.algae),0)}\%. This "side effect" must be taken into consideration when applying this technique because it may impose constraints on the used learners. We must also highlight that, although the data set size can be strongly increased, we are in fact only introducing replicas of already existing examples, and thus no new information is being inserted.
+As expected, all the data sets have an increased size. However, for the \texttt{Alg.Ext0.9} data set, the size was increased approximately \Sexpr{round(nrow(Alg.Ext0.9)*100/nrow(clean.algae),0)}\%. This ``side effect" must be taken into consideration when applying this technique because it may impose constraints on the used learners. We must also highlight that, although the data set size can be strongly increased, we are in fact only introducing replicas of already existing examples, and thus no new information is being inserted.
 
 
 
@@ -1151,22 +1193,22 @@ The generation of synthetic examples through the introduction of small perturbat
 
 We have adapted this over-sampling technique to regression problems and have combined it with the random under-sampling method. To accomplish this it is required that the user defines a relevance function and a relevance threshold. The examples which have a target variable value with relevance higher than the threshold set will be over-sampled, and the remaining will be randomly under-sampled. The under-sampling strategy used is the same described in Section \ref{sec:RURegress}. For the over-sampling strategy we use the same procedure which was described for classification tasks in Section \ref{sec:gnClassif}. The only difference on the over-sampling method is in the target variable value. For classification tasks, the target variable value was easily assigned: it was the rare class under consideration. For regression tasks we have decided to extend the technique applied for numeric features also to the target variable. This means that the new example target variable value is obtained by a random normal perturbation of the original target value based on the target value standard deviation.
 
-In order to use this method the user must provide a relevance function through the \texttt{rel} parameter (or use the automatic method for estimating it), a threshold on the relevance (parameter \texttt{thr.rel}) and the perturbation to be used (parameter \texttt{pert}). Moreover, the user may also express using the parameter \texttt{C.perc} the percentages of over and under-sampling to apply in each bump defined, or alternatively he may set this parameter to "balance" or "extreme". Similarly to behavior described in the previous techniques, setting this parameter to "balance" or "extreme" causes the percentages of over and under-sampling to be automatically estimated. The option "balance" will try to distribute the examples evenly across the existing bumps while maintaining the total number of examples in the modified data set. If the choice is "extreme" then the frequencies of the examples in the bumps will be inverted. The user can also indicate if the under-sampling process can be made with repetition of examples or not using the \texttt{repl} parameter.
+In order to use this method the user must provide a relevance function through the \texttt{rel} parameter (or use the automatic method for estimating it), a threshold on the relevance (parameter \texttt{thr.rel}) and the perturbation to be used (parameter \texttt{pert}). Moreover, the user may also express using the parameter \texttt{C.perc} the percentages of over and under-sampling to apply in each bump defined, or alternatively he may set this parameter to ``balance" or ``extreme". Similarly to the behavior described in the previous techniques, setting this parameter to ``balance" or ``extreme" causes the percentages of over and under-sampling to be automatically estimated. The option ``balance" will try to distribute the examples evenly across the existing bumps while maintaining the total number of examples in the modified data set. If the choice is ``extreme" then the frequencies of the examples in the bumps will be inverted. The user can also indicate if the under-sampling process can be made with repetition of examples or not using the \texttt{repl} parameter.
 
-We now show some examples of usage of the function \texttt{gaussNoiseRegress}.
+We now show some examples of usage of the function \texttt{GaussNoiseRegress}.
 <<GN_1>>=
 # relevance function estimated automatically has two bumps
 # defining the desired percentages of under and over-sampling to apply
 C.perc=list(0.5, 3)
 # define the relevance threshold
 thr.rel=0.8
-mygn <- gaussNoiseRegress(a7~., clean.algae, thr.rel=thr.rel, C.perc=C.perc)
-gnB <- gaussNoiseRegress(a7~., clean.algae, thr.rel=thr.rel, C.perc="balance")
-gnE <- gaussNoiseRegress(a7~., clean.algae, thr.rel=thr.rel, C.perc="extreme")
+mygn <- GaussNoiseRegress(a7~., clean.algae, thr.rel=thr.rel, C.perc=C.perc)
+gnB <- GaussNoiseRegress(a7~., clean.algae, thr.rel=thr.rel, C.perc="balance")
+gnE <- GaussNoiseRegress(a7~., clean.algae, thr.rel=thr.rel, C.perc="extreme")
 
 @
 
-Figures \ref{fig:GN_plot1} and \ref{fig:GN_plot2} show the impact of this strategy, for the parameters considered, on the examples distribution. In Figure \ref{fig:GN_plot2} we selected two numeric features ("Cl" and "a5") to visualize the impact on the data sets.
+Figures \ref{fig:GN_plot1} and \ref{fig:GN_plot2} show the impact of this strategy, for the parameters considered, on the examples distribution. In Figure \ref{fig:GN_plot2} we selected two numeric features (``Cl" and ``a5") to visualize the impact on the data sets.
 
 <<GN_plot1, fig.cap="Relevance function and density of the target variable in the original and new data sets using Gaussian noise strategy.", echo=FALSE>>=
 par(mar = c(5,5,2,5))
@@ -1207,12 +1249,12 @@ In the following example we check the impact of changing the perturbation introd
 
 <<gn_balance_pert_eval>>=
 # the default uses the value of 0.1 for "pert" parameter
-gnB1 <- gaussNoiseRegress(a7~., clean.algae, thr.rel=thr.rel, C.perc="balance")
+gnB1 <- GaussNoiseRegress(a7~., clean.algae, thr.rel=thr.rel, C.perc="balance")
 
 # try two different values for "pert" parameter
-gnB2 <- gaussNoiseRegress(a7~., clean.algae, thr.rel=thr.rel, C.perc="balance",
+gnB2 <- GaussNoiseRegress(a7~., clean.algae, thr.rel=thr.rel, C.perc="balance",
                           pert=0.5)
-gnB3 <- gaussNoiseRegress(a7~., clean.algae, thr.rel=thr.rel, C.perc="balance",
+gnB3 <- GaussNoiseRegress(a7~., clean.algae, thr.rel=thr.rel, C.perc="balance",
                           pert=0.01)
 
 @
@@ -1234,10 +1276,10 @@ plot(gnB3[,16], gnB3[,6], col= ifelse(gnB3[, 18]>5,2,3), pch=ifelse(gnB3[,18]>5,
 
 \subsection{The SmoteR Algorithm}\label{sec:smoteR}
 
-The SmoteR algorithm was presented in \cite{torgo2013smote}. This proposal is an adaptation for regression problems under imbalanced domains of the existing smote algorithm for classification tasks. As with other methods addressing regression tasks under imbalanced data distributions it is the user responsability to provide a relevance function and a relevance threshold. This function determines which are the relevant and the unimportant examples. This algorithm combines an over-sampling strategy by interpolation of examples with a random under-sampling approach. For the generation of new examples by interpolation, the same procedure proposed in smote algorithm is used. Regarding the generation of the target variable value of the new generated examples the proposed smoteR algorithm uses an weighted average of the values of target variable of the two examples used. The weights are calculated as an inverse function of the distance of the generated case to each of the two seed examples. This means that, the further away the new example is from the seed case less weight will be given for the generation of the target variable value. The random under-sampling approach is applied in the bumps containing the normal and unimportant cases. 
+The SmoteR algorithm was presented in \cite{torgo2013smote}. This proposal is an adaptation for regression problems under imbalanced domains of the existing smote algorithm \cite{CBOK02} for classification tasks. As with other methods addressing regression tasks on imbalanced data distributions it is the user responsability to provide a relevance function and a relevance threshold. This function determines which are the relevant and the unimportant examples. This algorithm combines an over-sampling strategy by interpolation of examples with a random under-sampling approach. For the generation of new examples by interpolation, the same procedure proposed in smote algorithm is used. Regarding the generation of the target variable value of the new generated examples the proposed smoteR algorithm uses an weighted average of the values of target variable of the two examples used. The weights are calculated as an inverse function of the distance of the generated case to each of the two seed examples. This means that, the further away the new example is from the seed case less weight will be given for the generation of the target variable value. The random under-sampling approach is applied in the bumps containing the normal and unimportant cases. 
 
-The smoteR algorithm is available through the \texttt{smoteRegress} function. The user may define its own relevance function or use the automatic method, as in the previously described techniques. The user must also define the relevance threshold. 
-Regarding the generation of examples it is required to specify the number of nearest neighbors to consider in smoteR algorithm. This is available through the parameter \texttt{k} and the default is set to 5. The user may then use the \texttt{C.perc} parameter to either express the percentages of under and over-sampling to use in each bump of relevance or to set which automatic method should be used for determining these percentages. Similarly to the other approaches, the automatic methods available are "balance" and "extreme" which estimate both where to apply the under/over-sampling and the corresponding percentages. The method "balance" changes the examples distribution by assigning roughly the same number of examples to each bump while the "extreme" method inverts the frequencies of each bump. Both methods approximately maintain the total number of examples. The parameter \texttt{repl} allows to select if the random under-sampling strategy is applied with repetition of examples or not. The user can also specify which distance function should be used for the nearest neighbors computation using the \texttt{dist} parameter. 
+The smoteR algorithm is available through the \texttt{SmoteRegress} function. The user may define its own relevance function or use the automatic method, as in the previously described techniques. The user must also define the relevance threshold. 
+Regarding the generation of examples it is required to specify the number of nearest neighbors to consider in smoteR algorithm. This is available through the parameter \texttt{k} and the default is set to 5. The user may then use the \texttt{C.perc} parameter to either express the percentages of under and over-sampling to use in each bump of relevance or to set which automatic method should be used for determining these percentages. Similarly to the other approaches, the automatic methods available are ``balance" and ``extreme" which estimate both where to apply the under/over-sampling and the corresponding percentages. The method ``balance" changes the examples distribution by assigning roughly the same number of examples to each bump while the ``extreme" method inverts the frequencies of each bump. Both methods approximately maintain the total number of examples. The parameter \texttt{repl} allows to select if the random under-sampling strategy is applied with repetition of examples or not. The user can also specify which distance function should be used for the nearest neighbors computation using the \texttt{dist} parameter. 
 
 The following examples illustrate how this method can be used.
 
@@ -1253,7 +1295,7 @@ The following examples illustrate how this method can be used.
 
 y <- sort(clean.algae$a7)
 phiF.args <- phi.control(y,method="extremes",extr.type="both")
-y.phi <- phi(y,phi.parms=phiF.args)
+y.phi <- phi(y, control.parms=phiF.args)
 
 # plot the relevance function
 plot(y,y.phi,type="l",
@@ -1270,15 +1312,17 @@ Figure \ref{fig:smoteR_rel1} shows that we are considering two different bumps: 
 # Thus, we can chose the following percentages: 
 thr.rel=0.8
 C.perc=list(0.1, 8) 
-# using these percentages and the relevance threshold of 0.8 with all the other parameters default values
-# it is necessary to set the distance function to "HEOM" because the data set contains nominal and numeric features
-mysm <- smoteRegress(a7~., clean.algae, thr.rel=thr.rel, dist="HEOM", C.perc=C.perc)
+# using these percentages and the relevance threshold of 0.8 with all
+# the other parameters default values
+# it is necessary to set the distance function to "HEOM" because the
+# data set contains nominal and numeric features
+mysm <- SmoteRegress(a7~., clean.algae, thr.rel=thr.rel, dist="HEOM", C.perc=C.perc)
 
 # use the automatic method for obtaining a balanced data set
-smB <- smoteRegress(a7~., clean.algae, thr.rel=thr.rel, dist="HEOM", C.perc="balance")
+smB <- SmoteRegress(a7~., clean.algae, thr.rel=thr.rel, dist="HEOM", C.perc="balance")
 
 # use the automatic method for invert the frequencies of the bumps
-smE <- smoteRegress(a7~., clean.algae, thr.rel=thr.rel, dist="HEOM", C.perc="extreme")
+smE <- SmoteRegress(a7~., clean.algae, thr.rel=thr.rel, dist="HEOM", C.perc="extreme")
 
 @
 
@@ -1334,9 +1378,9 @@ In Figure \ref{fig:smoteR_1bar} we can visualize the impact of these approaches 
 <<smoteR_1bar, echo=FALSE, fig.cap="Impact in the distribution of examples for several parameters in smoteR strategy. ",out.height="0.5\\textheight">>=
 DF <- rbind(data.frame(Dat="Original", obs=c(rep("first.bump",res[1]), rep("second.bump", res[2]))), data.frame(Dat="mysm", obs=c(rep("first.bump",res[3]), rep("second.bump", res[4]))), data.frame(Dat="smB", obs=c(rep("first.bump",res[5]), rep("second.bump", res[6]))), data.frame(Dat="smE", obs=c(rep("first.bump",res[7]), rep("second.bump", res[8]))))
 
-g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_histogram(binwidth=1, position="dodge", aes(group=Dat), colour="black")
+g1 <- ggplot(DF,aes(x=obs, fill=Dat, colour=Dat))+geom_bar(position="dodge", aes(group=Dat), colour="black")
 
-g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_histogram(binwidth=1, position="fill", aes(group=obs), colour="black")
+g2 <- ggplot(DF,aes(x=Dat, fill=obs, colour=obs))+geom_bar(position="fill", aes(group=obs), colour="black")
 
 plots <- list(g1, g2)
 
@@ -1344,7 +1388,7 @@ do.call(grid.arrange, plots)
 
 @
 
-In Figure \ref{fig:smoteR_fig2} we can visualize the impact of the several strategy variants considered for two numeric features selected (the "mnO2" and "Cl" features).
+In Figure \ref{fig:smoteR_fig2} we can visualize the impact of the several strategy variants considered for two numeric features selected (the ``mnO2" and ``Cl" features).
 
 <<smoteR_fig2,fig.cap="The impact of smoteR strategy.",out.width="0.8\\textwidth", echo=FALSE>>=
   par(mfrow = c(2, 2))
@@ -1361,15 +1405,16 @@ plot(smE[,5], smE[,6], col= ifelse(smE[, 18]>5,2,3), pch=ifelse(smE[,18]>5,"+", 
 
 \subsection{Importance Sampling}\label{sec:ISRegress}
 
-The Importance Sampling method is a new proposal whose main idea is to use the relevance function defined for a regression problem as a probability for resampling the examples combining over with under-sampling. This method simply removes some of the examples and includes in the data set replicas of other existing examples. There is no generation of new synthetic examples. For the over-sampling strategy, replicas of examples are introduced by selecting examples according to the relevance function defined, i.e., the higher the relevance of an example, the higher is the probability of being selected as a new replica to include. The under-sampling strategy selects examples to remove according to the function $1-\phi(y)$, i.e, the higher the relevance value of an example, the lower will be the probability of removing it.
+The Importance Sampling method is a new proposal whose main idea is to use the relevance function ($\phi()$) defined for a regression problem as a probability for resampling the examples combining over with under-sampling. This method simply removes some of the examples and includes in the data set replicas of other existing examples. There is no generation of new synthetic examples. For the over-sampling strategy, replicas of examples are introduced by selecting examples according to the relevance function defined, i.e., the higher the relevance of an example, the higher is the probability of being selected as a new replica to include. The under-sampling strategy selects examples to remove according to the function $1-\phi(y)$, i.e, the higher the relevance value of an example, the lower will be the probability of removing it.
 
 This method includes two main behaviors which can be distinguished by the definition or not of a threshold on the relevance function. This means that, if the user decides to chose a relevance threshold the strategy will take this value into consideration with under and over-sampling being applied only on the defined bumps. However, if the user decides not to set a threshold on the relevance then over sampling and under-sampling strategies will also be applied but without a strict bound, i.e., there may be regions of the target variable values where under-sampling and over-sampling are performed together.
 
-The strategy that depends on the definition of a relevance threshold, has the relevance bumps well defined. For these bumps, the user has several alternatives available through the \texttt{C.perc} parameter: the percentages of over and under-sampling to apply may be explicitly defined, or one of the options "balance" or "extreme" may be chosen. These last two option for the \texttt{C.perc} parameter allow to estimate the under and over-sampling percentages automatically. The option "balance" allows to obtain  a balanced data set across the different existing bumps. The "extreme" option will produce a new data set with the examples frequencies in the bumps inverted. In this setting, there is no range of the target variable where both under and over-sampling techniques are applied. 
+The strategy that depends on the definition of a relevance threshold, has the relevance bumps well defined. For these bumps, the user has several alternatives available through the \texttt{C.perc} parameter: the percentages of over and under-sampling to apply may be explicitly defined, or one of the options ``balance" or ``extreme" may be chosen. These last two option for the \texttt{C.perc} parameter allow to estimate the under and over-sampling percentages automatically. The option ``balance" allows to obtain  a balanced data set across the different existing bumps. The ``extreme" option will produce a new data set with the examples frequencies in the bumps inverted. In this setting, there is no range of the target variable where both under and over-sampling techniques are applied. 
 
 As previously mentioned, there is the possibility of not defining a relevance threshold, and simply use the relevance function to decide which examples should be replicated and which should be removed. In this case, the user does not set a threshold on the relevance, but he can define the importance that over and under-sampling should have. In this case, the \texttt{C.perc} parameter is ignored and two other parameters(\texttt{U} and \texttt{O}) are considered instead. The parameters \texttt{U} and \texttt{O} allow the user to define (in a $[0,1] scale$) the importance that the under/over-sampling have, i.e, these parameters assign a weight to the two methods. The higher is \texttt{O} parameter, the higher is the number of replicas selected. In a similar way, the higher is \texttt{U} parameter the higher is the number of examples removed.
 
 The function \texttt{ImpSampRegress} allows the use of Importance Sampling strategy. Some examples on how to use this approach are provided next.
+
 <<IS_1>>=
 # relevance function estimated automatically has two bumps
 # using the strategy with threshold definition
@@ -1496,25 +1541,25 @@ All the previous distance functions can be used in \UBL for computing the neares
 
 
 <<numeric_measures_ex>>=
-data <- iris[-c(91:125),]
+dat <- iris[-c(91:125),]
 # using the default of smote to invert the frequencies of the data set
 set.seed(123)
-sm.Eu <- smoteClassif(Species~., data, dist="Euclidean", 
+sm.Eu <- SmoteClassif(Species~., dat, dist="Euclidean", 
                       C.perc="extreme", k=3)
 set.seed(123)
-sm.Man1 <- smoteClassif(Species~., data, dist="Manhattan",
+sm.Man1 <- SmoteClassif(Species~., dat, dist="Manhattan",
                         C.perc="extreme", k=3)
 set.seed(123)
-sm.Man2 <- smoteClassif(Species~., data, dist="p-norm", p=1,
+sm.Man2 <- SmoteClassif(Species~., dat, dist="p-norm", p=1,
                         C.perc="extreme", k=3)
 set.seed(123)
-sm.5norm <- smoteClassif(Species~., data, dist="p-norm", p=5, 
+sm.5norm <- SmoteClassif(Species~., dat, dist="p-norm", p=5, 
                          C.perc="extreme", k=3)
 set.seed(123)
-sm.Cheb <- smoteClassif(Species~., data, dist="Chebyshev", 
+sm.Cheb <- SmoteClassif(Species~., dat, dist="Chebyshev", 
                         C.perc="extreme", k=3)
 set.seed(123)
-sm.Canb <- smoteClassif(Species~., data, dist="Canberra", 
+sm.Canb <- SmoteClassif(Species~., dat, dist="Canberra", 
                         C.perc="extreme", k=3)
 @
 
@@ -1523,7 +1568,7 @@ The impact of using these distance functions with smote strategy can be visualiz
 
 <<dist_num, fig.cap="Impact of using different distance functions with smote strategy.", echo=FALSE>>=
 par(mfrow=c(3,2))
-plot(data[,1], data[,2], pch=as.integer(data[,5]), col=as.integer(data[,5]), xlim=c(4,8), ylim=c(2,4.5), main="Original data")
+plot(dat[,1], dat[,2], pch=as.integer(dat[,5]), col=as.integer(dat[,5]), xlim=c(4,8), ylim=c(2,4.5), main="Original data")
 plot(sm.Eu[,1], sm.Eu[,2], pch=as.integer(sm.Eu[,5]), col=as.integer(sm.Eu[,5]), xlim=c(4,8), ylim=c(2,4.5), main="Euclidean distance")
 plot(sm.Man1[,1], sm.Man1[,2], pch=as.integer(sm.Man1[,5]), col=as.integer(sm.Man1[,5]), xlim=c(4,8), ylim=c(2,4.5), main="Manhattan distance")
 plot(sm.5norm[,1], sm.5norm[,2], pch=as.integer(sm.5norm[,5]), col=as.integer(sm.5norm[,5]), xlim=c(4,8), ylim=c(2,4.5), main="Minkowsky with r=5")
@@ -1562,7 +1607,7 @@ ndat3 <- NCLClassif(speed~., clean.algae, dist="Overlap",  Cl="smaller")
 # the most important classes are "high" and "low"
 ndat4 <- NCLClassif(speed~., clean.algae, dist="Overlap",  Cl=c("high", "low"))
 
-ndat5 <- smoteClassif(speed~., clean.algae, dist="Overlap", C.perc="balance")
+ndat5 <- SmoteClassif(speed~., clean.algae, dist="Overlap", C.perc="balance")
 @
 
 Figure \ref{fig:dist_overlap} shows the impact of using the overlap distance function, with several different strategies, on a data set consisting of only nominal variables.
@@ -1608,7 +1653,7 @@ summary(clean.algae)
 enn <- ENNClassif(speed~., clean.algae, dist="HEOM",  Cl="all", k=5)[[1]]
 #consider all the smaller classes as the most important
 ncl <- NCLClassif(speed~., clean.algae, dist="HEOM",  Cl="smaller")
-sm <- smoteClassif(speed~., clean.algae, dist="HEOM", C.perc="balance")
+sm <- SmoteClassif(speed~., clean.algae, dist="HEOM", C.perc="balance")
 @
 
 
@@ -1663,7 +1708,7 @@ norm-diff_a(x,y)= \frac{|x-y|}{4\sigma_a}
 Regarding Equation \ref{eq:HVDMnom}, several normalization of the VDM measure were proposed and tested in \cite{wilson1997improved}. The version presented here and implemented in \UBL was the one that achieved the best performance. We also highlight that the distance function proposed for the numeric attributes uses a different normalization which relies on the standard deviation of of each attribute $\sigma_a$.
 
 
-The HVDM distance can be used simply by setting the \texttt{dist} parameter to "HVDM". Although it is a function suitable for both nominal and numeric, if the data set provided contains only one type of attributes only the corresponding distance will be used.
+The HVDM distance can be used simply by setting the \texttt{dist} parameter to ``HVDM". Although it is a function suitable for both nominal and numeric, if the data set provided contains only one type of attributes only the corresponding distance will be used.
 
 
 
@@ -1676,7 +1721,7 @@ clean.algae <- algae[complete.cases(algae),c(1:6)]
 # speed is considered the target class
 summary(clean.algae)
 
-dat1 <- smoteClassif(speed~., clean.algae, dist="HVDM", C.perc="extreme")
+dat1 <- SmoteClassif(speed~., clean.algae, dist="HVDM", C.perc="extreme")
 
 dat2 <- NCLClassif(speed~., clean.algae, k=3, dist="HVDM", Cl="smaller")
 
@@ -1703,17 +1748,17 @@ In Figure \ref{fig:dist_HVDM2} the impact of smote strategy applied with differe
 
 <<dist_HVDM2, fig.cap="Using different distance functions with  smote strategy.", echo=FALSE>>=
 set.seed(123)
-d1 <- smoteClassif(speed~., clean.algae, dist="HVDM", C.perc="extreme")
+d1 <- SmoteClassif(speed~., clean.algae, dist="HVDM", C.perc="extreme")
 set.seed(123)
-d2 <- smoteClassif(speed~., clean.algae, dist="HEOM", C.perc="extreme")
+d2 <- SmoteClassif(speed~., clean.algae, dist="HEOM", C.perc="extreme")
 
 # in order to use metrics for numeric attributes only we must remove the nominal attributes
 set.seed(123)
-d3 <- smoteClassif(speed~., clean.algae[,3:6], dist="Euclidean", C.perc="extreme")
+d3 <- SmoteClassif(speed~., clean.algae[,3:6], dist="Euclidean", C.perc="extreme")
 set.seed(123)
-d4 <- smoteClassif(speed~., clean.algae[,3:6], dist="Chebyshev", C.perc="extreme")
+d4 <- SmoteClassif(speed~., clean.algae[,3:6], dist="Chebyshev", C.perc="extreme")
 set.seed(123)
-d5 <- smoteClassif(speed~., clean.algae[,3:6], dist="Manhattan", C.perc="extreme")
+d5 <- SmoteClassif(speed~., clean.algae[,3:6], dist="Manhattan", C.perc="extreme")
 
 
 g1 <- ggplot(clean.algae, aes(x = mxPH, y=mnO2, col=speed))+ geom_point()+ggtitle("Original data")
@@ -1736,200 +1781,14 @@ do.call(grid.arrange, plots)
 
 
 
-% 
-% % ====================================================================
-% \section{Experimental Comparison of Methods for Classification Tasks}
-% 
-% In this Section we present some results of the experimental comparison of the implemented methods for classification tasks. 
-% The experiences were made with data sets with a binary target class. The main characteristics of the used data sets are described in Table \ref{tab:ClassDataBinary}.
-% The used learning algorithms, their parameters variants an the corresponding R packages are described in Table \ref{tab:Sys}.
-% 
-% We tested 8 learning variants (4 random Forest and 4 svm) on 3 data sets with 29 strategies variants (the original data, 2 random undersampling, 2 random oversampling, 2 CNN, 4 Tomek links, 4 OSS, 2 ENN, 2 NCL, 6 Gaussian Noise and 4 smote).
-% 
-% \begin{table}[!tbp]
-% \begin{center}
-% \resizebox{0.7\textwidth}{!}{
-% \begin{tabular}{crrrrr}
-% \hline\hline
-% Data Set & N & Pnom & Pnum & nRare & \%Rare\tabularnewline
-% \hline
-% Ionosphere &351 &1&32&126&0.359\tabularnewline
-% 
-% thor &470& 13& 3& 70&0.149\tabularnewline
-% 
-% Pima&768&0&8&268&0.349\tabularnewline
-% \hline
-% \hline
-% \end{tabular}
-% }
-% \end{center}
-% \caption{Classification Data sets and characteristics(N: nr. of examples; Pnom: nr. of nominal predictors; Pnum: nr. of numeric predictors; nRare: nr. of examples in the rare class; \%Rare: nRare/N).}
-% \label{tab:ClassDataBinary}
-% \end{table}
-% 
-% \begin{table}[!tbp]
-% \begin{center}
-% \resizebox{\textwidth}{!} {
-% \begin{tabular}{lll}
-% \hline \hline
-% Learner & Parameter Variants & R package \\ 
-% \hline 
-% SVM & $cost=\{10,150\},gamma=\{0.01,0.001\}$ & \textbf{e1071}~\cite{e1071} \\ 
-% Random Forest & $mtry=\{4,6\},ntree=\{500,750\}$ & \textbf{randomForest}~\cite{rf} \\ 
-% \hline \hline
-% \end{tabular} 
-% }
-% \end{center}
-% \caption{Learning algorithms and parameter variants, and the respective R packages.}\label{tab:Sys}
-% \end{table}
-% 
-% 
-% Regarding the results obtained, we can observe the workflows that achieved the best scores for each metric and data set:
-% <<load_res1,echo=FALSE>>=
-% 
-% load("allResults2Class.Rdata")
-% @
-% 
-% 
-% <<res2class, warning=FALSE, echo=FALSE>>=
-% topPerformers(subset(res, workflows=glob2rx('*svm*|*random*')), maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
-% @
-% 
-% We can also observe which were the top performing workflows for each data set considered and each computed metric:
-% <<ionosphereRank, echo=FALSE>>=
-% rankWorkflows(subset(res, tasks='Ionosphere', workflows=glob2rx('*svm*|*random*')), maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
-% @
-% 
-% We can also visualize the results. However, since the results correspond to a very large set of experiences we only visualize some subsets of the experiences. So, we can observe some results for data set Ionosphere in Figure \ref{fig:Ionosphere_plot1}.
-% 
-% <<Ionosphere_plot1,echo=FALSE, fig.cap="Results of Ionosphere data for strategies Gaussian Noise and smote on variants of svm learner">>=
-% plot(subset(res, tasks='Ionosphere', workflows=glob2rx('*none.svm*|*GN.svm*|*smote.svm*'), metrics=glob2rx('F$')))
-% 
-% #metricsSummary(subset(res, workflows=glob2rx('*svm*'), tasks='Ionosphere'),summary='median')
-% @
-% 
-% Using package \texttt{performanceEstimation}, a summary of Ionosphere data set results for the svm learners can also be obtained for the $F$ measure, as follows:
-% <<summ_Ionosphere_F,  eval=FALSE >>=
-% summary(subset(res, tasks='Ionosphere', 
-%                     workflows=glob2rx('*svm*'),
-%                     metrics=glob2rx('F$')))
-% @
-% We do not present these results here due to its excessive length.
-% 
-% The results of thor data set for the svm learning variants and the $F$ measure, are displayed in Figure \ref{fig:thor_plot1}. Here it is clear that the existing methods for dealing with imbalanced domains do not always work for all the data sets. However, we must also highlight that this was a very restrict set of experiences, and some of the resampling approaches variants not tested could have a different impact in this data set.
-% 
-% 
-% <<thor_plot1, echo=FALSE,fig.cap="Results of thor data on variants of svm learner", warning=FALSE>>=
-% plot(subset(res, tasks='pima', workflows=glob2rx('*svm*'),metrics=glob2rx('F$')))
-% #plot(subset(res, tasks='thor', workflows=glob2rx('*svm*'),metrics='F', partial=FALSE))
-% @
-% 
-% Regarding the Pima data set, we can observe the workflows ranking:
-% <<pimaRankRes, echo=FALSE>>=
-% rankWorkflows(subset(res, tasks='pima', workflows=glob2rx('*svm*|*random*')), maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
-% @
-% 
-% Figure \ref{fig:pima_plot1} shows some partial results obtained for Pima data set with the $F$ measure. In this case we observe that the approaches that usually are more successful (random under-sample, smote and Gaussian noise strategies), here tend to present a worst performance.
-% <<pima_plot1, echo=FALSE, fig.cap="Results of pima data for strategies Random under-sampling, Gaussian Noise and smote on variants of svm learner">>=
-% plot(subset(res, tasks='pima',workflows=glob2rx('*none.svm|RU.svm|smote.svm|GN.svm*'), metrics=glob2rx('F$')))
-% #summary(subset(res, tasks='pima', workflows=glob2rx('*earth*'),metrics='F'))
-% 
-% #metricsSummary(subset(res, workflows=glob2rx('*svm*'), tasks='pima'),summary='median')
-% 
-% @
-% 
-% However, we can also observe in Figure \ref{fig:pima_plot2} that for this data set, the Tomek links and ENN strategies present an improved median performance when compared to using the original data set.  
-% <<pima_plot2, fig.cap="Results of pima data set for random Forest variants on original data set and data with ENN and Tomek links strategies applied.",echo=FALSE>>=
-% plot(subset(res, tasks='pima',workflows=glob2rx('*none.random|Tomek.random|ENN.random*'), metrics=glob2rx('F$')))
-% 
-% @
-% 
-% % ====================================================================
-% \section{Experimental Comparison of Methods for Regression Tasks}
-% 
-% In this Section we present some results of the experimental comparison of the implemented methods for regression tasks. 
-% The experiences were made with the data sets described in Table \ref{tab:RegressData}. The values in this Table were calculated for a relevance function automatically estimated using \texttt{uba} package and a relevance threshold of $0.8$.
-% 
-% \begin{table}[!tbp]
-% \begin{center}
-% \resizebox{0.9\textwidth}{!}{
-% \begin{tabular}{crrrrrrr}
-% \hline\hline
-% Data Set &tgt& N & Pnom & Pnum & nRare & \%Rare & Nrel bump\tabularnewline
-% \hline
-% algae &a1&198 &3&8&28&0.141& 1\tabularnewline
-% 
-% acceleration& acceleration& 1732& 3&11&89&0.051& 1\tabularnewline
-% 
-% boston& HousValue& 506& 0&14&65&0.128 & 1\tabularnewline
-% \hline
-% \hline
-% \end{tabular}
-% }
-% \end{center}
-% \caption{Regression Data sets and characteristics evaluated for a relevance function automatically determined with \texttt{uba} package and a relevance threshold of 0.8 (tgt: name of target variable; N: nr. of examples; Pnom: nr. of nominal predictors; Pnum: nr. of numeric predictors; nRare: nr. of examples in the rare class; \%Rare: nRare/N; Nrel bump: nr. of relevant bumps automatically determined).}
-% \label{tab:RegressData}
-% \end{table}
-% 
-% 
-% The used learning algorithms, their parameters variants an the corresponding R packages are described in Table \ref{tab:Sys2}. We tested three data sets with 18 learning algorithms variants (12 svm variants and 6 randomForest variants) and 6 types of resampling strategies. The resampling strategies tested were: "none" which represents not changing the original data set; random under-sampling (with 2 variants); random over-sampling (2 variants); Gaussian Noise (6 variants); smoteR (2 variants) and Importance Sampling (4 variants). The experiences were evaluated with the metrics available in package \texttt{uba} specially developed for this type of problems: precision, recall and F measure defined for regression tasks. In these experiences we have named precision, recall and F measure as ubaprec, ubarec and ubaF respectively.
-% 
-% 
-% \begin{table}[!tbp]
-% \begin{center}
-% \resizebox{\textwidth}{!} {
-% \begin{tabular}{lll}
-% \hline \hline
-% Learner & Parameter Variants & R package \\ 
-% \hline 
-% %MARS & $nk=\{10,17\},degree=\{1,2\},thresh=\{0.01,0.001\}$ & \textbf{earth}~\cite{earth} \\ 
-% SVM & $cost=\{10,150,300\},gamma=\{0.01,0.001\},epsilon=\{0.1, 0.01\}$ & \textbf{e1071}~\cite{e1071} \\ 
-% Random Forest & $mtry=\{5,7\},ntree=\{500,750, 1500\}$ & \textbf{randomForest}~\cite{rf} \\ 
-% \hline \hline
-% \end{tabular} 
-% }
-% \end{center}
-% \caption{Learning algorithms and parameter variants, and the respective R packages.}\label{tab:Sys2}
-% \end{table}
-% 
-% Regarding the results obtained, we can observe the workflows that acheived the best scores for each data set and metric:
-% <<load_res2,echo=FALSE>>=
-% 
-% load("allResultsRegress.Rdata")
-% @
-% 
-% 
-% <<resRegress, echo=FALSE>>=
-% topPerformers(res,maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
-% @
-
-% We can also verify which were the best performing workflows for each tested data set and measure evaluated: 
-% <<rankWFRegress, echo=FALSE>>=
-% rankWorkflows(res,maxs=rep(TRUE,dim(res[[1]][[1]]@iterationsScores)[2]))
-% @
-% 
-% 
-% We can observe visually the performance of subsets of the best performing strategies applied for the random Forest learning variants on Figures \ref{fig:algae_plot1}, \ref{fig:acceleration_plot1} and \ref{fig:boston_plot1} regarding the data sets algae, acceleration and boston respectively.
-
-% <<algae_plot1, fig.cap="Results on algae data set for strategies none, random over-sampling and random under-sampling for random forest learning variants",echo=FALSE>>=
-% plot(subset(res, tasks='a1',workflows=glob2rx('*none.random|RO.rand|RU.rand*')))
-% @
-% 
-% <<acceleration_plot1, fig.cap="Results on acceleration data set for none and random over-sampling strategies with random forest learning variants",echo=FALSE>>=
-% plot(subset(res, tasks='acceleration',workflows=glob2rx('*none.random|RO.rand*'), metrics='F'))
-% @
-% 
-% <<boston_plot1, fig.cap="Results on boston data set for none and Importance Sampling strategy on random forest learning variants",echo=FALSE>>=
-% plot(subset(res, tasks='boston',workflows=glob2rx('*none.random|IS.rand*'), metrics='F'))
-% @
-
-
 % =======================================================
-\section{Conclusions}
+\section{Conclusions}\label{sec:conc}
 
-We have presented \UBL that aims at dealing with predictive tasks under imbalanced domains. This package offers several methods for multiclass and regression problems. The approaches implemented are essentially pre-processing methods for changing the target variable distribution. This change in the data set is performed with the goal of forcing the learning algorithms to focus on the most important and less frequent cases. 
+We have presented \pUBL that aims at dealing with utility-based predictive tasks. This package offers several methods for multiclass and regression problems. The approaches implemented are essentially pre-processing methods for changing the target variable distribution. This change in the data set is performed with the goal of incorporating the user preference bias. The use of pre-processing methods that change the original data set force the learning algorithms to focus on the most relevant cases for the user.
 
-The existing strategies for dealing with imbalanced domains as a pre-processing step present the advantage of allowing the use of any standard learning algorithm without changing it. Moreover, these methods do not compromise the interpretability of the models used. As possible disadvantages we must point the difficulty of determining the ideal distribution of the domain. In fact, a perfectly balanced distribution of examples is not always the solution that provides the best results.
+The existing strategies for dealing with utility-based problems as a pre-processing step present the advantage of allowing the use of any standard learning algorithm without changing it. Moreover, these methods do not compromise the interpretability of the models used. As possible disadvantages we must point the difficulty of determining the ideal distribution of the domain. In fact, a perfectly balanced distribution of examples is not always the solution that provides the best results.
+
+\UBLp is a versatile tool for tackling problems that have some information regarding the domain. This package extends some methods previously developed for binary classification to a multiclass setting and also allows to deal with regression problems with multiple important regions. It offers to the user the possibility of manually defining how the data set should be changed for a selected pre-processing approach. Moreover, for each implemented approach it also enables the use of automatic methods for estimating the changes to apply.
 
 \newpage
 

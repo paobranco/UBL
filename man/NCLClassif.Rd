@@ -8,14 +8,14 @@ Neighborhood Cleaning Rule (NCL) algorithm for multiclass imbalanced problems
 This function handles imbalanced classification problems using the Neighborhood Cleaning Rule (NCL) method. 
 }
 \usage{
-NCLClassif(form, data, k=3, dist="Euclidean", p=2, Cl="smaller")
+NCLClassif(form, dat, k = 3, dist = "Euclidean", p = 2, Cl = "smaller")
 }
 
 \arguments{
   \item{form}{
     A formula describing the prediction problem.
   }
-  \item{data}{
+  \item{dat}{
     A data frame containing the original imbalanced data set.
   }
   \item{k}{
@@ -46,13 +46,14 @@ NCLClassif(form, data, k=3, dist="Euclidean", p=2, Cl="smaller")
 \code{\link{ENNClassif}}
 }
 \examples{
-# generate an small imbalanced data set
-ir<- iris[-c(90:135),]
-# apply NCL method with different metrics, number of neighbours and classes
-ir.M1 <- NCLClassif(Species~., ir, k=3, dist="Manhattan", Cl="smaller")
+# generate a small imbalanced data set
+ir <- iris[-c(90:135), ]
+# apply NCL method with different metrics, number of neighbors and classes
+ir.M1 <- NCLClassif(Species~., ir, k = 3, dist = "Manhattan", Cl = "smaller")
 ir.Def <- NCLClassif(Species~., ir)
-ir.Ch <- NCLClassif(Species~., ir, k=7, dist="Chebyshev", Cl="virginica")
-ir.Eu <- NCLClassif(Species~., ir, k=5, Cl=c("versicolor", "virginica"))
+ir.Ch <- NCLClassif(Species~., ir, k = 7, dist = "Chebyshev", Cl = "virginica")
+ir.Eu <- NCLClassif(Species~., ir, k = 5, Cl = c("versicolor", "virginica"))
+# check the results
 summary(ir$Species)
 summary(ir.M1$Species)
 summary(ir.Def$Species)
@@ -60,5 +61,5 @@ summary(ir.Ch$Species)
 summary(ir.Eu$Species)
 }
 
-\keyword{models}
+\keyword{pre-processing classification}
 

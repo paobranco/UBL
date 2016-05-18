@@ -8,14 +8,14 @@ Tomek links for imbalanced classification problems
 This function uses Tomek links to perform under-sampling for handling imbalanced multiclass problems. Tomek links are broken by removing one or both examples forming the link. 
 }
 \usage{
-TomekClassif(form, data, dist="Euclidean", p=2, Cl="all", rem="both")
+TomekClassif(form, dat, dist = "Euclidean", p = 2, Cl = "all", rem = "both")
 }
 
 \arguments{
   \item{form}{
     A formula describing the prediction problem.
   }
-  \item{data}{
+  \item{dat}{
     A data frame containing the original imbalanced data set.
   }
   \item{dist}{
@@ -68,18 +68,25 @@ Tomek, I. (1976). \emph{Two modifications of CNN} IEEE Trans. Syst. Man Cybern.,
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
   
 \seealso{
-\code{\link{OSSClassif, CNNClassif}}
+\code{\link{OSSClassif}, \link{CNNClassif}}
 }
 \examples{
   library(DMwR)
   data(algae)
-  clean.algae <- algae[complete.cases(algae),]
-  alg.HVDM1 <- TomekClassif(season~., clean.algae, dist="HVDM", Cl=c("winter", "spring"), rem="both")
-  alg.HVDM2 <- TomekClassif(season~., clean.algae, dist="HVDM", rem="maj")
-  # removes only examples from class summer which are the majority class in the link
-  alg.EuM <- TomekClassif(season~., clean.algae, dist="HEOM", Cl="summer", rem="maj") 
+  clean.algae <- algae[complete.cases(algae), ]
+  alg.HVDM1 <- TomekClassif(season~., clean.algae, dist = "HVDM", 
+                            Cl = c("winter", "spring"), rem = "both")
+  alg.HVDM2 <- TomekClassif(season~., clean.algae, dist = "HVDM", rem = "maj")
+  
+  # removes only examples from class summer which are the 
+  # majority class in the link
+  alg.EuM <- TomekClassif(season~., clean.algae, dist = "HEOM", 
+                          Cl = "summer", rem = "maj")
+  
   # removes only examples from class summer in every link they appear
-  alg.EuB <- TomekClassif(season~., clean.algae, dist="HEOM", Cl="summer", rem="both") 
+  alg.EuB <- TomekClassif(season~., clean.algae, dist = "HEOM",
+                          Cl = "summer", rem = "both")
+                          
   summary(clean.algae$season)
   summary(alg.HVDM1[[1]]$season)
   summary(alg.HVDM2[[1]]$season)
@@ -90,5 +97,5 @@ Tomek, I. (1976). \emph{Two modifications of CNN} IEEE Trans. Syst. Man Cybern.,
   alg.EuM[[2]]
 }
 
-\keyword{models}
+\keyword{pre-processing classification}
 

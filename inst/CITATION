@@ -1,13 +1,17 @@
 citHeader("To cite UBL in publications use:")
 
-year <- sub("-.*", "", meta$Date)
-note <- sprintf("R package version %s", meta$Version)
-
-bibentry(bibtype = "Manual",
-         title = "{UBL}: Utility-based Learning",
+citEntry(entry = "article",
+         title = "{UBL}: an R Package for Utility-Based Learning",
          author = c(person("Paula", "Branco"),
-                    person("Rita", "Ribeiro"),
+                    person("Rita P.", "Ribeiro"),
                     person("Luis", "Torgo")),
-         year = year,
-         note = note,
-         url = "https://github.com/paobranco/UBL")
+         year = "2016",
+         ee = "http://arxiv.org/abs/1604.08079",
+	 volume = "abs/1604.08079",
+	 journal = "CoRR",
+	 textVersion = 
+	 paste("Paula Branco, Rita P. Ribeiro, Luis Torgo (2016).",
+	 "UBL: an R Package for Utility-Based Learning", "CoRR abs/1604.08079 [cs.MS]",
+	 "URL: http://arxiv.org/abs/1604.08079",
+	 sep = ", ")
+	 )

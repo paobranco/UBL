@@ -1,5 +1,5 @@
-\name{randUnderClassif}
-\alias{randUnderClassif}
+\name{RandUnderClassif}
+\alias{RandUnderClassif}
 
 \title{
 Random under-sampling for imbalanced classification problems
@@ -9,18 +9,18 @@ This function performs a random under-sampling strategy for imbalanced multiclas
 
 }
 \usage{
-randUnderClassif(form, data, C.perc, repl=FALSE)
+RandUnderClassif(form, dat, C.perc = "balance", repl = FALSE)
 }
 
 \arguments{
   \item{form}{
     A formula describing the prediction problem.
   }
-  \item{data}{
+  \item{dat}{
     A data frame containing the original imbalanced data set.
   }
   \item{C.perc}{
-A named list containing each class name and the corresponding under-sampling percentage, between 0 and 1, where 1 means that no under-sampling is to be applied in the corresponding class. The user may indicate only the classes where he wants to apply random under-sampling. Alternatively, this parameter can be set to "balance" or "extreme", cases where the under-sampling percentages are automatically estimated. The "balance" option tries to balance all the existing classes while the "extreme" option inverts the classes original frequencies.
+A named list containing each class name and the corresponding under-sampling percentage, between 0 and 1, where 1 means that no under-sampling is to be applied in the corresponding class. The user may indicate only the classes where he wants to apply random under-sampling. Alternatively, this parameter can be set to "balance" (the defualt) or "extreme", cases where the under-sampling percentages are automatically estimated. The "balance" option tries to balance all the existing classes while the "extreme" option inverts the classes original frequencies.
   }
   \item{repl}{
   A boolean value controlling the possibility of having repetition of examples in the under-sampled data set. Defaults to FALSE.
@@ -34,46 +34,44 @@ This function performs a random under-sampling strategy for dealing with imbalan
   The function returns a data frame with
   the new data set resulting from the application of the random under-sampling strategy.
 }
-\references{
-
-
-}
 \author{ Paula Branco \email{paobranco@gmail.com}, Rita Ribeiro
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
   
 
 \seealso{
-\code{\link{randOverClassif}}
+\code{\link{RandOverClassif}}
 }
 \examples{
   library(DMwR)
   data(algae)
-  C.perc=list(autumn=1, summer=0.9, winter=0.4) # classes autumn and spring remain unchanged
-  myunder.algae <- randUnderClassif(season~., algae, C.perc)
-  undBalan.algae <- randUnderClassif(season~., algae, "balance")
-  undInvert.algae <- randUnderClassif(season~., algae, "extreme")
+  C.perc = list(autumn = 1, summer = 0.9, winter = 0.4) 
+  # classes autumn and spring remain unchanged
+  
+  myunder.algae <- RandUnderClassif(season~., algae, C.perc)
+  undBalan.algae <- RandUnderClassif(season~., algae, "balance")
+  undInvert.algae <- RandUnderClassif(season~., algae, "extreme")
 
   library(MASS)
   data(cats)
-  myunder.cats <- randUnderClassif(Sex~., cats, list(M=0.8))
-  undBalan.cats <- randUnderClassif(Sex~., cats,"balance")
-  undInvert.cats <- randUnderClassif(Sex~., cats, "extreme")
+  myunder.cats <- RandUnderClassif(Sex~., cats, list(M = 0.8))
+  undBalan.cats <- RandUnderClassif(Sex~., cats, "balance")
+  undInvert.cats <- RandUnderClassif(Sex~., cats, "extreme")
 
 
   # learn a model and check results with original and under-sampled data
   library(rpart)
-  idx <- sample(1:nrow(cats),as.integer(0.7*nrow(cats)))
-  tr <- cats[idx,]
-  ts <- cats[-idx,]
+  idx <- sample(1:nrow(cats), as.integer(0.7*nrow(cats)))
+  tr <- cats[idx, ]
+  ts <- cats[-idx, ]
   
-  idx <- sample(1:nrow(cats),as.integer(0.7*nrow(cats)))
-  tr <- cats[idx,]
-  ts <- cats[-idx,]
+  idx <- sample(1:nrow(cats), as.integer(0.7*nrow(cats)))
+  tr <- cats[idx, ]
+  ts <- cats[-idx, ]
   ctO <- rpart(Sex ~ ., tr)
-  predsO <- predict(ctO,ts,type="class")
-  new.cats <- randUnderClassif(Sex~., tr,"balance")
+  predsO <- predict(ctO, ts, type = "class")
+  new.cats <- RandUnderClassif(Sex~., tr, "balance")
   ct1 <- rpart(Sex ~ ., new.cats)
-  preds1 <- predict(ct1,ts,type="class")
+  preds1 <- predict(ct1, ts, type = "class")
    
   table(predsO, ts$Sex)  
 #  predsO  F  M
@@ -84,9 +82,9 @@ This function performs a random under-sampling strategy for dealing with imbalan
   table(preds1, ts$Sex)   
 # preds1  F  M
 #      F 13  4
-3      M  3 24
+#      M  3 24
 
 }
 
-\keyword{models}
+\keyword{pre-processing classification}
 

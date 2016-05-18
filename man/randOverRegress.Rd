@@ -1,11 +1,11 @@
-\name{randOverRegress}
-\alias{randOverRegress}
+\name{RandOverRegress}
+\alias{RandOverRegress}
 
 \title{
-Random oversampling for imbalanced regression problems
+Random over-sampling for imbalanced regression problems
 }
 \description{
-This function performs a random oversampling strategy for imbalanced regression problems. 
+This function performs a random over-sampling strategy for imbalanced regression problems. 
 Basically a percentage of cases of the "class(es)"
 (bumps above a relevance threshold defined) selected by the user are randomly over-sampled. 
 Alternatively, it can either balance all the existing "classes" 
@@ -13,18 +13,19 @@ Alternatively, it can either balance all the existing "classes"
 of the examples in each class.
 }
 \usage{
-randOverRegress(form, data, rel="auto", thr.rel=0.5, C.perc, repl=TRUE)
+RandOverRegress(form, dat, rel = "auto", thr.rel = 0.5, 
+                C.perc = "balance", repl = TRUE)
 }
 
 \arguments{
   \item{form}{
     A formula describing the prediction problem.
   }
-  \item{data}{
+  \item{dat}{
     A data frame containing the original imbalanced data set.
   }
   \item{rel}{
-    The relevance function which can be automatically ("auto") determined with uba package (the default) or may be provided by the user through a matrix.
+    The relevance function which can be automatically ("auto") determined (the default) or may be provided by the user through a matrix with the interpolating points.
   }
   \item{thr.rel}{
     A number indicating the relevance threshold above which a case is considered as belonging to the rare "class".
@@ -38,34 +39,45 @@ randOverRegress(form, data, rel="auto", thr.rel=0.5, C.perc, repl=TRUE)
   }
   \item{repl}{
   A boolean value controlling the possibility of having repetition of examples when choosing the examples to repeat in the over-sampled data set. 
-Defaults to TRUE because this is a necessary condition if the selected percentage is greater than 2. This parameter is only important when the oversampling percentage is between 1 and 2. In this case, it controls if all the new examples selected from a given "class" can be repeated or not.
+Defaults to TRUE because this is a necessary condition if the selected percentage is greater than 2. This parameter is only important when the over-sampling percentage is between 1 and 2. In this case, it controls if all the new examples selected from a given "class" can be repeated or not.
   }
 }
 \details{
-This function performs a random oversampling strategy for dealing with imbalanced regression problems. The new examples included in the new data set are randomly selected replicas of the examples already present in the original data set. 
+This function performs a random over-sampling strategy for dealing with imbalanced regression problems. The new examples included in the new data set are randomly selected replicas of the examples already present in the original data set. 
 }
 \value{
   The function returns a data frame with
-  the new data set resulting from the application of the random oversampling strategy.
-}
-\references{
-
+  the new data set resulting from the application of the random over-sampling strategy.
 }
 \author{ Paula Branco \email{paobranco@gmail.com}, Rita Ribeiro
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
   
 \seealso{
-\code{\link{randUnderRegress}}
+\code{\link{RandUnderRegress}}
 }
 \examples{
-  library(DMwR)
-  data(algae)
-  clean.algae <- algae[complete.cases(algae),]
-  C.perc=list(4) 
-  alg.myover <- randOverRegress(a7~., clean.algae, C.perc=C.perc)
-  alg.Bal <- randOverRegress(a7~., clean.algae, C.perc="balance")
-  alg.Ext <- randOverRegress(a7~., clean.algae, C.perc="extreme")
+
+data(morley)
+
+C.perc = list(2, 4)
+myover <- RandOverRegress(Speed~., morley, C.perc=C.perc)
+Bal <- RandOverRegress(Speed~., morley, C.perc= "balance")
+Ext <- RandOverRegress(Speed~., morley, C.perc= "extreme")
+
+library(DMwR)
+data(algae)
+clean.algae <- algae[complete.cases(algae), ]
+# all automatic
+ROB <-RandOverRegress(a7~., clean.algae)
+# user defined percentage for the only existing extreme (high)
+myRO <-RandOverRegress(a7~., clean.algae, rel = "auto", thr.rel = 0.7,
+                        C.perc = list(5))
+
+# check the results
+plot(clean.algae[,c(1,ncol(clean.algae))])
+plot(ROB[,c(1,ncol(clean.algae))])
+plot(myRO[,c(1,ncol(clean.algae))])
 
 }
 
-\keyword{models}
+\keyword{pre-processing regression}

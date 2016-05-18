@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.5.6)  30 JUL 2015 17:17
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.5.6)  28 APR 2016 15:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -352,22 +352,22 @@ tim
 ) (./UBL.aux)
 \openout1 = `UBL.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 76.
-LaTeX Font Info:    ... okay on input line 76.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -404,7 +404,7 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box30
-Package hyperref Info: Link coloring OFF on input line 76.
+Package hyperref Info: Link coloring OFF on input line 80.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -414,575 +414,558 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count125
 )
-LaTeX Info: Redefining \ref on input line 76.
-LaTeX Info: Redefining \pageref on input line 76.
-LaTeX Info: Redefining \nameref on input line 76.
+LaTeX Info: Redefining \ref on input line 80.
+LaTeX Info: Redefining \pageref on input line 80.
+LaTeX Info: Redefining \nameref on input line 80.
 
 (./UBL.out) (./UBL.out)
 \@outlinefile=\write4
 \openout4 = `UBL.out'.
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 82.
+LaTeX Font Info:    Try loading font information for U+msa on input line 86.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 82.
+LaTeX Font Info:    Try loading font information for U+msb on input line 86.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (51.86115pt too wide) in paragraph at lines 82--82
- [][] 
- []
+LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 86.
 
-[1
+
+(/usr/share/R/share/texmf/tex/latex/omscmtt.fd
+File: omscmtt.fd 
+)
+LaTeX Font Info:    Font shape `OMS/cmtt/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 86.
+ [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Package color Info: Redefining color shadecolor on input line 115.
-LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <8> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 117.
-Package color Info: Redefining color shadecolor on input line 126.
-
-Overfull \hbox (3.09048pt too wide) in paragraph at lines 129--129
-[][]\OT1/cmtt/m/n/8 install_github[][]([][]"paobranco/UBL"[][],[][]ref[][]=[][]
-"develop"[][])[] []\OT1/cmtt/m/it/8 # to install the development release[][] 
+Overfull \hbox (7.44511pt too wide) in paragraph at lines 106--107
+\OT1/cmr/m/n/10 usu-ally ex-pressed through a cost/benefit ma-trix (in clas-si-
+fi-ca-tion) or a cost/benefit
  []
 
-Package color Info: Redefining color shadecolor on input line 137.
-Package color Info: Redefining color shadecolor on input line 151.
 [2]
-Package color Info: Redefining color shadecolor on input line 165.
-Package color Info: Redefining color shadecolor on input line 186.
-Package color Info: Redefining color shadecolor on input line 211.
-Package color Info: Redefining color shadecolor on input line 238.
+Package color Info: Redefining color shadecolor on input line 124.
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <8> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 126.
+Package color Info: Redefining color shadecolor on input line 137.
+Package color Info: Redefining color shadecolor on input line 152.
+Package color Info: Redefining color shadecolor on input line 168.
+Package color Info: Redefining color shadecolor on input line 189.
  [3]
-Package color Info: Redefining color shadecolor on input line 269.
+Package color Info: Redefining color shadecolor on input line 214.
+Package color Info: Redefining color shadecolor on input line 241.
  [4]
-Package color Info: Redefining color shadecolor on input line 303.
- <figures/UBL-Iris_RU1-1.pdf, id=122, 505.89pt x 505.89pt>
-File: figures/UBL-Iris_RU1-1.pdf Graphic file (type pdf)
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 270.
 
-<use figures/UBL-Iris_RU1-1.pdf>
-Package pdftex.def Info: figures/UBL-Iris_RU1-1.pdf used on input line 305.
-(pdftex.def)             Requested size: 276.00105pt x 276.00177pt.
-Package color Info: Redefining color shadecolor on input line 318.
-Package color Info: Redefining color shadecolor on input line 350.
-
-<figures/UBL-Iris_RU2-1.pdf, id=124, 505.89pt x 505.89pt>
-File: figures/UBL-Iris_RU2-1.pdf Graphic file (type pdf)
-
-<use figures/UBL-Iris_RU2-1.pdf>
-Package pdftex.def Info: figures/UBL-Iris_RU2-1.pdf used on input line 352.
-(pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [5 <./figures/UBL-Iris_RU1-1.pdf>] [6 <./figures/UBL-Iris_RU2-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 371.
-Package color Info: Redefining color shadecolor on input line 408.
-
-<figures/UBL-IrisRO-1.pdf, id=148, 505.89pt x 505.89pt>
-File: figures/UBL-IrisRO-1.pdf Graphic file (type pdf)
-
-<use figures/UBL-IrisRO-1.pdf>
-Package pdftex.def Info: figures/UBL-IrisRO-1.pdf used on input line 410.
-(pdftex.def)             Requested size: 276.00105pt x 276.00177pt.
-Package color Info: Redefining color shadecolor on input line 425.
-
-<figures/UBL-Iris_RO2-1.pdf, id=150, 505.89pt x 505.89pt>
-File: figures/UBL-Iris_RO2-1.pdf Graphic file (type pdf)
-
-<use figures/UBL-Iris_RO2-1.pdf>
-Package pdftex.def Info: figures/UBL-Iris_RO2-1.pdf used on input line 427.
-(pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [7]
-Overfull \hbox (10.02747pt too wide) in paragraph at lines 441--442
-[]\OT1/cmr/m/n/10 This strat-egy is avail-able in pack-age \OT1/cmtt/m/n/10 UBL
- \OT1/cmr/m/n/10 through the func-tion \OT1/cmtt/m/n/10 ImpSampClassif\OT1/cmr/
-m/n/10 .
- []
-
-Package color Info: Redefining color shadecolor on input line 445.
-[8 <./figures/UBL-IrisRO-1.pdf>] [9 <./figures/UBL-Iris_RO2-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 492.
-
-<figures/UBL-ISC-1.pdf, id=182, 505.89pt x 505.89pt>
-File: figures/UBL-ISC-1.pdf Graphic file (type pdf)
-
-<use figures/UBL-ISC-1.pdf>
-Package pdftex.def Info: figures/UBL-ISC-1.pdf used on input line 494.
-(pdftex.def)             Requested size: 345.0pt x 345.00414pt.
-Package color Info: Redefining color shadecolor on input line 509.
-
-<figures/UBL-ISC_2-1.pdf, id=184, 505.89pt x 505.89pt>
-File: figures/UBL-ISC_2-1.pdf Graphic file (type pdf)
-
-<use figures/UBL-ISC_2-1.pdf>
-Package pdftex.def Info: figures/UBL-ISC_2-1.pdf used on input line 511.
-(pdftex.def)             Requested size: 345.0pt x 345.00414pt.
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 532.
-
-
-(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+ (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 532.
- [10] [11 <./figures/UBL-ISC-1.pdf>] [12 <./figures/UBL-ISC_2-1.pdf>] [13]
-Package color Info: Redefining color shadecolor on input line 576.
-Package color Info: Redefining color shadecolor on input line 631.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 270.
+Package color Info: Redefining color shadecolor on input line 289.
+ [5]
+Package color Info: Redefining color shadecolor on input line 323.
 
-<figures/UBL-TL_difPar-1.pdf, id=224, 505.89pt x 505.89pt>
+<figures/UBL-Iris_RU1-1.pdf, id=154, 505.89pt x 505.89pt>
+File: figures/UBL-Iris_RU1-1.pdf Graphic file (type pdf)
+
+<use figures/UBL-Iris_RU1-1.pdf>
+Package pdftex.def Info: figures/UBL-Iris_RU1-1.pdf used on input line 325.
+(pdftex.def)             Requested size: 276.00105pt x 276.00177pt.
+Package color Info: Redefining color shadecolor on input line 338.
+Package color Info: Redefining color shadecolor on input line 370.
+
+<figures/UBL-Iris_RU2-1.pdf, id=156, 505.89pt x 505.89pt>
+File: figures/UBL-Iris_RU2-1.pdf Graphic file (type pdf)
+
+<use figures/UBL-Iris_RU2-1.pdf>
+Package pdftex.def Info: figures/UBL-Iris_RU2-1.pdf used on input line 372.
+(pdftex.def)             Requested size: 345.0pt x 345.00414pt.
+ [6 <./figures/UBL-Iris_RU1-1.pdf>] [7 <./figures/UBL-Iris_RU2-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 391.
+Package color Info: Redefining color shadecolor on input line 429.
+
+<figures/UBL-IrisRO-1.pdf, id=181, 505.89pt x 505.89pt>
+File: figures/UBL-IrisRO-1.pdf Graphic file (type pdf)
+
+<use figures/UBL-IrisRO-1.pdf>
+Package pdftex.def Info: figures/UBL-IrisRO-1.pdf used on input line 431.
+(pdftex.def)             Requested size: 276.00105pt x 276.00177pt.
+ [8]
+Package color Info: Redefining color shadecolor on input line 446.
+
+<figures/UBL-Iris_RO2-1.pdf, id=190, 505.89pt x 505.89pt>
+File: figures/UBL-Iris_RO2-1.pdf Graphic file (type pdf)
+
+<use figures/UBL-Iris_RO2-1.pdf>
+Package pdftex.def Info: figures/UBL-Iris_RO2-1.pdf used on input line 448.
+(pdftex.def)             Requested size: 345.0pt x 345.00414pt.
+
+Overfull \hbox (10.02747pt too wide) in paragraph at lines 462--463
+[]\OT1/cmr/m/n/10 This strat-egy is avail-able in \OT1/cmtt/m/n/10 UBL \OT1/cmr
+/m/n/10 pack-age through the func-tion \OT1/cmtt/m/n/10 ImpSampClassif\OT1/cmr/
+m/n/10 .
+ []
+
+Package color Info: Redefining color shadecolor on input line 466.
+[9 <./figures/UBL-IrisRO-1.pdf>] [10 <./figures/UBL-Iris_RO2-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 514.
+
+<figures/UBL-ISC-1.pdf, id=212, 505.89pt x 505.89pt>
+File: figures/UBL-ISC-1.pdf Graphic file (type pdf)
+
+<use figures/UBL-ISC-1.pdf>
+Package pdftex.def Info: figures/UBL-ISC-1.pdf used on input line 516.
+(pdftex.def)             Requested size: 345.0pt x 345.00414pt.
+Package color Info: Redefining color shadecolor on input line 531.
+
+<figures/UBL-ISC_2-1.pdf, id=214, 505.89pt x 505.89pt>
+File: figures/UBL-ISC_2-1.pdf Graphic file (type pdf)
+
+<use figures/UBL-ISC_2-1.pdf>
+Package pdftex.def Info: figures/UBL-ISC_2-1.pdf used on input line 533.
+(pdftex.def)             Requested size: 345.0pt x 345.00414pt.
+ [11] [12 <./figures/UBL-ISC-1.pdf>] [13 <./figures/UBL-ISC_2-1.pdf>] [14]
+Package color Info: Redefining color shadecolor on input line 598.
+Package color Info: Redefining color shadecolor on input line 654.
+
+<figures/UBL-TL_difPar-1.pdf, id=252, 505.89pt x 505.89pt>
 File: figures/UBL-TL_difPar-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-TL_difPar-1.pdf>
-Package pdftex.def Info: figures/UBL-TL_difPar-1.pdf used on input line 633.
+Package pdftex.def Info: figures/UBL-TL_difPar-1.pdf used on input line 656.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [14] [15 <./figures/UBL-TL_difPar-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 657.
+ [15] [16 <./figures/UBL-TL_difPar-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 681.
 
-[16]
-Package color Info: Redefining color shadecolor on input line 713.
- <figures/UBL-CNN_plot-1.pdf, id=252, 505.89pt x 505.89pt>
+[17]
+Package color Info: Redefining color shadecolor on input line 737.
+ <figures/UBL-CNN_plot-1.pdf, id=279, 505.89pt x 505.89pt>
 File: figures/UBL-CNN_plot-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-CNN_plot-1.pdf>
-Package pdftex.def Info: figures/UBL-CNN_plot-1.pdf used on input line 715.
+Package pdftex.def Info: figures/UBL-CNN_plot-1.pdf used on input line 739.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [17 <./figures/UBL-CNN_plot-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 737.
+ [18 <./figures/UBL-CNN_plot-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 761.
 
-Overfull \hbox (3.505pt too wide) in paragraph at lines 742--742
-[][]\OT1/cmtt/m/n/8 ir3[] []<-[] []OSSClassif[][](Species[][]~[][]., data,[] []
-Cl[][]=[][]c[][]([][]"versicolor"[][],[] []"virginica"[][]),[] []start[][]=[][]
-"Tomek"[][])[][] 
+Overfull \hbox (20.50525pt too wide) in paragraph at lines 770--770
+[]\OT1/cmtt/m/n/8 ## Warning in TomekClassif(form, dat, dist = dist, p = p, Cl 
+= otherCl, rem = "both"):
  []
 
-
-Overfull \hbox (24.75531pt too wide) in paragraph at lines 746--746
-[]\OT1/cmtt/m/n/8 ## Warning in TomekClassif(form, data, dist = dist, p = p, Cl
- = otherCl, rem = "both"):
- []
-
-Package color Info: Redefining color shadecolor on input line 795.
-<figures/UBL-OSS_plot-1.pdf, id=270, 505.89pt x 505.89pt>
+Package color Info: Redefining color shadecolor on input line 819.
+<figures/UBL-OSS_plot-1.pdf, id=297, 505.89pt x 505.89pt>
 File: figures/UBL-OSS_plot-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-OSS_plot-1.pdf>
-Package pdftex.def Info: figures/UBL-OSS_plot-1.pdf used on input line 797.
+Package pdftex.def Info: figures/UBL-OSS_plot-1.pdf used on input line 821.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [18] [19 <./figures/UBL-OSS_plot-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 821.
-Package color Info: Redefining color shadecolor on input line 857.
+ [19] [20 <./figures/UBL-OSS_plot-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 845.
+Package color Info: Redefining color shadecolor on input line 881.
 
-<figures/UBL-ir_ENN_plot-1.pdf, id=291, 505.89pt x 505.89pt>
+<figures/UBL-ir_ENN_plot-1.pdf, id=320, 505.89pt x 505.89pt>
 File: figures/UBL-ir_ENN_plot-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-ir_ENN_plot-1.pdf>
-Package pdftex.def Info: figures/UBL-ir_ENN_plot-1.pdf used on input line 859.
+Package pdftex.def Info: figures/UBL-ir_ENN_plot-1.pdf used on input line 883.
 (pdftex.def)             Requested size: 345.00414pt x 299.00513pt.
- [20] [21 <./figures/UBL-ir_ENN_plot-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 876.
+Package color Info: Redefining color shadecolor on input line 900.
 
-Overfull \hbox (3.505pt too wide) in paragraph at lines 907--907
+Overfull \hbox (3.505pt too wide) in paragraph at lines 931--931
 [][]\OT1/cmtt/m/n/8 g[] []<-[][]ggplot[][](cats,[] []aes[][](Bwt, Hwt,[] []col[
 ][]=Sex))[][]+[][]geom_point[][]()[][]+[][]ggtitle[][]([][]"Original data set"[
 ][])[][] 
  []
 
-<figures/UBL-ENN_cats-1.pdf, id=310, 505.89pt x 505.89pt>
+[21] [22 <./figures/UBL-ir_ENN_plot-1.pdf>]
+<figures/UBL-ENN_cats-1.pdf, id=336, 505.89pt x 505.89pt>
 File: figures/UBL-ENN_cats-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-ENN_cats-1.pdf>
-Package pdftex.def Info: figures/UBL-ENN_cats-1.pdf used on input line 919.
+Package pdftex.def Info: figures/UBL-ENN_cats-1.pdf used on input line 943.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [22] [23 <./figures/UBL-ENN_cats-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 941.
+ [23 <./figures/UBL-ENN_cats-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 965.
 
-Overfull \hbox (7.75507pt too wide) in paragraph at lines 948--948
-[]\OT1/cmtt/m/n/8 ## Warning in ENNClassif(form, data[which(data[, tgt] %in% ot
-herCl), ], k, : There
+Overfull \hbox (24.75531pt too wide) in paragraph at lines 972--972
+[]\OT1/cmtt/m/n/8 ## Warning in ENNClassif(form, dat[which(dat[, tgt] %in% othe
+rCl), ], k, dist, : There
  []
 
 
-Overfull \hbox (7.75507pt too wide) in paragraph at lines 955--955
-[]\OT1/cmtt/m/n/8 ## Warning in ENNClassif(form, data[which(data[, tgt] %in% ot
-herCl), ], k, : There
+Overfull \hbox (24.75531pt too wide) in paragraph at lines 979--979
+[]\OT1/cmtt/m/n/8 ## Warning in ENNClassif(form, dat[which(dat[, tgt] %in% othe
+rCl), ], k, dist, : There
  []
 
-Package color Info: Redefining color shadecolor on input line 984.
-<figures/UBL-NCL_plot-1.pdf, id=329, 505.89pt x 505.89pt>
+[24]
+Package color Info: Redefining color shadecolor on input line 1008.
+ <figures/UBL-NCL_plot-1.pdf, id=356, 505.89pt x 505.89pt>
 File: figures/UBL-NCL_plot-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-NCL_plot-1.pdf>
-Package pdftex.def Info: figures/UBL-NCL_plot-1.pdf used on input line 986.
+Package pdftex.def Info: figures/UBL-NCL_plot-1.pdf used on input line 1010.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [24] [25 <./figures/UBL-NCL_plot-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1012.
-Package color Info: Redefining color shadecolor on input line 1053.
+Package color Info: Redefining color shadecolor on input line 1036.
+ [25] [26 <./figures/UBL-NCL_plot-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 1077.
 
-<figures/UBL-ir_GN_plot-1.pdf, id=355, 505.89pt x 505.89pt>
+<figures/UBL-ir_GN_plot-1.pdf, id=379, 505.89pt x 505.89pt>
 File: figures/UBL-ir_GN_plot-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-ir_GN_plot-1.pdf>
-Package pdftex.def Info: figures/UBL-ir_GN_plot-1.pdf used on input line 1055.
+Package pdftex.def Info: figures/UBL-ir_GN_plot-1.pdf used on input line 1079.
 (pdftex.def)             Requested size: 345.00414pt x 299.00513pt.
-Package color Info: Redefining color shadecolor on input line 1068.
+Package color Info: Redefining color shadecolor on input line 1092.
 
-<figures/UBL-ir_GN_plot2-1.pdf, id=356, 505.89pt x 505.89pt>
+<figures/UBL-ir_GN_plot2-1.pdf, id=380, 505.89pt x 505.89pt>
 File: figures/UBL-ir_GN_plot2-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-ir_GN_plot2-1.pdf>
-Package pdftex.def Info: figures/UBL-ir_GN_plot2-1.pdf used on input line 1070.
+Package pdftex.def Info: figures/UBL-ir_GN_plot2-1.pdf used on input line 1094.
 
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [26] [27 <./figures/UBL-ir_GN_plot-1.pdf>]
-[28 <./figures/UBL-ir_GN_plot2-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1085.
+Package color Info: Redefining color shadecolor on input line 1109.
 
-<figures/UBL-smote_illust-1.pdf, id=387, 505.89pt x 505.89pt>
+<figures/UBL-smote_illust-1.pdf, id=383, 505.89pt x 505.89pt>
 File: figures/UBL-smote_illust-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-smote_illust-1.pdf>
-Package pdftex.def Info: figures/UBL-smote_illust-1.pdf used on input line 1087
+Package pdftex.def Info: figures/UBL-smote_illust-1.pdf used on input line 1111
 .
 (pdftex.def)             Requested size: 241.50444pt x 239.19638pt.
- [29 <./figures/UBL-smote_illust-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1106.
-Package color Info: Redefining color shadecolor on input line 1147.
+ [27] [28 <./figures/UBL-ir_GN_plot-1.pdf>] [29 <./figures/UBL-ir_GN_plot2-1.pd
+f>]
+Package color Info: Redefining color shadecolor on input line 1130.
+Package color Info: Redefining color shadecolor on input line 1171.
 
-<figures/UBL-smote_plot_hist-1.pdf, id=402, 505.89pt x 505.89pt>
+<figures/UBL-smote_plot_hist-1.pdf, id=416, 505.89pt x 505.89pt>
 File: figures/UBL-smote_plot_hist-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-smote_plot_hist-1.pdf>
 Package pdftex.def Info: figures/UBL-smote_plot_hist-1.pdf used on input line 1
-149.
+173.
 (pdftex.def)             Requested size: 345.00414pt x 299.00513pt.
-Package color Info: Redefining color shadecolor on input line 1161.
+Package color Info: Redefining color shadecolor on input line 1185.
 
-<figures/UBL-smote_plot-1.pdf, id=403, 505.89pt x 505.89pt>
+<figures/UBL-smote_plot-1.pdf, id=417, 505.89pt x 505.89pt>
 File: figures/UBL-smote_plot-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-smote_plot-1.pdf>
-Package pdftex.def Info: figures/UBL-smote_plot-1.pdf used on input line 1163.
+Package pdftex.def Info: figures/UBL-smote_plot-1.pdf used on input line 1187.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [30] [31 <./figures/UBL-smote_plot_hist-1.pdf>] [32 <./figures/UBL-smote_plot-
-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1182.
-
-<figures/UBL-relev_ex-1.pdf, id=434, 505.89pt x 505.89pt>
+ [30 <./figures/UBL-smote_illust-1.pdf>]
+[31 <./figures/UBL-smote_plot_hist-1.pdf>] [32 <./figures/UBL-smote_plot-1.pdf>
+]
+Package color Info: Redefining color shadecolor on input line 1209.
+ <figures/UBL-relev_ex-1.pdf, id=457, 505.89pt x 505.89pt>
 File: figures/UBL-relev_ex-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-relev_ex-1.pdf>
-Package pdftex.def Info: figures/UBL-relev_ex-1.pdf used on input line 1184.
+Package pdftex.def Info: figures/UBL-relev_ex-1.pdf used on input line 1211.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
-Package color Info: Redefining color shadecolor on input line 1200.
- [33 <./figures/UBL-relev_ex-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1233.
- [34]
-Package color Info: Redefining color shadecolor on input line 1263.
-Package color Info: Redefining color shadecolor on input line 1286.
+Package color Info: Redefining color shadecolor on input line 1227.
+ [33] [34 <./figures/UBL-relev_ex-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 1260.
 
-<figures/UBL-RU_ex1-1.pdf, id=456, 505.89pt x 505.89pt>
+[35]
+Package color Info: Redefining color shadecolor on input line 1299.
+Package color Info: Redefining color shadecolor on input line 1322.
+ <figures/UBL-RU_ex1-1.pdf, id=493, 505.89pt x 505.89pt>
 File: figures/UBL-RU_ex1-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-RU_ex1-1.pdf>
-Package pdftex.def Info: figures/UBL-RU_ex1-1.pdf used on input line 1288.
+Package pdftex.def Info: figures/UBL-RU_ex1-1.pdf used on input line 1324.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
-Package color Info: Redefining color shadecolor on input line 1302.
- [35] [36 <./figures/UBL-RU_ex1-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1329.
-Package color Info: Redefining color shadecolor on input line 1343.
+Package color Info: Redefining color shadecolor on input line 1338.
+ [36] [37 <./figures/UBL-RU_ex1-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 1365.
+Package color Info: Redefining color shadecolor on input line 1380.
 
-<figures/UBL-RU_ex2-1.pdf, id=473, 505.89pt x 505.89pt>
+<figures/UBL-RU_ex2-1.pdf, id=512, 505.89pt x 505.89pt>
 File: figures/UBL-RU_ex2-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-RU_ex2-1.pdf>
-Package pdftex.def Info: figures/UBL-RU_ex2-1.pdf used on input line 1345.
+Package pdftex.def Info: figures/UBL-RU_ex2-1.pdf used on input line 1382.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
 
-Overfull \hbox (6.22289pt too wide) in paragraph at lines 1361--1368
+Overfull \hbox (6.22289pt too wide) in paragraph at lines 1398--1405
  [][] 
  []
 
-[37] [38 <./figures/UBL-RU_ex2-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1381.
-Package color Info: Redefining color shadecolor on input line 1399.
+[38] [39 <./figures/UBL-RU_ex2-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 1418.
+Package color Info: Redefining color shadecolor on input line 1436.
 
-<figures/UBL-RO_ex1-1.pdf, id=493, 505.89pt x 505.89pt>
+<figures/UBL-RO_ex1-1.pdf, id=531, 505.89pt x 505.89pt>
 File: figures/UBL-RO_ex1-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-RO_ex1-1.pdf>
-Package pdftex.def Info: figures/UBL-RO_ex1-1.pdf used on input line 1401.
+Package pdftex.def Info: figures/UBL-RO_ex1-1.pdf used on input line 1438.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [39 <./figures/UBL-RO_ex1-1.pdf>] [40]
-Package color Info: Redefining color shadecolor on input line 1441.
-Package color Info: Redefining color shadecolor on input line 1458.
+ [40] [41 <./figures/UBL-RO_ex1-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 1478.
+Package color Info: Redefining color shadecolor on input line 1495.
 
-<figures/UBL-GN_plot1-1.pdf, id=518, 505.89pt x 505.89pt>
+<figures/UBL-GN_plot1-1.pdf, id=556, 505.89pt x 505.89pt>
 File: figures/UBL-GN_plot1-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-GN_plot1-1.pdf>
-Package pdftex.def Info: figures/UBL-GN_plot1-1.pdf used on input line 1460.
+Package pdftex.def Info: figures/UBL-GN_plot1-1.pdf used on input line 1497.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
-Package color Info: Redefining color shadecolor on input line 1474.
+Package color Info: Redefining color shadecolor on input line 1511.
 
-<figures/UBL-GN_plot2-1.pdf, id=519, 505.89pt x 505.89pt>
+<figures/UBL-GN_plot2-1.pdf, id=557, 505.89pt x 505.89pt>
 File: figures/UBL-GN_plot2-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-GN_plot2-1.pdf>
-Package pdftex.def Info: figures/UBL-GN_plot2-1.pdf used on input line 1476.
+Package pdftex.def Info: figures/UBL-GN_plot2-1.pdf used on input line 1513.
 (pdftex.def)             Requested size: 276.00105pt x 276.00177pt.
-Package color Info: Redefining color shadecolor on input line 1491.
- [41 <./figures/UBL-GN_plot1-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1509.
+Package color Info: Redefining color shadecolor on input line 1528.
+Package color Info: Redefining color shadecolor on input line 1546.
 
-<figures/UBL-GN_plot3-1.pdf, id=533, 505.89pt x 505.89pt>
+<figures/UBL-GN_plot3-1.pdf, id=559, 505.89pt x 505.89pt>
 File: figures/UBL-GN_plot3-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-GN_plot3-1.pdf>
-Package pdftex.def Info: figures/UBL-GN_plot3-1.pdf used on input line 1511.
+Package pdftex.def Info: figures/UBL-GN_plot3-1.pdf used on input line 1548.
 (pdftex.def)             Requested size: 276.00105pt x 276.00177pt.
- [42 <./figures/UBL-GN_plot2-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1532.
- [43 <./figures/UBL-GN_plot3-1.pdf>]
-<figures/UBL-smoteR_rel1-1.pdf, id=557, 505.89pt x 505.89pt>
+ [42] [43 <./figures/UBL-GN_plot1-1.pdf>]
+[44 <./figures/UBL-GN_plot2-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 1569.
+ [45 <./figures/UBL-GN_plot3-1.pdf>]
+<figures/UBL-smoteR_rel1-1.pdf, id=601, 505.89pt x 505.89pt>
 File: figures/UBL-smoteR_rel1-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-smoteR_rel1-1.pdf>
-Package pdftex.def Info: figures/UBL-smoteR_rel1-1.pdf used on input line 1555.
+Package pdftex.def Info: figures/UBL-smoteR_rel1-1.pdf used on input line 1592.
 
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [44 <./figures/UBL-smoteR_rel1-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1568.
+Package color Info: Redefining color shadecolor on input line 1605.
 
-Overfull \hbox (0.78613pt too wide) in paragraph at lines 1570--1570
+Overfull \hbox (0.78613pt too wide) in paragraph at lines 1607--1607
 [][]\OT1/cmtt/m/it/8 # we have two bumps: the first must be under-sampled and t
 he second over-sampled. [][] 
  []
 
 
-Overfull \hbox (97.38536pt too wide) in paragraph at lines 1574--1574
-[][]\OT1/cmtt/m/it/8 # using these percentages and the relevance threshold of 0
-.8 with all the other parameters default values[][] 
- []
-
-
-Overfull \hbox (139.38503pt too wide) in paragraph at lines 1575--1575
-[][]\OT1/cmtt/m/it/8 # it is necessary to set the distance function to "HEOM" b
-ecause the data set contains nominal and numeric features[][] 
- []
-
-
-Overfull \hbox (12.00513pt too wide) in paragraph at lines 1576--1576
-[][]\OT1/cmtt/m/n/8 mysm[] []<-[] []smoteRegress[][](a7[][]~[][]., clean.algae,
+Overfull \hbox (12.00513pt too wide) in paragraph at lines 1615--1615
+[][]\OT1/cmtt/m/n/8 mysm[] []<-[] []SmoteRegress[][](a7[][]~[][]., clean.algae,
 [] []thr.rel[][]=thr.rel,[] []dist[][]=[][]"HEOM"[][],[] []C.perc[][]=C.perc)[]
 [] 
  []
 
 
-Overfull \hbox (20.50525pt too wide) in paragraph at lines 1579--1579
-[][]\OT1/cmtt/m/n/8 smB[] []<-[] []smoteRegress[][](a7[][]~[][]., clean.algae,[
+Overfull \hbox (20.50525pt too wide) in paragraph at lines 1618--1618
+[][]\OT1/cmtt/m/n/8 smB[] []<-[] []SmoteRegress[][](a7[][]~[][]., clean.algae,[
 ] []thr.rel[][]=thr.rel,[] []dist[][]=[][]"HEOM"[][],[] []C.perc[][]=[][]"balan
 ce"[][])[][] 
  []
 
 
-Overfull \hbox (20.50525pt too wide) in paragraph at lines 1582--1582
-[][]\OT1/cmtt/m/n/8 smE[] []<-[] []smoteRegress[][](a7[][]~[][]., clean.algae,[
+Overfull \hbox (20.50525pt too wide) in paragraph at lines 1621--1621
+[][]\OT1/cmtt/m/n/8 smE[] []<-[] []SmoteRegress[][](a7[][]~[][]., clean.algae,[
 ] []thr.rel[][]=thr.rel,[] []dist[][]=[][]"HEOM"[][],[] []C.perc[][]=[][]"extre
 me"[][])[][] 
  []
 
-Package color Info: Redefining color shadecolor on input line 1590.
-<figures/UBL-smoteR_plot1-1.pdf, id=572, 505.89pt x 505.89pt>
+[46 <./figures/UBL-smoteR_rel1-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 1629.
+
+<figures/UBL-smoteR_plot1-1.pdf, id=615, 505.89pt x 505.89pt>
 File: figures/UBL-smoteR_plot1-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-smoteR_plot1-1.pdf>
-Package pdftex.def Info: figures/UBL-smoteR_plot1-1.pdf used on input line 1592
+Package pdftex.def Info: figures/UBL-smoteR_plot1-1.pdf used on input line 1631
 .
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [45 <./figures/UBL-smoteR_plot1-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1628.
+Package color Info: Redefining color shadecolor on input line 1667.
 
-<figures/UBL-smoteR_1bar-1.pdf, id=587, 505.89pt x 505.89pt>
+<figures/UBL-smoteR_1bar-1.pdf, id=618, 505.89pt x 505.89pt>
 File: figures/UBL-smoteR_1bar-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-smoteR_1bar-1.pdf>
-Package pdftex.def Info: figures/UBL-smoteR_1bar-1.pdf used on input line 1630.
+Package pdftex.def Info: figures/UBL-smoteR_1bar-1.pdf used on input line 1669.
 
 (pdftex.def)             Requested size: 345.00414pt x 299.00513pt.
-Package color Info: Redefining color shadecolor on input line 1643.
+Package color Info: Redefining color shadecolor on input line 1682.
 
-<figures/UBL-smoteR_fig2-1.pdf, id=589, 505.89pt x 505.89pt>
+<figures/UBL-smoteR_fig2-1.pdf, id=620, 505.89pt x 505.89pt>
 File: figures/UBL-smoteR_fig2-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-smoteR_fig2-1.pdf>
-Package pdftex.def Info: figures/UBL-smoteR_fig2-1.pdf used on input line 1645.
+Package pdftex.def Info: figures/UBL-smoteR_fig2-1.pdf used on input line 1684.
 
 (pdftex.def)             Requested size: 276.00105pt x 276.00177pt.
- [46] [47 <./figures/UBL-smoteR_1bar-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1669.
-Package color Info: Redefining color shadecolor on input line 1683.
-<figures/UBL-IS_plot1-1.pdf, id=608, 505.89pt x 505.89pt>
+ [47 <./figures/UBL-smoteR_plot1-1.pdf>]
+[48 <./figures/UBL-smoteR_1bar-1.pdf>] [49 <./figures/UBL-smoteR_fig2-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 1709.
+Package color Info: Redefining color shadecolor on input line 1723.
+
+<figures/UBL-IS_plot1-1.pdf, id=657, 505.89pt x 505.89pt>
 File: figures/UBL-IS_plot1-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-IS_plot1-1.pdf>
-Package pdftex.def Info: figures/UBL-IS_plot1-1.pdf used on input line 1685.
+Package pdftex.def Info: figures/UBL-IS_plot1-1.pdf used on input line 1725.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
-Package color Info: Redefining color shadecolor on input line 1697.
+Package color Info: Redefining color shadecolor on input line 1737.
 
-<figures/UBL-IS_plot2-1.pdf, id=609, 505.89pt x 505.89pt>
+<figures/UBL-IS_plot2-1.pdf, id=658, 505.89pt x 505.89pt>
 File: figures/UBL-IS_plot2-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-IS_plot2-1.pdf>
-Package pdftex.def Info: figures/UBL-IS_plot2-1.pdf used on input line 1699.
+Package pdftex.def Info: figures/UBL-IS_plot2-1.pdf used on input line 1739.
 (pdftex.def)             Requested size: 276.00105pt x 276.00177pt.
-Package color Info: Redefining color shadecolor on input line 1712.
- [48 <./figures/UBL-smoteR_fig2-1.pdf>]
-[49 <./figures/UBL-IS_plot1-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1726.
+Package color Info: Redefining color shadecolor on input line 1752.
+Package color Info: Redefining color shadecolor on input line 1766.
 
-<figures/UBL-IS_plot3-1.pdf, id=635, 505.89pt x 505.89pt>
+<figures/UBL-IS_plot3-1.pdf, id=661, 505.89pt x 505.89pt>
 File: figures/UBL-IS_plot3-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-IS_plot3-1.pdf>
-Package pdftex.def Info: figures/UBL-IS_plot3-1.pdf used on input line 1728.
+Package pdftex.def Info: figures/UBL-IS_plot3-1.pdf used on input line 1768.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
-Package color Info: Redefining color shadecolor on input line 1740.
+Package color Info: Redefining color shadecolor on input line 1780.
 
-<figures/UBL-IS_plot4-1.pdf, id=636, 505.89pt x 505.89pt>
+<figures/UBL-IS_plot4-1.pdf, id=662, 505.89pt x 505.89pt>
 File: figures/UBL-IS_plot4-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-IS_plot4-1.pdf>
-Package pdftex.def Info: figures/UBL-IS_plot4-1.pdf used on input line 1742.
+Package pdftex.def Info: figures/UBL-IS_plot4-1.pdf used on input line 1782.
 (pdftex.def)             Requested size: 276.00105pt x 276.00177pt.
- [50 <./figures/UBL-IS_plot2-1.pdf>] [51 <./figures/UBL-IS_plot3-1.pdf>] [52 <.
-/figures/UBL-IS_plot4-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1792.
-Package color Info: Redefining color shadecolor on input line 1822.
+ [50] [51 <./figures/UBL-IS_plot1-1.pdf>]
+[52 <./figures/UBL-IS_plot2-1.pdf>] [53 <./figures/UBL-IS_plot3-1.pdf>]
+[54 <./figures/UBL-IS_plot4-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 1832.
+Package color Info: Redefining color shadecolor on input line 1862.
 
-<figures/UBL-dist_num-1.pdf, id=679, 505.89pt x 505.89pt>
+<figures/UBL-dist_num-1.pdf, id=726, 505.89pt x 505.89pt>
 File: figures/UBL-dist_num-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-dist_num-1.pdf>
-Package pdftex.def Info: figures/UBL-dist_num-1.pdf used on input line 1824.
+Package pdftex.def Info: figures/UBL-dist_num-1.pdf used on input line 1864.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
-Package color Info: Redefining color shadecolor on input line 1848.
- [53] [54 <./figures/UBL-dist_num-1.pdf>]
-Overfull \hbox (3.505pt too wide) in paragraph at lines 1866--1866
+Package color Info: Redefining color shadecolor on input line 1888.
+
+Overfull \hbox (3.505pt too wide) in paragraph at lines 1906--1906
 [][]\OT1/cmtt/m/n/8 ndat1[] []<-[] []ENNClassif[][](speed[][]~[][]., clean.alga
 e,[] []dist[][]=[][]"Overlap"[][],[]  []Cl[][]=[][]c[][]([][]"high"[][],[] []"m
 edium"[][]))[][] 
  []
 
-Package color Info: Redefining color shadecolor on input line 1881.
-<figures/UBL-dist_overlap-1.pdf, id=703, 505.89pt x 505.89pt>
+[55] [56 <./figures/UBL-dist_num-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 1921.
+
+<figures/UBL-dist_overlap-1.pdf, id=746, 505.89pt x 505.89pt>
 File: figures/UBL-dist_overlap-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-dist_overlap-1.pdf>
-Package pdftex.def Info: figures/UBL-dist_overlap-1.pdf used on input line 1883
+Package pdftex.def Info: figures/UBL-dist_overlap-1.pdf used on input line 1923
 .
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
-Package color Info: Redefining color shadecolor on input line 1911.
- [55] [56 <./figures/UBL-dist_overlap-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 1942.
- <figures/UBL-dist_heom-1.pdf, id=725, 505.89pt x 505.89pt>
+ [57 <./figures/UBL-dist_overlap-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 1951.
+Package color Info: Redefining color shadecolor on input line 1982.
+
+<figures/UBL-dist_heom-1.pdf, id=760, 505.89pt x 505.89pt>
 File: figures/UBL-dist_heom-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-dist_heom-1.pdf>
-Package pdftex.def Info: figures/UBL-dist_heom-1.pdf used on input line 1944.
+Package pdftex.def Info: figures/UBL-dist_heom-1.pdf used on input line 1984.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
 
-Overfull \hbox (3.69495pt too wide) in paragraph at lines 1955--1956
+Overfull \hbox (3.69495pt too wide) in paragraph at lines 1995--1996
 []\OT1/cmr/m/n/10 Other pro-pos-als, such as the Het-ero-ge-neous Value Dif-fer
 -ence Met-ric (HVDM),
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1959--1966
+Underfull \hbox (badness 10000) in paragraph at lines 1999--2006
 
  []
 
-[57 <./figures/UBL-dist_heom-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 2001.
+[58] [59 <./figures/UBL-dist_heom-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 2041.
 
-Overfull \hbox (24.75531pt too wide) in paragraph at lines 2019--2019
+Overfull \hbox (24.75531pt too wide) in paragraph at lines 2059--2059
 []\OT1/cmtt/m/n/8 ##  autumn:36   large :42   high  :76   Min.   :7.000   Min. 
   : 1.500   Min.   :  0.80[] 
  []
 
 
-Overfull \hbox (24.75531pt too wide) in paragraph at lines 2019--2019
+Overfull \hbox (24.75531pt too wide) in paragraph at lines 2059--2059
 []\OT1/cmtt/m/n/8 ##  spring:48   medium:83   low   :31   1st Qu.:7.777   1st Q
 u.: 7.675   1st Qu.: 11.85[] 
  []
 
 
-Overfull \hbox (24.75531pt too wide) in paragraph at lines 2019--2019
+Overfull \hbox (24.75531pt too wide) in paragraph at lines 2059--2059
 []\OT1/cmtt/m/n/8 ##  summer:43   small :59   medium:77   Median :8.100   Media
 n : 9.750   Median : 35.08[] 
  []
 
 
-Overfull \hbox (24.75531pt too wide) in paragraph at lines 2019--2019
+Overfull \hbox (24.75531pt too wide) in paragraph at lines 2059--2059
 []\OT1/cmtt/m/n/8 ##  winter:57                           Mean   :8.078   Mean 
   : 9.019   Mean   : 44.88[] 
  []
 
 
-Overfull \hbox (24.75531pt too wide) in paragraph at lines 2019--2019
+Overfull \hbox (24.75531pt too wide) in paragraph at lines 2059--2059
 []\OT1/cmtt/m/n/8 ##                                      3rd Qu.:8.400   3rd Q
 u.:10.700   3rd Qu.: 58.52[] 
  []
 
 
-Overfull \hbox (24.75531pt too wide) in paragraph at lines 2019--2019
+Overfull \hbox (24.75531pt too wide) in paragraph at lines 2059--2059
 []\OT1/cmtt/m/n/8 ##                                      Max.   :9.500   Max. 
   :13.400   Max.   :391.50[] 
  []
 
-[58]
-Package color Info: Redefining color shadecolor on input line 2032.
- <figures/UBL-dist_HVDM-1.pdf, id=758, 505.89pt x 505.89pt>
+Package color Info: Redefining color shadecolor on input line 2072.
+<figures/UBL-dist_HVDM-1.pdf, id=790, 505.89pt x 505.89pt>
 File: figures/UBL-dist_HVDM-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-dist_HVDM-1.pdf>
-Package pdftex.def Info: figures/UBL-dist_HVDM-1.pdf used on input line 2034.
+Package pdftex.def Info: figures/UBL-dist_HVDM-1.pdf used on input line 2074.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
-Package color Info: Redefining color shadecolor on input line 2048.
+ [60]
+Package color Info: Redefining color shadecolor on input line 2088.
 
-<figures/UBL-dist_HVDM2-1.pdf, id=760, 505.89pt x 505.89pt>
+<figures/UBL-dist_HVDM2-1.pdf, id=801, 505.89pt x 505.89pt>
 File: figures/UBL-dist_HVDM2-1.pdf Graphic file (type pdf)
 
 <use figures/UBL-dist_HVDM2-1.pdf>
-Package pdftex.def Info: figures/UBL-dist_HVDM2-1.pdf used on input line 2050.
+Package pdftex.def Info: figures/UBL-dist_HVDM2-1.pdf used on input line 2090.
 (pdftex.def)             Requested size: 345.0pt x 345.00414pt.
- [59 <./figures/UBL-dist_HVDM-1.pdf>]
-[60 <./figures/UBL-dist_HVDM2-1.pdf>]
-Overfull \hbox (8.27835pt too wide) in paragraph at lines 2255--2256
-[]\OT1/cmr/m/n/10 The ex-ist-ing strate-gies for deal-ing with im-bal-anced do-
-mains as a pre-processing
- []
-
-[61] (./UBL.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2261.
- [62]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 2261.
+ [61 <./figures/UBL-dist_HVDM-1.pdf>]
+[62 <./figures/UBL-dist_HVDM2-1.pdf>] [63] (./UBL.bbl [64])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 2115.
+ [65]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 2115.
  (./UBL.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2261.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2261.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 2115.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 2115.
 
 Package rerunfilecheck Info: File `UBL.out' has not changed.
-(rerunfilecheck)             Checksum: 7F65377F50878C8F4655EB343264D1DE;4957.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2261.
+(rerunfilecheck)             Checksum: 887887AB86E5CD9A3FBEADE65E92E304;4853.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 2115.
  ) 
 Here is how much of TeX's memory you used:
- 12119 strings out of 494985
- 175727 string characters out of 6180357
- 257783 words of memory out of 5000000
- 15011 multiletter control sequences out of 15000+600000
+ 12164 strings out of 494985
+ 176478 string characters out of 6180357
+ 259185 words of memory out of 5000000
+ 15044 multiletter control sequences out of 15000+600000
  13296 words of font info for 53 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 42i,8n,75p,1388b,421s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,8n,75p,1406b,457s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texli
@@ -994,20 +977,22 @@ ts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type
 c/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
 nts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmtt12.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmtt9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-symbols/msbm10.pfb>
-Output written on UBL.pdf (62 pages, 939798 bytes).
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmtt12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.p
+fb>
+Output written on UBL.pdf (65 pages, 971368 bytes).
 PDF statistics:
- 902 PDF objects out of 1000 (max. 8388607)
- 734 compressed objects within 8 object streams
- 159 named destinations out of 1000 (max. 500000)
+ 952 PDF objects out of 1000 (max. 8388607)
+ 779 compressed objects within 8 object streams
+ 167 named destinations out of 1000 (max. 500000)
  362 words of extra memory for PDF output out of 10000 (max. 10000000)
 

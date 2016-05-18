@@ -1,5 +1,5 @@
-\name{smoteClassif}
-\alias{smoteClassif}
+\name{SmoteClassif}
+\alias{SmoteClassif}
 
 \title{
 SMOTE algorithm for unbalanced classification problems
@@ -10,20 +10,21 @@ method. Namely, it can generate a new "SMOTEd" data set that addresses
 the class unbalance problem. 
 }
 \usage{
-smoteClassif(form, data, C.perc, k=5, repl=FALSE, dist="Euclidean", p=2)
+SmoteClassif(form, dat, C.perc = "balance", k = 5, repl = FALSE,
+             dist = "Euclidean", p = 2)
 }
 
 \arguments{
   \item{form}{
     A formula describing the prediction problem
   }
-  \item{data}{
+  \item{dat}{
     A data frame containing the original (unbalanced) data set
   }
   \item{C.perc}{
       A named list containing the percentage(s) of under- or/and 
         over-sampling to apply to each class.
-        The oversampling percentage means that the examples above the threshold
+        The over-sampling percentage means that the examples above the threshold
         are increased by this percentage. The under-sampling percentage means 
         that the normal cases are under-sampled by this percentage. Alternatively it may be "balance" (the default) or "extreme", cases where the sampling percentages are automatically estimated either to balance the examples between the minority and majority classes or to invert the distribution of examples across the existing classes transforming the majority classes into minority and vice-versa.
   }
@@ -71,57 +72,60 @@ Intelligence Research, 16:321-357.
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
   
   \seealso{
-\code{\link{randUnderClassif}, \link{randOverClassif}}
+\code{\link{RandUnderClassif}, \link{RandOverClassif}}
 }
 
 \examples{
 ## A small example with a data set created artificially from the IRIS
 ## data 
 data(iris)
-data <- iris[, c(1, 2, 5)]
-data$Species <- factor(ifelse(data$Species == "setosa","rare","common")) 
+dat <- iris[, c(1, 2, 5)]
+dat$Species <- factor(ifelse(dat$Species == "setosa", "rare", "common")) 
 ## checking the class distribution of this artificial data set
-table(data$Species)
+table(dat$Species)
 
 ## now using SMOTE to create a more "balanced problem"
-newData <- smoteClassif(Species ~ ., data, C.perc = list(common=1,rare=6))
+newData <- SmoteClassif(Species ~ ., dat, C.perc = list(common = 1,rare = 6))
 table(newData$Species)
 
 ## Checking visually the created data
-\dontrun{
 par(mfrow = c(1, 2))
-plot(data[, 1], data[, 2], pch = 19 + as.integer(data[, 3]),
+plot(dat[, 1], dat[, 2], pch = 19 + as.integer(dat[, 3]),
      main = "Original Data")
-plot(newData[, 1], newData[, 2], pch = 19 + as.integer(newData[,3]),
+plot(newData[, 1], newData[, 2], pch = 19 + as.integer(newData[, 3]),
      main = "SMOTE'd Data")
-}
+
 
 # automatically balancing the data maintaining the total number of examples
-datBal <- smoteClassif(Species ~ ., data, C.perc = "balance")
+datBal <- SmoteClassif(Species ~ ., dat, C.perc = "balance")
 table(datBal$Species)
 
 # automatically inverting the original distribution of examples 
-datExt <- smoteClassif(Species ~ ., data, C.perc = "extreme")
+datExt <- SmoteClassif(Species ~ ., dat, C.perc = "extreme")
 table(datExt$Species)
 
 
  library(DMwR)
  data(algae)
  clean.algae <- algae[complete.cases(algae),]
- C.perc=list(autumn=2, summer=1.5, winter=0.9) # class spring remains unchanged
- # necessary to define a distance fucntion which can deal with both nominal and numeric features 
- mysmote.algae <- smoteClassif(season~., clean.algae, C.perc, dist="HEOM")
+ C.perc = list(autumn = 2, summer = 1.5, winter = 0.9) 
+ # class spring remains unchanged
+ # In this case it is necessary to define a distance function that 
+ # is able to deal with both nominal and numeric features 
+ mysmote.algae <- SmoteClassif(season~., clean.algae, C.perc, dist = "HEOM")
  # the distance function may be HVDM 
- smoteBalan.algae <- smoteClassif(season~., clean.algae, "balance",dist="HVDM")
- smoteExtre.algae <- smoteClassif(season~., clean.algae, "extreme", dist="HVDM")
+ smoteBalan.algae <- SmoteClassif(season~., clean.algae, "balance",
+                                  dist = "HVDM")
+ smoteExtre.algae <- SmoteClassif(season~., clean.algae, "extreme",
+                                  dist = "HVDM")
 
   library(MASS)
   data(cats)
-  mysmote.cats <- smoteClassif(Sex~., cats, list(M=0.8, F=1.8))
-  smoteBalan.cats <- smoteClassif(Sex~., cats,"balance")
-  smoteExtre.cats <- smoteClassif(Sex~., cats, "extreme")
+  mysmote.cats <- SmoteClassif(Sex~., cats, list(M = 0.8, F = 1.8))
+  smoteBalan.cats <- SmoteClassif(Sex~., cats, "balance")
+  smoteExtre.cats <- SmoteClassif(Sex~., cats, "extreme")
 
 }
 
-\keyword{models}
+\keyword{pre-processing classification}
 

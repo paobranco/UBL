@@ -1,38 +1,40 @@
-##import(graphics)
-##import(abind)  # commented out as it does not have a name space
-##import(xts)
-##importFrom(zoo,as.zoo)
-import(methods)
-##import(ggplot2)
+
+## ------------------------------------------------------------------------------------------------
+
 useDynLib(UBL)
-exportPattern("^[[:alpha:]]+")
 
+## ------------------------------------------------------------------------------------------------
 
-#exportClasses(
-#    CV, Holdout, LOOCV,
-#    MonteCarlo, Bootstrap, 
-#
-#    EstimationResults,
-#    ComparisonResults,
-#
-#    PredTask,
-#
-#    EstimationTask,
-#
-#    Workflow,
-#    WFoutput
-#    )
+import(methods)
+importFrom("grDevices", "boxplot.stats")
+importFrom("stats", "rnorm", "runif", "sd")
+## ------------------------------------------------------------------------------------------------
 
-#exportMethods(show)
-#exportMethods(summary)
-#exportMethods(plot)
-#exportMethods(subset)
+## Functions
 
 export(
-    ## constructors (classDefs.R file)
-    #CV, Holdout, LOOCV,
-    #MonteCarlo, Bootstrap, 
-
-    )
-
-
+	##classification pre-processing methods
+	CNNClassif,
+	ENNClassif,
+	GaussNoiseClassif,
+	ImpSampClassif,
+	NCLClassif,
+	OSSClassif,
+	RandOverClassif,
+	RandUnderClassif,
+	SmoteClassif,
+	TomekClassif,
+	## regression pre-processing methods
+	GaussNoiseRegress,
+	ImpSampRegress,
+	RandOverRegress,
+	RandUnderRegress,
+	SmoteRegress,	
+	## phi related function
+	phi.control,
+#	phi.setup,
+#	phi.extremes,
+#	phi.range,
+	phi
+)
+       

@@ -8,13 +8,13 @@ One-sided selection strategy for handling multiclass imbalanced problems.
  This function performs an adapted one-sided selection strategy for multiclass imbalanced problems.
 }
 \usage{
-OSSClassif(form, data, dist="Euclidean", p=2, Cl="smaller", start="CNN") 
+OSSClassif(form, dat, dist = "Euclidean", p = 2, Cl = "smaller", start = "CNN")
 }
 \arguments{
   \item{form}{
     A formula describing the prediction problem.
   }
-  \item{data}{
+  \item{dat}{
     A data frame containing the original imbalanced data set.
   }
   \item{dist}{
@@ -24,14 +24,11 @@ OSSClassif(form, data, dist="Euclidean", p=2, Cl="smaller", start="CNN")
     A number indicating the value of p if the "p-norm" distance is chosen.
   }
   \item{Cl}{
-   A character vector indicating which are the most important classes. Defaults to "smaller" which means that the smaller classes are automatically determined. In this case, all the smaller classes are those with a frequency below #examples/#classes. With the selection of option "smaller" those classes are the ones considered important for the user.
+   A character vector indicating which are the most important classes. Defaults to "smaller" which means that the smaller classes are automatically determined. In this case, all the smaller classes are those with a frequency below (nr.examples)/(nr.classes). With the selection of option "smaller" those classes are the ones considered important for the user.
    }
    \item{start}{
      A string which determines which strategy (CNN or Tomek links) should be performed first. The existing options are "CNN" and "Tomek". The first one, "CNN", which is the default, means that CNN strategy will be performed first and Tomek links are applied after. On the other hand, if \code{start} is set to "Tomek" then the reverse order is applied (first Tomek links and after CNN strategy).
    }
-}
-\details{
-
 }
 \value{
   The function returns a data frame with
@@ -47,24 +44,27 @@ Batista, G. E.; Prati, R. C. & Monard, M. C. (2004). \emph{A study of the behavi
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
   
 \seealso{
-\code{\link{TomekClassif, CNNClassif}}
+\code{\link{TomekClassif}, \link{CNNClassif}}
 }
 
 \examples{
+  \dontrun{
   library(DMwR)
   data(algae)
-  clean.algae <- algae[complete.cases(algae),]
-  alg1 <- OSSClassif(season~., clean.algae, dist="HVDM", Cl=c("spring", "summer"))
-  alg2 <- OSSClassif(season~., clean.algae, dist="HEOM", Cl=c("spring", "summer"), start="Tomek")
-  alg3 <- OSSClassif(season~., clean.algae, dist="HVDM", start="CNN")
-  alg4 <- OSSClassif(season~., clean.algae, dist="HVDM", start="Tomek")
-  alg5 <- OSSClassif(season~., clean.algae, dist="HEOM", Cl="winter")
+  clean.algae <- algae[complete.cases(algae), ]
+  alg1 <- OSSClassif(season~., clean.algae, dist = "HVDM", 
+                     Cl = c("spring", "summer"))
+  alg2 <- OSSClassif(season~., clean.algae, dist = "HEOM", 
+                     Cl = c("spring", "summer"), start = "Tomek")
+  alg3 <- OSSClassif(season~., clean.algae, dist = "HVDM", start = "CNN")
+  alg4 <- OSSClassif(season~., clean.algae, dist = "HVDM", start = "Tomek")
+  alg5 <- OSSClassif(season~., clean.algae, dist = "HEOM", Cl = "winter")
   summary(alg1$season)
   summary(alg2$season)
   summary(alg3$season)
   summary(alg4$season)
   summary(alg5$season)
+  }
 }
-
-\keyword{models}
+\keyword{pre-processing classification}
 
