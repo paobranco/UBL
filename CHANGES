@@ -1,7 +1,14 @@
+VERSION 0.0.5 (2016-07-13)
+	- added two synthetic data sets, for classification and regression
+	- correction of bugs
+	- added verifications of percentages provided for under/over-sampling that should be less/greater than 1 in each case.
+	- improvements of functions documentation
+	- improved warnings issued when no change is performed in the data set
+	- vignettes restructured to use the synthetic data sets introduced in this version
+
 VERSION 0.0.4 (2016-04-28)
-- correction of bugs related with FORTRAN code
+	- correction of bugs related with FORTRAN code
 
 VERSION 0.0.3 (2016-04-15)
-
-- first version
+	- first version
 

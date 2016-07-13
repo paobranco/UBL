@@ -70,14 +70,6 @@ Hart, P. E. (1968). \emph{The condensed nearest neighbor rule} IEEE Transactions
   summary(CNN2[[1]]$season)
   
   
-  ir <- iris[-c(95:130), ]
-  myCNN.iris <- CNNClassif(Species~., ir, Cl = c("setosa", "virginica"))
-  CNN.iris1 <- CNNClassif(Species~., ir, Cl = "smaller")
-  CNN.iris2 <- CNNClassif(Species~., ir, Cl = "versicolor")
-  summary(myCNN.iris[[1]]$Species)
-  summary(CNN.iris1[[1]]$Species)
-  summary(CNN.iris2[[1]]$Species)
-  
   library(MASS)
   data(cats)
   CNN.catsF <- CNNClassif(Sex~., cats, Cl = "F")

@@ -4,7 +4,7 @@
 [![Downloads](http://cranlogs.r-pkg.org/badges/UBL)](https://cran.rstudio.com/web/packages/UBL/)
 
 
-An R package implementing several approaches to utility-based learning, both for classification and regression predictive tasks
+An R package implementing several pre-processing approaches to utility-based learning, both for classification and regression predictive tasks
 
 **To Install the Latest Stable  Release (from github) do the following in R:**
 
