@@ -51,7 +51,7 @@ RandUnderClassif <- function(form, dat, C.perc = "balance", repl = FALSE)
   if (is.list(C.perc)) { 
     # the under-sampling percentages are provided by the user
     if (any(C.perc > 1)) {
-      stop("percentages provided must be < 1 to perform under-sampling!")
+      stop("The percentages provided must be < 1 to perform under-sampling!")
     }
     names.und <- names(which(C.perc < 1))
 

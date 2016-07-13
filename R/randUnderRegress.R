@@ -38,6 +38,10 @@ RandUnderRegress <- function(form, dat, rel = "auto", thr.rel = 0.5,
   # Returns: a data frame modified by the random under-sampling strategy
 
 {
+  if(is.list(C.perc) & any(unlist(C.perc)>1)){
+    stop("The under-sampling percentages provided in parameter C.perc
+         can not be higher than 1!")
+  }
   # the column where the target variable is
   tgt <- which(names(dat) == as.character(form[[2]]))
   
@@ -65,10 +69,14 @@ RandUnderRegress <- function(form, dat, rel = "auto", thr.rel = 0.5,
          Please, redefine your relevance function!")
   }
   
-  temp[which(y.relev > thr.rel)] <- -temp[which(y.relev > thr.rel)]
+#  temp[which(y.relev >= thr.rel)] <- -temp[which(y.relev >= thr.rel)]
   bumps <- c()
   for (i in 1:(length(y) - 1)) {
-    if (temp[i] * temp[i + 1] < 0) {
+#     if (temp[i] * temp[i + 1] < 0) {
+#       bumps <- c(bumps, i)
+#     }
+    if ((temp[i] >= thr.rel && temp[i+1] < thr.rel) || 
+        (temp[i] < thr.rel && temp[i+1] >= thr.rel)) {
       bumps <- c(bumps, i)
     }
   }
@@ -87,7 +95,7 @@ RandUnderRegress <- function(form, dat, rel = "auto", thr.rel = 0.5,
   imp <- sapply(obs.ind, function(x) mean(phi(x, pc)))
   
   und <- which(imp < thr.rel)
-  ove <- which(imp > thr.rel)
+  ove <- which(imp >= thr.rel)
   
   newdata <- NULL
   for (j in 1:length(ove)) {

@@ -101,11 +101,15 @@ SmoteRegress <- function(form, dat, rel = "auto", thr.rel = 0.5,
     stop("All the points have relevance 0. 
          Please, redefine your relevance function!")
   }
-  temp[which(y.relev > thr.rel)] <- -temp[which(y.relev > thr.rel)]
+#  temp[which(y.relev >= thr.rel)] <- -temp[which(y.relev >= thr.rel)]
   bumps <- c()
   for (i in 1:(length(y) - 1)) { 
-    if (temp[i] * temp[i + 1] < 0) bumps <- c(bumps, i) 
-  }
+#     if (temp[i] * temp[i + 1] < 0) bumps <- c(bumps, i) 
+    if ((temp[i] >= thr.rel && temp[i+1] < thr.rel) || 
+        (temp[i] < thr.rel && temp[i+1] >= thr.rel)) {
+      bumps <- c(bumps, i)
+    }
+   }
   nbump <- length(bumps) + 1 # number of different "classes"
   
   # collect the indexes in each "class"

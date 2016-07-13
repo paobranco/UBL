@@ -40,6 +40,10 @@ RandOverRegress <- function(form, dat, rel = "auto", thr.rel = 0.5,
   # Returns: a new data frame modified through the Random Over-sampling strategy
 
 {
+  if(is.list(C.perc) & any(unlist(C.perc)<1)){
+    stop("The over-sampling percentages provided in parameter C.perc
+         can not be lower than 1!")
+  }
   # the column where the target variable is
   tgt <- which(names(dat) == as.character(form[[2]]))
     
@@ -66,10 +70,14 @@ RandOverRegress <- function(form, dat, rel = "auto", thr.rel = 0.5,
     stop("All the points have relevance 0. Please, redefine your relevance
          function!")
   }
-  temp[which(y.relev > thr.rel)] <- -temp[which(y.relev > thr.rel)]
+#  temp[which(y.relev >= thr.rel)] <- -temp[which(y.relev >= thr.rel)]
   bumps <- c()
   for (i in 1:(length(y) - 1)) {
-    if (temp[i] * temp[i + 1] < 0) {
+#     if (temp[i] * temp[i + 1] < 0) {
+#       bumps <- c(bumps, i)
+#     }
+    if ((temp[i] >= thr.rel && temp[i+1] < thr.rel) || 
+          (temp[i] < thr.rel && temp[i+1] >= thr.rel)) {
       bumps <- c(bumps, i)
     }
   }
@@ -86,7 +94,7 @@ RandOverRegress <- function(form, dat, rel = "auto", thr.rel = 0.5,
 
   imp <- sapply(obs.ind, function(x) mean(phi(x, pc)))
   
-  ove <- which(imp > thr.rel)
+  ove <- which(imp >= thr.rel)
   und <- which(imp < thr.rel)
   
 # set the over-sampling percentages

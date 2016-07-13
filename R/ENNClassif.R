@@ -90,7 +90,7 @@ ENNClassif <- function(form, dat, k = 3, dist = "Euclidean",
     if (length(rm.idx)) {
     res <- dat[-rm.idx, ]
     } else {
-      warning("There are no examples to remove!")
+      warning("ENNClassif found no examples to remove!", call. = FALSE)
       res <- dat
     }
 

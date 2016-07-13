@@ -121,7 +121,7 @@ TomekClassif <- function(form, dat, dist = "Euclidean", p = 2, Cl = "all",
   if (length(rm.idx)) {
     res <- dat[-rm.idx, ]
   } else {
-    warning("There are no examples to remove!")
+    warning("TomekClassif found no examples to remove!", call. = FALSE)
     res <- dat
   }
 

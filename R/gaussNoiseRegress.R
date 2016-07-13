@@ -100,10 +100,14 @@ GaussNoiseRegress <- function(form, dat, rel = "auto", thr.rel = 0.5,
          relevance function!")
   }
 
-  temp[which(y.relev > thr.rel)] <- -temp[which(y.relev > thr.rel)]
+#  temp[which(y.relev >= thr.rel)] <- -temp[which(y.relev >= thr.rel)]
   bumps <- c()
   for (i in 1:(length(y) - 1)) {
-    if (temp[i] * temp[i + 1] < 0) {
+#     if (temp[i] * temp[i + 1] < 0) {
+#       bumps <- c(bumps, i)
+#     }
+    if ((temp[i] >= thr.rel && temp[i+1] < thr.rel) || 
+          (temp[i] < thr.rel && temp[i+1] >= thr.rel)) {
       bumps <- c(bumps, i)
     }
   }

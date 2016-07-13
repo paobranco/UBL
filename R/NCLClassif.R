@@ -59,7 +59,7 @@ NCLClassif <- function(form, dat, k = 3, dist = "Euclidean",
   
   if (!length(Cl)) {
     res <- ENNClassif(form, dat, k, dist, p)
-    warning("Only ENN applied because no minority class was detected!")
+    warning("Only ENN applied because no minority class was detected!", call. = FALSE)
     return(res)
   }
 

@@ -50,7 +50,7 @@ RandOverClassif <- function(form, dat, C.perc = "balance", repl = TRUE)
   
   if (is.list(C.perc)) { # over-sampling percentages are provided by the user
     if (any(C.perc < 1)) {
-      stop("percentages provided must be > 1 to perform over-sampling!")
+      stop("The percentages provided must be > 1 to perform over-sampling!")
     }
     names.ove <- names(which(C.perc > 1))
     

@@ -48,15 +48,12 @@ neighbours <- function(tgt, data, dist, p=2, k)
             "p-norm"=p,
             stop("Distance measure not available!"))
    
-  
-#   # construct a flag for the type of problem: 0 classification 1 regression
-#   ifelse (class(data[,tgt])=="numeric", flag <- 1, flag <- 0)
-  
-  if (class(data[,tgt])=="numeric" & p <=-4) stop("distance measure selected only available for classification tasks")
+    
+  if (class(data[,tgt]) == "numeric" & p <= -4) stop("distance measure selected only available for classification tasks")
 
 nomatr <- c() 
-  for(col in seq.int(dim(data)[2])){
-    if(class(data[,col]) %in% c('factor','character')){
+  for (col in seq.int(dim(data)[2])) {
+    if (class(data[,col]) %in% c('factor','character')) {
       nomatr <- c(nomatr, col)
     }
   }
@@ -64,32 +61,30 @@ nomatr <- c()
   nomatr <- setdiff(nomatr, tgt)
   numatr <- setdiff(seq.int(dim(data)[2]), c(nomatr,tgt))
   
-  nomData <- t(sapply(subset(data, select=nomatr), as.integer))
-  numData <- t(subset(data, select=numatr))
+  nomData <- t(sapply(subset(data, select = nomatr), as.integer))
+  numData <- t(subset(data, select = numatr))
   
   # check if the measure can be applied to the data set features
   
-  if(length(numatr) & p==-2){
+  if (length(numatr) & p == -2) {
     stop("Can not compute Overlap metric with numeric attributes!")
   }
-  if(length(nomatr) & p >=-1){
+  if (length(nomatr) & p >= -1) {
     stop("Can not compute ", dist ," distance with nominal attributes!")
   }
 
-  tgtData <- data[,tgt]
+  tgtData <- data[, tgt]
   n <- length(tgtData)
-  res <- matrix(0.0,nrow=k, ncol=n)
-  if(class(tgtData)!="numeric"){tgtData <- as.integer(tgtData)}
-  
+  res <- matrix(0.0, nrow = k, ncol = n)
+  if (class(tgtData) != "numeric") {tgtData <- as.integer(tgtData)}
+
   Cl <- length(unique(tgtData))
   nnom <- length(nomatr)
   nnum <- length(numatr)
 
-  
-  
-  distm <- matrix(0.0,nrow=n, ncol=n)
-  numD <- matrix(0.0,nrow=nnum, ncol=n)
-  
+  distm <- matrix(0.0, nrow = n, ncol = n)
+  numD <- matrix(0.0, nrow = nnum, ncol = n)
+
 
   storage.mode(numData) <- "double"
   storage.mode(nomData) <- "integer"
@@ -99,18 +94,18 @@ nomatr <- c()
   storage.mode(numD) <- "double"
   
   neig <- .Fortran("neighbours", 
-                   tgtData=tgtData,  # tgt data
-                   numData=numData, #numeric data
-                   nomData=nomData, #nominal data
-                   p=as.integer(p), # code for distance metric
-                   k=as.integer(k), # nr of neighbours
-                   n=as.integer(n), # nr of examples in the data
-                   nnum=as.integer(nnum), # nr of numeric attributes
-                   nnom=as.integer(nnom), # nr of nominal attributes
-                   Cl=as.integer(Cl), # number of different classes in the target variable
-                   distm=distm,
-                   numD=numD,
-                   res=res) # output
+                   tgtData = tgtData,  # tgt data
+                   numData = numData, #numeric data
+                   nomData = nomData, #nominal data
+                   p = as.integer(p), # code for distance metric
+                   k = as.integer(k), # nr of neighbours
+                   n = as.integer(n), # nr of examples in the data
+                   nnum = as.integer(nnum), # nr of numeric attributes
+                   nnom = as.integer(nnom), # nr of nominal attributes
+                   Cl = as.integer(Cl), # number of different classes in the target variable
+                   distm = distm,
+                   numD = numD,
+                   res = res) # output
   neig <- t(neig$res)
 
   neig
