@@ -19,7 +19,7 @@ GaussNoiseClassif(form, dat, C.perc = "balance", pert = 0.1, repl = FALSE)
     A data frame containing the original (unbalanced) data set
   }
   \item{C.perc}{
-      A named list containing the percentage(s) of under- or/and  over-sampling to apply to each class. The over-sampling percentage means that the examples above the threshold are increased by this percentage. The under-sampling percentage means that the normal cases are under-sampled by this percentage. Alternatively it may be "balance" (the default) or "extreme", cases where the sampling percentages are automatically estimated either to balance the examples between the minority and majority classes or to invert the distribution of examples across the existing classes transforming the majority classes into minority and vice-versa.
+      A named list containing the percentage(s) of under- or/and  over-sampling to apply to each class.         The over-sampling percentage is a number above 1 while the under-sampling percentage should be a number below 1. If the number 1 is provided for a given class then that class remains unchanged. Alternatively it may be "balance" (the default) or "extreme", cases where the sampling percentages are automatically estimated either to balance the examples between the minority and majority classes or to invert the distribution of examples across the existing classes transforming the majority classes into minority and vice-versa.
   }
   \item{pert}{
     A number indicating the level of perturbation to introduce when generating synthetic examples. Assuming as center the base example, this parameter defines the radius (based on the standard deviation) where the new example is generated.

@@ -20,7 +20,7 @@ RandUnderClassif(form, dat, C.perc = "balance", repl = FALSE)
     A data frame containing the original imbalanced data set.
   }
   \item{C.perc}{
-A named list containing each class name and the corresponding under-sampling percentage, between 0 and 1, where 1 means that no under-sampling is to be applied in the corresponding class. The user may indicate only the classes where he wants to apply random under-sampling. Alternatively, this parameter can be set to "balance" (the defualt) or "extreme", cases where the under-sampling percentages are automatically estimated. The "balance" option tries to balance all the existing classes while the "extreme" option inverts the classes original frequencies.
+A named list containing each class name and the corresponding under-sampling percentage, between 0 and 1, where 1 means that no under-sampling is to be applied in the corresponding class. The user may indicate only the classes where he wants to apply random under-sampling. For instance, a percentage of 0.2 means that, in the changed data set, the class is reduced to 20\% of its original size. Alternatively, this parameter can be set to "balance" (the defualt) or "extreme", cases where the under-sampling percentages are automatically estimated. The "balance" option tries to balance all the existing classes while the "extreme" option inverts the classes original frequencies.
   }
   \item{repl}{
   A boolean value controlling the possibility of having repetition of examples in the under-sampled data set. Defaults to FALSE.

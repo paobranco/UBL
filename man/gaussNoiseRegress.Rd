@@ -26,7 +26,7 @@ GaussNoiseRegress(form, dat, rel = "auto", thr.rel = 0.5, C.perc = "balance",
     A number indicating the relevance threshold above which a case is considered as belonging to the rare "class".
   }
     \item{C.perc}{
-      A list containing the percentage(s) of under- or/and  over-sampling to apply to each "class" obtained with the threshold. The over-sampling percentage means that the examples above the threshold are increased by this percentage. The under-sampling percentage means that the normal cases (cases below the threshold) are under-sampled by this percentage. Alternatively it may be "balance" (the default) or "extreme", cases where the sampling percentages are automatically estimated.
+      A list containing the percentage(s) of under- or/and  over-sampling to apply to each "class" (bump) obtained with the threshold. The \code{C.perc} values should be provided in ascending order of target variable values. The over-sampling percentage(s) should be numbers above 1 and represent the increase that is applied to the examples of the bump. The under-sampling percentage(s) should be numbers below 1 and represent the decrease applied to the cases in the corresponding bump. If the value of 1 is provided for a given bump, then the examples in that bump will remain unchanged. Alternatively it may be "balance" (the default) or "extreme", cases where the sampling percentages are automatically estimated.
   }
   \item{pert}{
     A number indicating the level of perturbation to introduce when generating synthetic examples. Assuming as center the base example, this parameter defines the radius (based on the standard deviation) where the new example is generated.

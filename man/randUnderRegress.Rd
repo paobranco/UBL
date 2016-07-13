@@ -31,10 +31,9 @@ RandUnderRegress(form, dat,  rel = "auto", thr.rel = 0.5,
   }
   \item{C.perc}{
       A list containing the under-sampling percentage/s to apply to all/each
-        "class" (bump) obtained with the relevance threshold. Examples 
-        are randomly removed in each normal "class" according to a percentage. Moreover, different percentages may 
-        be provided for each "class". Alternatively, it may be "balance" or "extreme",
-        cases where the under-sampling percentages are automatically estimated.
+        "class" (bump) obtained with the relevance threshold. Examples are randomly removed from the "class(es)". If only one percentage is provided this value is reused in all the "classes" that have values below the relevance threshold. A different percentage can be provided to each "class". In this case, the percentages should be provided in ascending order of target variable value. The under-sampling percentage(s), should be a number below 1, meaning that the normal cases (cases below the threshold) are under-sampled by the corresponding percentage. If the number 1 is provided then those examples are not changed. 
+        Alternatively, \code{C.perc} parameter may be set to "balance" or "extreme",
+        cases where the under-sampling percentages are automatically estimated to either balance or invert the frequencies of the examples in the "classes" (bumps).
   }
   \item{repl}{
   A boolean value controlling the possibility of having repetition of examples in the under-sampled data set. Defaults to FALSE.

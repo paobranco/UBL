@@ -27,12 +27,7 @@ ImpSampRegress(form, dat, rel = "auto", thr.rel = NA,
   }
     \item{C.perc}{
       A list containing the percentage(s) of under- or/and 
-        over-sampling to apply to each "class" obtained with the threshold.
-        The over-sampling percentage means that the examples above the threshold
-        are increased by this percentage. The under-sampling percentage means 
-        that the normal cases (cases below the threshold) are under-sampled by 
-        this percentage. Alternatively it may be "balance" (the default) or "extreme",
-        cases where the sampling percentages are automatically estimated. This parameter is only used when a relevance threshold (thr.rel) is set. Otherwise it is ignored.
+        over-sampling to apply to each "class" obtained with the threshold. This parameter is only used when a relevance threshold (thr.rel) is set. Otherwise it is ignored. The \code{C.perc} values should be provided in ascending order of target variable values. The over-sampling percentage(s) must be numbers higher than 1 and represent the increase applied to the examples of the bump. The under-sampling percentage(s) should be numbers below 1 and represent the decrease applyed in the corresponding bump. If the value of 1 is provided for a given bump, then the examples in that bump will remain unchanged. Alternatively, this parameter may be set to "balance" (the default) or "extreme", cases where the sampling percentages are automatically estimated. 
   }
   \item{O}{
   A number expressing the importance given to over-sampling when the 

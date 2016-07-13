@@ -22,10 +22,10 @@ ENNClassif(form, dat, k = 3, dist = "Euclidean", p = 2, Cl = "all")
     A number indicating the number of nearest neighbors to use.
   }
   \item{dist}{
-    A character string indicating which distance metric to use when determining the k nearest neighbors. 
+    A character string indicating which distance metric to use when determining the k nearest neighbors. See the details. Defaults to "Euclidean".
   }
   \item{p}{
-    A number indicating the value of p if the "p-norm" distance is chosen.
+    A number indicating the value of p if the "p-norm" distance is chosen. Only necessary to define if a "p-norm" is chosen in the \code{dist} argument. See details.
   }
   \item{Cl}{
    A character vector indicating which classes should be under-sampled. Defaults to "all" meaning that all classes are candidates for having examples removed. The user may define a subset of the existing classes in which this technique will be applied. 
@@ -33,7 +33,21 @@ ENNClassif(form, dat, k = 3, dist = "Euclidean", p = 2, Cl = "all")
 
 }
 \details{
-The ENN algorithm uses a cleaning method to perform under-sampling. For each example with class label in Cl the k nearest neighbors are computed using a selected distance metric. The example is removed from the data set if it is misclassified by at least half of it's k nearest neighbors. Usually this algorithm uses k=3.
+  \describe{
+    \item{\code{dist} parameter:}{The parameter \code{dist} allows the user to define the distance metric to be used in the neighbors computation. Although the default is the Euclidean distance, other metrics are available. This allows the computation of distances in data sets with, for instance, both nominal and numeric features. The options available for the distance functions are as follows: 
+    
+    - for data with only numeric features: "Manhattan", "Euclidean", "Canberra", "Chebyshev", "p-norm";
+    
+    - for data with only nominal features: "Overlap";
+    
+    - for dealing with both nominal and numeric features: "HEOM", "HVDM".
+    
+    When the "p-norm" is selected for the \code{dist} parameter, it is also necessary to define the value of parameter \code{p}. The value of parameter \code{p} sets which "p-norm" will be used. For instance, if \code{p} is set to 1, the "1-norm" (or Manhattan distance) is used, and if \code{p} is set to 2, the "2-norm" (or Euclidean distance) is applied.
+    For more details regarding the distance functions implemented in UBL package please see the package vignettes.
+    }
+    \item{ENN algorithm:}{The ENN algorithm uses a cleaning method to perform under-sampling. For each example with class label in Cl the k nearest neighbors are computed using a selected distance metric. The example is removed from the data set if it is misclassified by at least half of it's k nearest neighbors. Usually this algorithm uses k=3.
+}
+}
 }
 \value{
   The function returns a list containing a data frame with

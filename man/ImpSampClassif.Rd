@@ -20,7 +20,7 @@ ImpSampClassif(form, dat, C.perc = "balance")
   }
   \item{C.perc}{
       A list containing the percentage(s) of random under- or 
-        over-sampling to apply to each class. Alternatively it may be "balance" (the default) or "extreme",
+        over-sampling to apply to each class. The over-sampling percentage is a number above 1 while the under-sampling percentage should be a number below 1. If the number 1 is provided for a given class then that class remains unchanged. Alternatively it may be "balance" (the default) or "extreme",
         cases where the sampling percentages are automatically estimated. 
   }
 }

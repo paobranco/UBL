@@ -32,10 +32,10 @@ RandOverRegress(form, dat, rel = "auto", thr.rel = 0.5,
   }
   \item{C.perc}{
       A list containing the over-sampling percentage/s to apply to all/each
-        "class" (bump) obtained with the relevance threshold. Replicas of the examples 
-        are added randomly in each "class". Moreover, different percentages may 
-        be provided for each "class". Alternatively, it may be "balance" or "extreme",
-        cases where the over-sampling percentages are automatically estimated.
+        "class" (bump) obtained with the relevance threshold. Replicas of the examples are are randomly added in each "class".
+        If only one percentage is provided this value is reused in all the "classes" that have values above the relevance threshold. A different percentage can be provided to each "class". In this case, the percentages should be provided in ascending order of target variable value. The over-sampling percentage(s), should be numbers above 1, meaning that the important cases (cases above the threshold) are over-sampled by the corresponding percentage. If the number 1 is provided then those examples are not changed. 
+        Alternatively, \code{C.perc} parameter may be set to "balance" or "extreme",
+        cases where the over-sampling percentages are automatically estimated to either balance or invert the frequencies of the examples in the "classes" (bumps).        
   }
   \item{repl}{
   A boolean value controlling the possibility of having repetition of examples when choosing the examples to repeat in the over-sampled data set. 
