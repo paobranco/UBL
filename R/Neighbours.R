@@ -3,10 +3,10 @@
 # P. Branco, April 2015
 # ---------------------------------------------------
 
-neighbours <- function(tgt, data, dist, p=2, k)
+neighbours <- function(tgt, dat, dist, p=2, k)
 #  INPUTS:
 #   tgt is the column where the target variable is
-#   data is the original data set
+#   dat is the original data set
 #   dist is the distance measure to be used
 #   p is a parameter used when a p-norm is computed
 #   k is the number of neighbours to consider
@@ -49,20 +49,20 @@ neighbours <- function(tgt, data, dist, p=2, k)
             stop("Distance measure not available!"))
    
     
-  if (class(data[,tgt]) == "numeric" & p <= -4) stop("distance measure selected only available for classification tasks")
+  if (class(dat[,tgt]) == "numeric" & p <= -4) stop("distance measure selected only available for classification tasks")
 
 nomatr <- c() 
-  for (col in seq.int(dim(data)[2])) {
-    if (class(data[,col]) %in% c('factor','character')) {
+  for (col in seq.int(dim(dat)[2])) {
+    if (class(dat[,col]) %in% c('factor','character')) {
       nomatr <- c(nomatr, col)
     }
   }
   
   nomatr <- setdiff(nomatr, tgt)
-  numatr <- setdiff(seq.int(dim(data)[2]), c(nomatr,tgt))
+  numatr <- setdiff(seq.int(dim(dat)[2]), c(nomatr,tgt))
   
-  nomData <- t(sapply(subset(data, select = nomatr), as.integer))
-  numData <- t(subset(data, select = numatr))
+  nomData <- t(sapply(subset(dat, select = nomatr), as.integer))
+  numData <- t(subset(dat, select = numatr))
   
   # check if the measure can be applied to the data set features
   
@@ -73,7 +73,7 @@ nomatr <- c()
     stop("Can not compute ", dist ," distance with nominal attributes!")
   }
 
-  tgtData <- data[, tgt]
+  tgtData <- dat[, tgt]
   n <- length(tgtData)
   res <- matrix(0.0, nrow = k, ncol = n)
   if (class(tgtData) != "numeric") {tgtData <- as.integer(tgtData)}

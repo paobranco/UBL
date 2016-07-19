@@ -35,6 +35,8 @@ export(
 #	phi.setup,
 #	phi.extremes,
 #	phi.range,
-	phi
+	phi,
+	## neighbours function
+	neighbours
 )
        
