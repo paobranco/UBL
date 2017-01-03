@@ -7,7 +7,16 @@ useDynLib(UBL)
 
 import(methods)
 importFrom("grDevices", "boxplot.stats")
-importFrom("stats", "rnorm", "runif", "sd")
+importFrom("stats", "rnorm", "runif", "sd", "approxfun", "density", "isoreg", "loess",
+           "loess.control", "predict")
+importFrom("graphics", "contour", "image", "points")
+importFrom("MBA", "mba.points", "mba.surf")
+importFrom("randomForest", "randomForest")
+importFrom("automap", "autoKrige")
+importFrom("sp", "coordinates<-", "SpatialPoints")
+importFrom("gstat", "idw")
+
+
 ## ------------------------------------------------------------------------------------------------
 
 ## Functions
@@ -36,6 +45,17 @@ export(
 #	phi.extremes,
 #	phi.range,
 	phi,
+#	tPhi,
+#	BL,
+#	UtilTRPhiBL,
+	##surface interpolation methods
+	UtilInterpol,
+	## utility-based evaluation metrics for classification and regression
+	EvalClassifMetrics,
+	EvalRegressMetrics,
+	## utility-based optimal predictions
+	UtilOptimClassif,
+	UtilOptimRegress,
 	## neighbours function
 	neighbours
 )

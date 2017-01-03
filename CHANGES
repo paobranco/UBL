@@ -1,3 +1,9 @@
+VERSION 0.0.6 (2017-01-03)
+	- added method for interpolating utility/benefit/cost surfaces
+	- added utility-based metrics for classification and regression tasks (utility, cost and benefit)
+	- added a function for utility-based learning for classification (from Elkan 2001)
+	- added a function for utility-based learning for regression 
+
 VERSION 0.0.5 (2016-07-13)
 	- added two synthetic data sets, for classification and regression
 	- correction of bugs
