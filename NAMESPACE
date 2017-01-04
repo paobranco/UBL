@@ -23,6 +23,7 @@ importFrom("gstat", "idw")
 
 export(
 	##classification pre-processing methods
+	AdasynClassif,
 	CNNClassif,
 	ENNClassif,
 	GaussNoiseClassif,

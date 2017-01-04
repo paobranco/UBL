@@ -173,7 +173,7 @@ Smote.exsClassif <- function(dat, tgt, N, k, dist, p)
   # dat   are the rare cases (the minority class cases)
   # tgt    is the name of the target variable
   # N      is the percentage of over-sampling to carry out;
-  # k      is the number of nearest neighors to use for the generation
+  # k      is the number of nearest neighbors to use for the generation
   # dist   is the distance function to use for the neighbors computation
   # p      is an integer used when a "p-norm" distance is selected
   # OUTPUTS:
