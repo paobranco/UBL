@@ -79,7 +79,7 @@ utility, benefit or cost surface evaluated on the true value y and predictied va
   using the surface provided.
 }
 \references{
-Rau, M.M., Seitz, S., Brimioulle, F., Frank, E., Friedrich, O., Gruen, D. and Hoyle, B., 2015. Accurate photometrics redshift probability density estimation-method comparison and application. Monthly Notices of the Royal Astronomical Society, 452(4), pp.3710-3725.
+Rau, M.M., Seitz, S., Brimioulle, F., Frank, E., Friedrich, O., Gruen, D. and Hoyle, B., 2015. Accurate photometric redshift probability density estimation-method comparison and application. Monthly Notices of the Royal Astronomical Society, 452(4), pp.3710-3725.
 
 Elkan, C., 2001, August. The foundations of cost-sensitive learning. In International joint conference on artificial intelligence (Vol. 17, No. 1, pp. 973-978). LAWRENCE ERLBAUM ASSOCIATES LTD.
 }
