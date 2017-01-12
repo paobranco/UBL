@@ -101,6 +101,7 @@ UtilOptimClassif <- function(form, train, test, mtr, type = "util",
   
   if(is.numeric(train$tgt)) stop("This function only deals with classification tasks.",
                                  call. = FALSE)
+  
   if (is.null(predictor)) { # no separate prediction phase
     preds <- do.call(eval(parse(text = learner)),
                      c(list(form, train), learner.pars)) 

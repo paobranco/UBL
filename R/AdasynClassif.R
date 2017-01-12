@@ -7,7 +7,7 @@
 # dat <- iris[-c(45:75), c(1, 2, 5)]
 # # checking the class distribution of this artificial data set
 # table(dat$Species)
-# newdata <- AdasynClassif(Species~., dat, beta=0.1)
+# newdata <- AdasynClassif(Species~., dat, beta=0.8)
 # table(newdata$Species)
 # beta <- list("setosa"=1, "versicolor"=0.5)
 # newdata <- AdasynClassif(Species~., dat, baseClass="virginica", beta=beta)
@@ -46,7 +46,7 @@ AdasynClassif <- function(form, dat, baseClass=NULL,
   li <- class.freq(dat, tgt)
   
   if(is.null(baseClass)){
-      baseClass <- li[[1]][which.max(li[[2]])]
+      baseClass <- as.character(li[[1]][which.max(li[[2]])])
   }
   LbaseClass <- li[[2]][which(li[[1]] == baseClass)]
   
