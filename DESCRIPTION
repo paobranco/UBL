@@ -5,7 +5,7 @@ Description: Provides a set of functions that can be used to obtain better predi
 Version: 0.0.6
 Depends: R(>= 3.0), methods, grDevices, graphics, stats, MBA, gstat, automap, sp, randomForest
 Suggests: MASS, rpart, testthat, DMwR, ggplot2, e1071
-Date: 2017-01-03
+Date: 2017-07-13
 Authors@R: c(person("Paula", "Branco", email = "paobranco@gmail.com", role = c("aut", "cre")), person("Rita", "Ribeiro", email = "rpribeiro@dcc.fc.up.pt", role = c("aut", "ctb")), person("Luis", "Torgo", email = "ltorgo@dcc.fc.up.pt", role = c("aut", "ctb")))
 URL: https://github.com/paobranco/UBL
 BugReports: https://github.com/paobranco/UBL/issues

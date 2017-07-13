@@ -67,15 +67,17 @@ UtilOptimRegress <- function(form, train, test,
   #                 has the y value, the second column the \hat{y} value and the
   #                 third column has the corresponding utility value. The domain
   #                 boundaries of (y, \hat{y}) must be provided.
-  #   minds         the lower bound of the target variable considered for interpolation
-  #   maxds         the upper bound of the target variable considered for interpolation
-  #   eps           a value for the precision considered during the interpolation. 
+  #   minds         the lower bound of the target variable considered
+  #   maxds         the upper bound of the target variable considered
+  #   eps           a value for the precision considered during the pdf. 
   #
   #   output:
   #   the predictions for the test data optimized using the surface provided
   
   type <- match.arg(type, c("utility", "cost", "benefit"))
   strat <- match.arg(strat, c("interpol", "automatic")) # only interpol implemented for now
+  if (strat != "interpol") stop("UBL::Only interpolation is available for now as strat parameter",
+                                call. = FALSE)
   tgt <- which(names(train) == as.character(form[[2]]))
   
   if (is.null(minds)){
@@ -94,10 +96,17 @@ UtilOptimRegress <- function(form, train, test,
            No further arguments are necessary.", call. = FALSE)
     }
     method <- match.arg(strat.parms[[1]], c("bilinear", "splines", "idw", "krige"))
+    # UtilRes is a lxl matrix with the true utility values on the rows and the
+    # predictions on the columns, i.e., resUtil[a,b] provides the utility of
+    # predicting b for a true value a.
     UtilRes <- UtilInterpol(NULL, NULL, type, control.parms, 
                           minds, maxds, m.pts, 
                           method = method, visual = FALSE, eps = eps,
                           full.output = TRUE)
+  } else if(strat == "auto"){
+    # baseseq <- seq(minds-0.01, maxds+0.01, by=eps)
+    # if(baseseq[length(baseseq)]!=maxds) baseseq <- c(baseseq, maxds)
+    
   }
 
   resPDF <- getPDFinRange(y.true, test, train, form)
@@ -117,7 +126,7 @@ UtilOptimRegress <- function(form, train, test,
     } else {
       optim[ex] <- y.true[which.min(areas)]
     }
-    print(ex)
+#    print(ex)
   }
  
   #obtain the utility values for the points (test, optim) determined 

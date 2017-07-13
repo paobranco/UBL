@@ -99,16 +99,37 @@ SmoteClassif <- function(form, dat, C.perc = "balance",
     }
     if (length(names.ove)) { # perform over-sampling
       for (i in 1:length(names.ove)) {
-        newExs <- Smote.exsClassif(dat[which(dat[, ncol(dat)] == names.ove[i]), ],
-                                   ncol(dat),
-                                   C.perc[[names.ove[i]]],
-                                   k,
-                                   dist,
-                                   p)
-        # add original rare examples and synthetic generated examples
-        newdata <- rbind(newdata,
-                         newExs,
-                         dat[which(dat[, ncol(dat)] == names.ove[i]), ])
+        if(length(which(dat[, ncol(dat)] == names.ove[i])) == 1){
+          warning(paste("SmoteClassif :: Unable to use SmoteClassif in a bump with 1 example.
+                        Introducing replicas of the example."), call.=FALSE)
+          newdata <- rbind(newdata, dat[rep(which(dat[, ncol(dat)] == names.ove[i]),C.perc[names.ove[i]]),])
+        } else if (length(which(dat[, ncol(dat)] == names.ove[i])) <= k){
+          warning(paste("SmoteClassif :: Nr of examples is less or equal to k.\n Using k =",
+                        length(which(dat[, ncol(dat)] == names.ove[i]))-1, 
+                        "in the nearest neighbours computation in this bump."), call.=FALSE)
+          Origk <- k
+          k <- length(which(dat[, ncol(dat)] == names.ove[i]))-1
+          newExs <- Smote.exsClassif(dat[which(dat[, ncol(dat)] == names.ove[i]), ],
+                                     ncol(dat),
+                                     li[[3]][ove[i]]/li[[2]][ove[i]] + 1,
+                                     k,
+                                     dist,
+                                     p)
+          # add original rare examples and synthetic generated examples
+          newdata <- rbind(newdata, newExs, 
+                           dat[which(dat[,ncol(dat)] == names.ove[i]),])
+          k <- Origk
+        } else {
+          newExs <- Smote.exsClassif(dat[which(dat[, ncol(dat)] == names.ove[i]), ],
+                                     ncol(dat),
+                                     C.perc[[names.ove[i]]],
+                                     k,
+                                     dist,
+                                     p)
+          # add original rare examples and synthetic generated examples
+          newdata <- rbind(newdata, newExs,
+                           dat[which(dat[, ncol(dat)] == names.ove[i]), ])
+        }
       }
     }
   } else {
@@ -140,15 +161,37 @@ SmoteClassif <- function(form, dat, C.perc = "balance",
     
     if (length(ove)) { #perform over-sampling
       for (i in 1:length(ove)) {
-        newExs <- Smote.exsClassif(dat[which(dat[, ncol(dat)] == li[[1]][ove[i]]), ],
-                                   ncol(dat),
-                                   li[[3]][ove[i]]/li[[2]][ove[i]] + 1,
-                                   k,
-                                   dist,
-                                   p)
-        # add original rare examples and synthetic generated examples
-        dc <- ncol(dat)
-        newdata <- rbind(newdata, newExs, dat[which(dat[,dc] == li[[1]][ove[i]]),])
+        if(length(which(dat[, ncol(dat)] == li[[1]][ove[i]])) == 1){
+          warning(paste("SmoteClassif :: Unable to use SmoteClassif in a bump with 1 example.
+                        Introducing replicas of the example."), call.=FALSE)
+          newdata <- rbind(newdata, dat[rep(which(dat[, ncol(dat)] == li[[1]][ove[i]]), li[[3]][ove[i]]),])
+        } else if(length(which(dat[, ncol(dat)] == li[[1]][ove[i]]))<= k){
+          warning(paste("SmoteClassif :: Nr of examples is less or equal to k.\n Using k =",
+                        length(which(dat[, ncol(dat)] == li[[1]][ove[i]]))-1, 
+                        "in the nearest neighbours computation in this bump."), call.=FALSE)
+          Origk <- k
+          k <- length(which(dat[, ncol(dat)] == li[[1]][ove[i]]))-1
+          newExs <- Smote.exsClassif(dat[which(dat[, ncol(dat)] == li[[1]][ove[i]]), ],
+                                     ncol(dat),
+                                     li[[3]][ove[i]]/li[[2]][ove[i]] + 1,
+                                     k,
+                                     dist,
+                                     p)
+          # add original rare examples and synthetic generated examples
+          newdata <- rbind(newdata, newExs, 
+                           dat[which(dat[,ncol(dat)] == li[[1]][ove[i]]),])
+          k <- Origk
+        } else {
+          newExs <- Smote.exsClassif(dat[which(dat[, ncol(dat)] == li[[1]][ove[i]]), ],
+                                     ncol(dat),
+                                     li[[3]][ove[i]]/li[[2]][ove[i]] + 1,
+                                     k,
+                                     dist,
+                                     p)
+          # add original rare examples and synthetic generated examples
+          newdata <- rbind(newdata, newExs, 
+                           dat[which(dat[,ncol(dat)] == li[[1]][ove[i]]),])
+        }
       } 
     }
 

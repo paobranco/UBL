@@ -143,12 +143,26 @@ SmoteRegress <- function(form, dat, rel = "auto", thr.rel = 0.5,
     if (C.perc[[i]] == 1) {
       newdata <- rbind(newdata, dat[names(obs.ind[[i]]), ])
     } else if (C.perc[[i]] > 1) {
-      newExs <- Smote.exsRegress(dat[names(obs.ind[[i]]), ],
-                                 ncol(dat),
-                                 C.perc[[i]],
-                                 k,
-                                 dist,
-                                 p)
+      if (length(obs.ind[[i]])<=k && length(obs.ind[[i]])>1) {
+        warning("Unable to use the number of neighbors specified
+                because the bump has fewer examples. Using ", 
+                length(obs.ind[[i]])-1, " as the value of k.",
+                call.=FALSE)
+        newExs <- Smote.exsRegress(dat[names(obs.ind[[i]]), ],
+                                   ncol(dat), C.perc[[i]],
+                                   length(obs.ind[[i]])-1, dist, p)
+        
+      } else if (length(obs.ind[[i]]) == 1) {
+        warning("Unable to use the number of neighbors specified
+                because the bump has only one example. Introducing
+                replicas in this bump!",
+                call.=FALSE)
+        newExs <- dat[rep(names(obs.ind[[i]]), C.perc[[i]]*nrow(dat)),]
+      } else {
+        newExs <- Smote.exsRegress(dat[names(obs.ind[[i]]), ],
+                                   ncol(dat), C.perc[[i]],
+                                   k, dist, p)
+      }
       # add original rare examples and synthetic generated examples
       newdata <- rbind(newdata, newExs, dat[names(obs.ind[[i]]), ])
     } else if (C.perc[[i]] < 1) {
@@ -187,6 +201,17 @@ Smote.exsRegress <- function(dat, tgt, N, k, dist, p)
   # The result of the function is a (N-1)*nrow(dat) set of generate
   # examples with rare values on the target
 {
+  # check for constant features and remove them, if any
+  # add the constant value of those features in the returned synthetic examples
+  
+  ConstFeat <- which(apply(dat, 2, function(col){length(unique(col)) == 1}))
+  
+  if(length(ConstFeat)){
+    badds <- dat
+    ConstRes <- dat[1,ConstFeat]
+    dat <- dat[,apply(dat, 2, function(col) { length(unique(col)) > 1 })]
+    tgt <- ncol(dat)
+  }
   
   nomatr <- c()
   T <- matrix(nrow = dim(dat)[1], ncol = dim(dat)[2])
@@ -277,9 +302,9 @@ Smote.exsRegress <- function(dat, tgt, N, k, dist, p)
         d2 <- abs(T[kNNs[i, neig], x] - newM[nexs * nT + count, x])/ranges[x]
       }
       if (length(nomatr)) {
-        d1 <- d1 + sum(T[i,nomatr] != newM[(i - 1) * nexs + n, nomatr])
+        d1 <- d1 + sum(T[i,nomatr] != newM[nexs *nT + count, nomatr])
         d2 <- d2 + 
-              sum(T[kNNs[i, neig], nomatr] != newM[(i - 1) * nexs + n, nomatr])
+              sum(T[kNNs[i, neig], nomatr] != newM[nexs * nT + count, nomatr])
       }
       # (d2+d1-d1 = d2 and d2+d1-d2 = d1) the more distant the less weight
       if (d1 == d2) {
@@ -294,14 +319,24 @@ Smote.exsRegress <- function(dat, tgt, N, k, dist, p)
   }
 
   newCases <- data.frame(newM)
-
   for (a in nomatr) {
     newCases[, a] <- factor(newCases[, a],
                             levels = 1:nlevels(dat[, a]),
                             labels = levels(dat[, a]))
   }
   
-  colnames(newCases) <- colnames(dat)
+  if(length(ConstFeat)){ # add constant features that were removed in the beginning
+    
+    newCases <- cbind(newCases, 
+                      as.data.frame(lapply(ConstRes,
+                                           function(x){rep(x, nrow(newCases))})))
+    colnames(newCases) <- c(colnames(dat), names(ConstFeat))
+    newCases <- newCases[colnames(badds)]
+    
+  } else {
+    colnames(newCases) <- colnames(dat)
+  }
+  
   newCases
   
 }

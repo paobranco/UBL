@@ -1,12 +1,14 @@
-\name{neighbours}
-\alias{neighbours}
+\name{distances}
+\alias{distances}
 
-\title{Computation of nearest neighbours using a selected distance function. 
+\title{
+Distance matrix between all data set examples according to a selected distance metric. 
 }
-\description{This function allows to obtain the nearest neighbours of each example in a data set using a distance function selected by the user.
+\description{
+This function computes the distances between all examples in a data set using a selected distance metric. The metrics available are suitable for data sets with numeric and/or nominal features and include, among others: Euclidean, Manhattan, HEOM and HVDM.
 }
 \usage{
-neighbours(tgt, dat, dist, p=2, k)
+distances(tgt, dat, dist, p=2)
 }
 
 \arguments{
@@ -19,13 +21,12 @@ neighbours(tgt, dat, dist, p=2, k)
   }
   \item{p}{An optional parameter that is only required if the distance function selected in parameter \code{dist} is "p-norm".
   }
-  \item{k}{The number of nearest neighbours to return for each example.  
-  }
-  }
-  
-\value{
-The function returns a matrix with the indexes of the k nearest neighbours for each example in the data set. 
 }
+
+\value{
+The function returns a matrix with the distances computed between each pair of examples in the data set. 
+}
+
 
 \details{Several distance function are implemented in UBL package. The goal of having such a diversity of distance functions is to provide the users more flexibility regarding the distance used and also to provide distance fucntions that are able to deal with nominal and numeric features. The options available for the distance functions are as follows: 
   \describe{
@@ -36,14 +37,12 @@ The function returns a matrix with the indexes of the k nearest neighbours for e
     
     When the "p-norm" is selected for the \code{dist} parameter, it is also necessary to define the value of parameter \code{p}. The value of parameter \code{p} sets which "p-norm" will be used. For instance, if \code{p} is set to 1, the "1-norm" (or Manhattan distance) is used, and if \code{p} is set to 2, the "2-norm" (or Euclidean distance) is applied.
     For more details regarding the distance functions implemented in UBL package please see the package vignettes.
-    }
+}
     
 \references{Wilson, D.R. and Martinez, T.R. (1997). \emph{Improved heterogeneous distance functions.} Journal of artificial intelligence research, pp.1-34.
-
 }
-
 \seealso{
-\code{\link{distances}}
+\code{\link{neighbours}}
 }
 
 \author{ Paula Branco \email{paobranco@gmail.com}, Rita Ribeiro
@@ -53,17 +52,18 @@ The function returns a matrix with the indexes of the k nearest neighbours for e
 \examples{
 \dontrun{
 data(ImbC)
-# determine the 2 nearest neighbours of each example in ImbC data set
+# determine the distances between each example in ImbC data set
 # using the "HVDM" distance function.
-neig1 <- neighbours(3, ImbC, "HVDM", k=2)
+dist1 <- distances(3, ImbC, "HVDM")
 
 # now using the "HEOM" distance function
-neig2 <- neighbours(3, ImbC, "HEOM", k=2)
+dist2 <- distances(3, ImbC, "HEOM")
 
 # check the differences
-head(neig1)
-head(neig2)
+head(dist1)
+head(dist2)
 }
 }
 
-\keyword{neighbours evaluation}
+\keyword{distances evaluation}
+

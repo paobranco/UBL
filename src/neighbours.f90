@@ -4,7 +4,7 @@
 !                                                            
 !============================================================
 
-subroutine neighbours(tgtData, numData, nomData, p, k, n, nnum,&
+subroutine F_neighbours(tgtData, numData, nomData, p, k, n, nnum,&
 					nnom, Cl, distm, numD, res)
 !----------------------------------------------------------------
 ! Subroutine neighbours is used for obtaining the nearest 
@@ -271,9 +271,17 @@ double precision function HEOMnum(a,b,d,ranges)
 	implicit none
 	integer(kind=4), intent(in) :: d
 	real   (kind=8), intent(in) :: a(d), b(d), ranges(d)
-
-
-	HEOMnum = sum((abs(a-b)/ranges)**2)
+	integer(kind=4) :: i
+	! Epsilon value
+	real    (kind=8), PARAMETER :: eps = 1d-30
+	
+	HEOMnum =0.0d0
+	do i=1, d
+	!		HEOMnum = sum((abs(a-b)/ranges)**2)
+		if (ranges(i) > eps) then
+			HEOMnum = HEOMnum +(abs(a(i)-b(i))/ranges(i))**2
+		end if
+	end do
 
 end function HEOMnum
 
@@ -347,8 +355,15 @@ double precision function HVDMnum(numa, numb, dimnum, sd)
 
 
 	integer            (kind=4) :: i
-
-	HVDMnum = sum((abs(numa-numb)/(4*sd))**2)
+	! Epsilon value
+	real    (kind=8), PARAMETER :: eps = 1d-30
+	
+	HVDMnum = 0.0d0
+	do i=1, dimnum
+		if (sd(i) > eps) then
+			HVDMnum = HVDMnum + ((abs(numa(i)-numb(i))/(4*sd(i)))**2)
+		end if
+	end do
 
 end function HVDMnum
 
@@ -396,4 +411,4 @@ double precision function HVDMnom(nomdata, dimnom, tgtData, n, i, j, Cl)
 
 end function HVDMnom
 
-end subroutine neighbours
+end subroutine F_neighbours

@@ -124,7 +124,7 @@ class.freq <- function(dat, tgt){
   names <- sort(unique(dat[, tgt]))
   li <- list(names, 
              sapply(names, 
-                    function(x) length(which(dat[, tgt] == names[x]))))
+                    function(x) length(which(dat[, tgt] == x))))
   li
 }
 

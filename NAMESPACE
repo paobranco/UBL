@@ -1,7 +1,7 @@
 
 ## ------------------------------------------------------------------------------------------------
 
-useDynLib(UBL)
+useDynLib(UBL, .registration=TRUE)
 
 ## ------------------------------------------------------------------------------------------------
 
@@ -46,9 +46,9 @@ export(
 #	phi.extremes,
 #	phi.range,
 	phi,
-#	tPhi,
-#	BL,
-#	UtilTRPhiBL,
+	#tPhi,
+	#BL,
+	#UtilNewRegress,
 	##surface interpolation methods
 	UtilInterpol,
 	## utility-based evaluation metrics for classification and regression
@@ -57,7 +57,11 @@ export(
 	## utility-based optimal predictions
 	UtilOptimClassif,
 	UtilOptimRegress,
+	## utility-based learning
+	#MetacostClassif,
+	#MetacostRegress,
 	## neighbours function
-	neighbours
+	neighbours,
+	distances
 )
        

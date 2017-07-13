@@ -1,8 +1,15 @@
-VERSION 0.0.6 (2017-01-03)
+VERSION 0.0.6 (2017-06-20)
+	- added adasyn algorithm for classification
 	- added method for interpolating utility/benefit/cost surfaces
 	- added utility-based metrics for classification and regression tasks (utility, cost and benefit)
-	- added a function for utility-based learning for classification (from Elkan 2001)
-	- added a function for utility-based learning for regression 
+	- added a function for utility-based learning optimization for classification (from Elkan 2001)
+	- added a function for utility-based learning optimization for regression
+	- added a function that returns the distances between all pairs of 
+          example computed according to a selected distance metric
+	- bugs correction in SmoteRegress function (caused by constant features)
+	- bugs correction on RandOverClassif (caused by classes with only one example)
+	- bugs correction on neighbours function (Fortran code)
+	- routines registration added
 
 VERSION 0.0.5 (2016-07-13)
 	- added two synthetic data sets, for classification and regression

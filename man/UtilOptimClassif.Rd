@@ -120,5 +120,5 @@ table(test$Class,resUtil)
 
 
 }
-\keyword{utility optimization}
+\keyword{utility optimization, utility-based classification}
 

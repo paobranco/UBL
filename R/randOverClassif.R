@@ -56,9 +56,13 @@ RandOverClassif <- function(form, dat, C.perc = "balance", repl = TRUE)
     
     for (i in 1:length(names.ove)) { # over-sampling each class provided
       Exs <- which(dat[, tgt] == names.ove[i])
+      if(length(Exs)==1){
+        sel <- rep(Exs, as.integer((C.perc[[names.ove[i]]] - 1) * length(Exs)))
+      } else {
       sel <- sample(Exs,
                     as.integer((C.perc[[names.ove[i]]] - 1) * length(Exs)),
                     replace = repl)
+      }
       newdata <- rbind(newdata, dat[sel, ])
     }
   } else if (C.perc == "balance") { # over-sampling percent. will be calculated
@@ -75,9 +79,13 @@ RandOverClassif <- function(form, dat, C.perc = "balance", repl = TRUE)
       Exs <- which(dat[, tgt] == names.ove[i])
       num1 <- li[[2]][as.numeric(match(majCl, names))[1]]
       num2<-  li[[2]][as.numeric(names.ove[i])]
-      sel <- sample(Exs,
-                    as.integer(num1 - num2),
-                    replace = repl)
+      if(length(Exs) == 1){
+        sel <- rep(Exs, as.integer(num1 - num2))
+      } else {
+        sel <- sample(Exs,
+                      as.integer(num1 - num2),
+                      replace = repl)
+      }
       newdata <- rbind(newdata, dat[sel, ])
     }
   } else if (C.perc == "extreme") { 
@@ -97,9 +105,13 @@ RandOverClassif <- function(form, dat, C.perc = "balance", repl = TRUE)
       mmcl <- as.numeric(match(majCl, names))[1]
       n1 <- (li[[2]][mmcl])^2/li[[2]][as.numeric(match(names.ove[i], names))]
       n2 <- li[[2]][as.numeric(match(names.ove[i], names))]
-      sel <- sample(Exs,
-                    round(n1 - n2, 0),
-                    replace = repl)
+      if(length(Exs) == 1){
+        sel <- rep(Exs, round(n1 - n2, 0))
+      } else {
+        sel <- sample(Exs,
+                      round(n1 - n2, 0),
+                      replace = repl)
+      }
       newdata <- rbind(newdata, dat[sel, ])
     }
   } else {
