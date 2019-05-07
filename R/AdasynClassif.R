@@ -22,7 +22,7 @@ AdasynClassif <- function(form, dat, baseClass=NULL,
   # baseClass Character specifying the reference class, i.e., the class from 
   #           which all other will be compared to. This is selected by the user,
   #           or estimated from the classes distribution in dat. If not defined,
-  #           the default, tthe majority class is selected.
+  #           the default, the majority class is selected.
   # beta      a single numeric or a vector of numerics for defining the desired 
   #           balance level after synthetic examples generation. beta is in [0,1], 
   #           where 1 correspondes to fully balanced classes. If only one beta 
@@ -111,11 +111,14 @@ AdasynClassif <- function(form, dat, baseClass=NULL,
     # determine nr of baseClass examples in the KNN
     r <- c()
     for(ex in which(dat[, tgt] == li[[1]][dTgt[i]])){
-      r <- c(r, length(which(dat[kNNs[ex,],tgt] == baseClass))/5)
+      r <- c(r, length(which(dat[kNNs[ex,],tgt] == baseClass))/k)
     }
     # normalize
-    new.r <- r/sum(r)
-    
+    if(sum(r) == 0){
+      new.r <- rep(1/length(r), length(r))
+    } else {
+      new.r <- r/sum(r)
+    }
     # for each ex generate g_i new examples
     g[[i]] <- round(new.r*G[i],0)
   

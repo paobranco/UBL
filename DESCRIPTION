@@ -2,10 +2,10 @@ Package: UBL
 Type: Package
 Title: An Implementation of Re-Sampling Approaches to Utility-Based Learning for Both Classification and Regression Tasks
 Description: Provides a set of functions that can be used to obtain better predictive performance on cost-sensitive and cost/benefits tasks (for both regression and classification). This includes re-sampling approaches that modify the original data set biasing it towards the user preferences.
-Version: 0.0.6
+Version: 0.1.0
 Depends: R(>= 3.0), methods, grDevices, graphics, stats, MBA, gstat, automap, sp, randomForest
 Suggests: MASS, rpart, testthat, DMwR, ggplot2, e1071
-Date: 2017-07-13
+Date: 2019-05-07
 Authors@R: c(person("Paula", "Branco", email = "paobranco@gmail.com", role = c("aut", "cre")), person("Rita", "Ribeiro", email = "rpribeiro@dcc.fc.up.pt", role = c("aut", "ctb")), person("Luis", "Torgo", email = "ltorgo@dcc.fc.up.pt", role = c("aut", "ctb")))
 URL: https://github.com/paobranco/UBL
 BugReports: https://github.com/paobranco/UBL/issues

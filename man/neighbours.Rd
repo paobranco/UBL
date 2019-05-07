@@ -11,7 +11,7 @@ neighbours(tgt, dat, dist, p=2, k)
 
 \arguments{
   \item{tgt}{
-  The column of the problem target variable.
+  The column number of the problem target variable.
   }
   \item{dat}{A data frame containing the problem data.
   }

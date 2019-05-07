@@ -374,15 +374,15 @@ double precision function HVDMnom(nomdata, dimnom, tgtData, n, i, j, Cl)
 	real   (kind=8), intent(in) :: tgtData(n)
 
 	real               (kind=8) :: res
-	integer            (kind=4) :: att, k, l, ci, cj, p, NCli, NClj
-	real               (kind=8) :: resAt, finalresAt
+	integer            (kind=4) :: att, k, l, p
+	real               (kind=8) :: ci, cj, NCli, NClj, resAt, finalresAt
 	
 	finalresAt = 0
 	
 	do att=1,dimnom
 		resAt = 0
-		ci = 0
-		cj = 0
+		ci = 0.0
+		cj = 0.0
 		do p=1,n 
 			if (nomdata(att,p)==nomdata(att,i)) then
 				ci = ci + 1
@@ -392,13 +392,13 @@ double precision function HVDMnom(nomdata, dimnom, tgtData, n, i, j, Cl)
 			end if
 		end do
 		do k=1,Cl
-			NCli = 0
-			NClj = 0
+			NCli = 0.0
+			NClj = 0.0
 			do l=1,n
-				if (nomdata(att,l)==nomdata(att,i) .and. tgtData(l)==tgtData(i)) then
+				if (nomdata(att,l)==nomdata(att,i) .and. tgtData(l)==k) then
 					NCli = NCli + 1
 				end if
-				if (nomdata(att,l)==nomdata(att,j) .and. tgtData(l)==tgtData(j)) then
+				if (nomdata(att,l)==nomdata(att,j) .and. tgtData(l)==k) then
 					NClj = NClj + 1
 				end if
 			end do

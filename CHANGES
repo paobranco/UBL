@@ -1,3 +1,13 @@
+VERSION 0.1.0 (2019-05-07)
+	- added MetaCost methods for classification and regression (based on MeatCost from Domingos, 1999)
+	- added methods for introducing a Neighbourhood Bias in smoteR and under-sampling for regression and classification
+	- added SMOGN algorithm for imbalanced regression
+	- added MetaUtilRegress algorithm
+	- added bagging method for dealing with imbalanced regression problems
+	- improvements of functions documentation 
+	- bugs correction in HVDM function (thanks to Miriam Santos and Arne Camps for noticing this)
+	- correction added in ADASYN function to solve examples generation when there are no nearest neighbours in the baseClass
+
 VERSION 0.0.6 (2017-06-20)
 	- added adasyn algorithm for classification
 	- added method for interpolating utility/benefit/cost surfaces

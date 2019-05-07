@@ -6,21 +6,21 @@
 #   library(DMwR)
 #   data(algae)
 #   clean.algae <- algae[complete.cases(algae), ]
-#   IS.ext <-ImpSampRegress(a7~., clean.algae, rel = "auto", thr.rel = 0.7,
+#   IS.ext <-WERCSRegress(a7~., clean.algae, rel = "auto", thr.rel = 0.7,
 #                           C.perc = "extreme")
-#   IS.bal <-ImpSampRegress(a7~., clean.algae, rel = "auto", thr.rel = 0.7,
+#   IS.bal <-WERCSRegress(a7~., clean.algae, rel = "auto", thr.rel = 0.7,
 #                           C.perc = "balance")
-#   myIS <-ImpSampRegress(a7~., clean.algae, rel = "auto", thr.rel = 0.7,
+#   myIS <-WERCSRegress(a7~., clean.algae, rel = "auto", thr.rel = 0.7,
 #                           C.perc = list(0.2, 6))
 ##  everything automatic
-#   IS.auto <- ImpSampRegress(a7~., clean.algae)
+#   IS.auto <- WERCSRegress(a7~., clean.algae)
 ##  select the importance given to phi (over-sampling) 
 ##  and to 1-phi (under-sampling)
-#   IS.auto2 <- ImpSampRegress(a7~., clean.algae, O = 0.8, U = 0.2)
+#   IS.auto2 <- WERCSRegress(a7~., clean.algae, O = 0.8, U = 0.2)
 # 
-# P. Branco, May 2015 Apr 2016
+# P. Branco, May 2015 Apr 2016 Nov 2018
 # ---------------------------------------------------
-ImpSampRegress <- function(form, dat, rel = "auto", thr.rel = NA, 
+WERCSRegress <- function(form, dat, rel = "auto", thr.rel = NA, 
                            C.perc = "balance", O = 0.5, U = 0.5)
   
   # Args:

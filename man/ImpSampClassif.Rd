@@ -1,14 +1,14 @@
-\name{ImpSampClassif}
-\alias{ImpSampClassif}
+\name{WERCSClassif}
+\alias{WERCSClassif}
 
 \title{
-Importance Sampling algorithm for imbalanced classification problems
+WEighted Relevance-based Combination Strategy (WERCS) algorithm for imbalanced classification problems
 }
 \description{
 This function handles imbalanced classification problems using the importance/relevance provided to re-sample the data set. The relevance is used to introduce replicas of the most important examples and to remove the least important examples. This function combines random over-sampling with random under-sampling which are applied in the problem classes according to the corresponding relevance.
 }
 \usage{
-ImpSampClassif(form, dat, C.perc = "balance")
+WERCSClassif(form, dat, C.perc = "balance")
 }
 
 \arguments{
@@ -40,9 +40,9 @@ ImpSampClassif(form, dat, C.perc = "balance")
   data(iris)
   # generating an artificially imbalanced data set
   ir <- iris[-c(51:70,111:150), ]
-  IS.ext <-ImpSampClassif(Species~., ir, C.perc = "extreme")
-  IS.bal <-ImpSampClassif(Species~., ir, C.perc = "balance")
-  myIS <-ImpSampClassif(Species~., ir, C.perc = list(setosa = 0.2,
+  IS.ext <-WERCSClassif(Species~., ir, C.perc = "extreme")
+  IS.bal <-WERCSClassif(Species~., ir, C.perc = "balance")
+  myIS <-WERCSClassif(Species~., ir, C.perc = list(setosa = 0.2,
                                                     versicolor = 2,
                                                     virginica = 6))
   # check the results

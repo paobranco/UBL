@@ -36,7 +36,9 @@ AdasynClassif(form, dat, baseClass = NULL, beta = 1, dth = 0.95,
     value. A beta value of 1 (the default) corresponds to full balancing the 
     classes. See examples. 
   }
-  \item{dth}{
+  \item{dth}{A threshold for the maximum tolerated degree of class imbalance ratio.
+  Defaults to 0.95, meaning that the strategy is applied if the 
+  imbalance ratio is more than 5\%. This means that the strategy is applied to a class A if, the ratio of this class frequency and the baseClass frequency is less than 95\% (|A|/|baseClass| < 0.95).
   }
   \item{k}{
     A number indicating the number of nearest neighbors that are used to
@@ -85,7 +87,7 @@ In 2008 IEEE International Joint Conference on Neural Networks
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
   
   \seealso{
-\code{\link{SmoteClassif}, \link{RandOverClassif}, \link{ImpSampClassif}}
+\code{\link{SmoteClassif}, \link{RandOverClassif}, \link{WERCSClassif}}
 }
 
 \examples{

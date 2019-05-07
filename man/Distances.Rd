@@ -13,7 +13,7 @@ distances(tgt, dat, dist, p=2)
 
 \arguments{
   \item{tgt}{
-  The column of the problem target variable.
+  The index of the column of the problem target variable.
   }
   \item{dat}{A data frame containing the problem data.
   }

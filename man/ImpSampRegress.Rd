@@ -1,14 +1,14 @@
-\name{ImpSampRegress}
-\alias{ImpSampRegress}
+\name{WERCSRegress}
+\alias{WERCSRegress}
 
 \title{
-Importance Sampling algorithm for imbalanced regression problems
+WEighted Relevance-based Combination Strategy (WERCS) algorithm for imbalanced regression problems
 }
 \description{
 This function handles imbalanced regression problems using the relevance function provided to re-sample the data set. The relevance function is used to introduce replicas of the most important examples and to remove the least important examples.
 }
 \usage{
-ImpSampRegress(form, dat, rel = "auto", thr.rel = NA, 
+WERCSRegress(form, dat, rel = "auto", thr.rel = NA, 
                C.perc = "balance", O = 0.5, U = 0.5)
 }
 
@@ -57,14 +57,14 @@ ImpSampRegress(form, dat, rel = "auto", thr.rel = NA,
   data(algae)
   clean.algae <- algae[complete.cases(algae), ]
   # defining a threshold on the relevance
-  IS.ext <-ImpSampRegress(a7~., clean.algae, rel = "auto", 
+  IS.ext <-WERCSRegress(a7~., clean.algae, rel = "auto", 
                           thr.rel = 0.7, C.perc = "extreme")
-  IS.bal <-ImpSampRegress(a7~., clean.algae, rel = "auto", thr.rel = 0.7,
+  IS.bal <-WERCSRegress(a7~., clean.algae, rel = "auto", thr.rel = 0.7,
                           C.perc = "balance")
-  myIS <-ImpSampRegress(a7~., clean.algae, rel = "auto", thr.rel = 0.7,
+  myIS <-WERCSRegress(a7~., clean.algae, rel = "auto", thr.rel = 0.7,
                         C.perc = list(0.2, 6))
   # neither threshold nor C.perc defined
-  IS.auto <- ImpSampRegress(a7~., clean.algae, rel = "auto")
+  IS.auto <- WERCSRegress(a7~., clean.algae, rel = "auto")
 
 }
 

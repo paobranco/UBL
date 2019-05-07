@@ -5,15 +5,16 @@
 # 
 # Examples:
 # ir <- iris[-c(51:70,111:150), ]
-# IS.ext <- ImpSampClassif(Species~., ir, C.perc = "extreme")
-# IS.bal <- ImpSampClassif(Species~., ir, C.perc = "balance")
-# myIS <- ImpSampClassif(Species~., ir, 
+# IS.ext <- WERCSClassif(Species~., ir, C.perc = "extreme")
+# IS.bal <- WERCSClassif(Species~., ir, C.perc = "balance")
+# myIS <- WERCSClassif(Species~., ir, 
 #                        C.perc = list(setosa = 0.2,
 #                                      versicolor = 2,
 #                                      virginica = 6))
 # P. Branco, July 2015 Apr 2016
+# P. Branco, Nov 2018
 # ---------------------------------------------------
-ImpSampClassif <- function(form, dat, C.perc = "balance")
+WERCSClassif <- function(form, dat, C.perc = "balance")
   
   # Args:
   # form   a model formula
