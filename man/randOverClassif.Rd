@@ -40,14 +40,15 @@ This function performs a random over-sampling strategy for dealing with imbalanc
 \code{\link{RandUnderClassif}}
 }
 \examples{
-  library(DMwR)
-  data(algae)
+  if (requireNamespace("DMwR2", quietly = TRUE)) {
+  data(algae, package ="DMwR2")
+  clean.algae <- data.frame(algae[complete.cases(algae), ])
   # classes spring and winter remain unchanged
   C.perc = list(autumn = 2, summer = 1.5, spring = 1) 
-  myover.algae <- RandOverClassif(season~., algae, C.perc)
-  oveBalan.algae <- RandOverClassif(season~., algae, "balance")
-  oveInvert.algae <- RandOverClassif(season~., algae, "extreme")
-  
+  myover.algae <- RandOverClassif(season~., clean.algae, C.perc)
+  oveBalan.algae <- RandOverClassif(season~., clean.algae, "balance")
+  oveInvert.algae <- RandOverClassif(season~., clean.algae, "extreme")
+  } else {
   library(MASS)
   data(cats)
   myover.cats <- RandOverClassif(Sex~., cats, list(M = 1.5))
@@ -67,6 +68,7 @@ This function performs a random over-sampling strategy for dealing with imbalanc
   preds1 <- predict(ct1, ts, type = "class")
   table(predsO, ts$Sex)   
   table(preds1, ts$Sex)
+  }
 }
 
 \keyword{pre-processing classification}

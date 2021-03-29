@@ -47,16 +47,16 @@ Sauchi Stephen Lee. (2000) \emph{Noisy replication in skewed binary classificati
 }
 
 \examples{
-library(DMwR)
-data(algae)
-clean.algae <- algae[complete.cases(algae), ]
+  if (requireNamespace("DMwR2", quietly = TRUE)) {
+data(algae, package ="DMwR2")
+clean.algae <- data.frame(algae[complete.cases(algae), ])
 # autumn and summer are the most important classes and winter
 # is the least important
 C.perc = list(autumn = 3, summer = 1.5, winter = 0.2)
 gn <- GaussNoiseClassif(season~., clean.algae, C.perc)
 table(algae$season)
 table(gn$season)
-
+} else {
 # another example
 data(iris)
 dat <- iris[, c(1, 2, 5)]
@@ -72,6 +72,7 @@ table(new.gn$Species)
       col = as.integer(dat[, 3]), main = "Original Data")
  plot(new.gn[, 1], new.gn[, 2], pch = as.integer(new.gn[, 3]),
       col = as.integer(new.gn[, 3]), main = "Data with Gaussian Noise")
+      }
 
 }
 

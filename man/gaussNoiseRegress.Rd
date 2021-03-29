@@ -53,9 +53,9 @@ Sauchi Stephen Lee. (2000) \emph{Noisy replication in skewed binary classificati
 }
 
 \examples{
-  library(DMwR)
-  data(algae)
-  clean.algae <- algae[complete.cases(algae), ]
+  if (requireNamespace("DMwR2", quietly = TRUE)) {
+  data(algae, package ="DMwR2")
+  clean.algae <- data.frame(algae[complete.cases(algae), ])
   C.perc = list(0.5, 3) 
   mygn.alg <- GaussNoiseRegress(a7~., clean.algae, C.perc = C.perc)
   gnB.alg <- GaussNoiseRegress(a7~., clean.algae, C.perc = "balance", 
@@ -68,7 +68,7 @@ Sauchi Stephen Lee. (2000) \emph{Noisy replication in skewed binary classificati
   lines(density(mygn.alg$a7), col = 4)
 
 
-
+} else {
   ir <- iris[-c(95:130), ]
   mygn1.iris <- GaussNoiseRegress(Sepal.Width~., ir, C.perc = list(0.5, 2.5))
   mygn2.iris <- GaussNoiseRegress(Sepal.Width~., ir, C.perc = list(0.2, 4),
@@ -89,6 +89,7 @@ Sauchi Stephen Lee. (2000) \emph{Noisy replication in skewed binary classificati
   lines(density(gnE.iris$Sepal.Width, bw = 0.3), col = 4)
   # check the impact of a different relevance threshold
   lines(density(gn.rel$Sepal.Width), col = 2)
+  }
 }
 
 \keyword{pre-processing regression}

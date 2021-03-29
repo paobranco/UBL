@@ -116,11 +116,11 @@ table(datBal$Species)
 datExt <- SmoteClassif(Species ~ ., dat, C.perc = "extreme")
 table(datExt$Species)
 
-
- library(DMwR)
- data(algae)
- clean.algae <- algae[complete.cases(algae),]
- C.perc = list(autumn = 2, summer = 1.5, winter = 0.9) 
+  if (requireNamespace("DMwR2", quietly = TRUE)) {
+  
+  data(algae, package ="DMwR2")
+  clean.algae <- data.frame(algae[complete.cases(algae), ])
+  C.perc = list(autumn = 2, summer = 1.5, winter = 0.9) 
  # class spring remains unchanged
  # In this case it is necessary to define a distance function that 
  # is able to deal with both nominal and numeric features 
@@ -130,13 +130,13 @@ table(datExt$Species)
                                   dist = "HVDM")
  smoteExtre.algae <- SmoteClassif(season~., clean.algae, "extreme",
                                   dist = "HVDM")
-
+} else {
   library(MASS)
   data(cats)
   mysmote.cats <- SmoteClassif(Sex~., cats, list(M = 0.8, F = 1.8))
   smoteBalan.cats <- SmoteClassif(Sex~., cats, "balance")
   smoteExtre.cats <- SmoteClassif(Sex~., cats, "extreme")
-
+}
 }
 
 \keyword{pre-processing classification}

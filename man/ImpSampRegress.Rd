@@ -53,9 +53,9 @@ WERCSRegress(form, dat, rel = "auto", thr.rel = NA,
 }
 
 \examples{
-  library(DMwR)
-  data(algae)
-  clean.algae <- algae[complete.cases(algae), ]
+  if (requireNamespace("DMwR2", quietly = TRUE)) {
+  data(algae, package ="DMwR2")
+  clean.algae <- data.frame(algae[complete.cases(algae), ])
   # defining a threshold on the relevance
   IS.ext <-WERCSRegress(a7~., clean.algae, rel = "auto", 
                           thr.rel = 0.7, C.perc = "extreme")
@@ -65,6 +65,7 @@ WERCSRegress(form, dat, rel = "auto", thr.rel = NA,
                         C.perc = list(0.2, 6))
   # neither threshold nor C.perc defined
   IS.auto <- WERCSRegress(a7~., clean.algae, rel = "auto")
+  }
 
 }
 

@@ -142,13 +142,15 @@ points(test$medv, normal.preds, col="green")
 points(test$medv, pred.res$optim, col="blue")
 
 # another example now using points interpolation with splines
-data(algae,package="DMwR")
-ds <- algae[complete.cases(algae[,1:12]),1:12]
+if (requireNamespace("DMwR2", quietly = TRUE)){
+
+data(algae, package ="DMwR2")
+ds <- data.frame(algae[complete.cases(algae[,1:12]), 1:12])
 tgt <- which(colnames(ds) == "a1")
 sp <- sample(1:nrow(ds), as.integer(0.7*nrow(ds)))
 train <- ds[sp,]
 test <- ds[-sp,]
-
+  
 control.parms <- phi.control(ds[,tgt], method="extremes", extr.type="both")
 
 # the boundaries of the domain considered
@@ -190,6 +192,7 @@ UtilInterpol(test$a1, normal.preds, type="util", control.parms = control.parms,
              minds, maxds, m.pts, method="splines", visual=TRUE) 
 # add the optim preds
 points(test$a1, pred.res$optim, col="green")
+}
 
 # Example using a cost surface:
 data(Boston, package = "MASS")

@@ -1,4 +1,4 @@
-VERSION 0.1.0 (2019-05-07)
+VERSION 0.0.7 (2021-03-29)
 	- added MetaCost methods for classification and regression (based on MeatCost from Domingos, 1999)
 	- added methods for introducing a Neighbourhood Bias in smoteR and under-sampling for regression and classification
 	- added SMOGN algorithm for imbalanced regression

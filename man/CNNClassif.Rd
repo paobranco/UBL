@@ -57,9 +57,10 @@ Hart, P. E. (1968). \emph{The condensed nearest neighbor rule} IEEE Transactions
 \code{\link{OSSClassif}, \link{TomekClassif}}
 }
 \examples{
-  library(DMwR)
-  data(algae)
-  clean.algae <- algae[complete.cases(algae), ]
+  if (requireNamespace("DMwR2", quietly = TRUE)) {
+  
+  data(algae, package ="DMwR2")
+  clean.algae <- data.frame(algae[complete.cases(algae), ])
   myCNN <- CNNClassif(season~., clean.algae, 
                       Cl = c("summer", "spring", "winter"),
                       dist = "HEOM")
@@ -74,6 +75,16 @@ Hart, P. E. (1968). \emph{The condensed nearest neighbor rule} IEEE Transactions
   data(cats)
   CNN.catsF <- CNNClassif(Sex~., cats, Cl = "F")
   CNN.cats <- CNNClassif(Sex~., cats, Cl = "smaller")
+  
+     } else {
+     
+  library(MASS)
+  data(cats)
+  CNN.catsF <- CNNClassif(Sex~., cats, Cl = "F")
+  CNN.cats <- CNNClassif(Sex~., cats, Cl = "smaller")
+
+   }
+
 }
 
 \keyword{pre-processing classification}

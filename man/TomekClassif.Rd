@@ -85,9 +85,10 @@ Tomek, I. (1976). \emph{Two modifications of CNN} IEEE Trans. Syst. Man Cybern.,
 \code{\link{OSSClassif}, \link{CNNClassif}}
 }
 \examples{
-  library(DMwR)
-  data(algae)
-  clean.algae <- algae[complete.cases(algae), ]
+  if (requireNamespace("DMwR2", quietly = TRUE)) {
+
+  data(algae, package ="DMwR2")
+  clean.algae <- data.frame(algae[complete.cases(algae), ])
   alg.HVDM1 <- TomekClassif(season~., clean.algae, dist = "HVDM", 
                             Cl = c("winter", "spring"), rem = "both")
   alg.HVDM2 <- TomekClassif(season~., clean.algae, dist = "HVDM", rem = "maj")
@@ -109,6 +110,7 @@ Tomek, I. (1976). \emph{Two modifications of CNN} IEEE Trans. Syst. Man Cybern.,
   
   # check which were the indexes of the examples removed in alg.EuM
   alg.EuM[[2]]
+  }
 }
 
 \keyword{pre-processing classification}

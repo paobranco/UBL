@@ -64,9 +64,9 @@ Batista, G. E.; Prati, R. C. & Monard, M. C. (2004). \emph{A study of the behavi
 
 \examples{
   \dontrun{
-  library(DMwR)
-  data(algae)
-  clean.algae <- algae[complete.cases(algae), ]
+    if (requireNamespace("DMwR2", quietly = TRUE)) {
+  data(algae, package ="DMwR2")
+  clean.algae <- data.frame(algae[complete.cases(algae), ])
   alg1 <- OSSClassif(season~., clean.algae, dist = "HVDM", 
                      Cl = c("spring", "summer"))
   alg2 <- OSSClassif(season~., clean.algae, dist = "HEOM", 
@@ -79,6 +79,7 @@ Batista, G. E.; Prati, R. C. & Monard, M. C. (2004). \emph{A study of the behavi
   summary(alg3$season)
   summary(alg4$season)
   summary(alg5$season)
+  }
   }
 }
 \keyword{pre-processing classification}

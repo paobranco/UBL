@@ -15,7 +15,7 @@ Name: \tab UBL\cr
 Type: \tab Package\cr
 Version: \tab 0.0.7\cr
 %update!
-Date: \tab 2017-12-4\cr
+Date: \tab 2021-03-29\cr
 License: \tab GPL 2 GPL 3\cr
 }
 
@@ -84,18 +84,18 @@ trainD <- ImbR[i.train,]
 testD <- ImbR[-i.train,]
 
 # train a model on the original train data
-library(DMwR)
-model <- rpartXse(Tgt~., trainD, se = 0)
+  if (requireNamespace("DMwR2", quietly = TRUE)) {
+model <- DMwR2::rpartXse(Tgt~., trainD, se = 0)
 
-preds <- predict(model, testD)
+preds <- DMwR2::predict(model, testD)
 
 plot(testD$Tgt, preds, xlim = c(0,55), ylim = c(0,55))
 abline(a = 0, b = 1)
 
 # obtain a new train using random under-sampling strategy
 newTrain <- RandUnderRegress(Tgt~., trainD)
-newModel <- rpartXse(Tgt~., newTrain, se = 0)
-newPreds <- predict(newModel, testD)
+newModel <- DMwR2::rpartXse(Tgt~., newTrain, se = 0)
+newPreds <- DMwR2::predict(newModel, testD)
 
 # plot the predictions for the model obtained with 
 # the original and the modified train data
@@ -104,5 +104,6 @@ abline(a = 0, b = 1, lty=2, col="grey")
 points(testD$Tgt, newPreds, col="blue", pch=2) #blue for changed train
 abline(h=30, lty=2, col="grey")
 abline(v=30, lty=2, col="grey")
+}
 }
 }

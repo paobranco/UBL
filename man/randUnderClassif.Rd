@@ -42,15 +42,17 @@ This function performs a random under-sampling strategy for dealing with imbalan
 \code{\link{RandOverClassif}}
 }
 \examples{
-  library(DMwR)
-  data(algae)
+  if (requireNamespace("DMwR2", quietly = TRUE)) {
+
+  data(algae, package ="DMwR2")
+  clean.algae <- data.frame(algae[complete.cases(algae), ])
   C.perc = list(autumn = 1, summer = 0.9, winter = 0.4) 
   # classes autumn and spring remain unchanged
   
-  myunder.algae <- RandUnderClassif(season~., algae, C.perc)
-  undBalan.algae <- RandUnderClassif(season~., algae, "balance")
-  undInvert.algae <- RandUnderClassif(season~., algae, "extreme")
-
+  myunder.algae <- RandUnderClassif(season~., clean.algae, C.perc)
+  undBalan.algae <- RandUnderClassif(season~., clean.algae, "balance")
+  undInvert.algae <- RandUnderClassif(season~., clean.algae, "extreme")
+} else {
   library(MASS)
   data(cats)
   myunder.cats <- RandUnderClassif(Sex~., cats, list(M = 0.8))
@@ -83,7 +85,7 @@ This function performs a random under-sampling strategy for dealing with imbalan
 # preds1  F  M
 #      F 13  4
 #      M  3 24
-
+}
 }
 
 \keyword{pre-processing classification}
