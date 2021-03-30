@@ -217,7 +217,7 @@ Smote.exsRegress <- function(dat, tgt, N, k, dist, p)
   T <- matrix(nrow = dim(dat)[1], ncol = dim(dat)[2])
   for (col in seq.int(dim(T)[2])){
     if (class(dat[, col]) %in% c('factor', 'character')) {
-      T[, col] <- as.integer(dat[, col])
+      T[, col] <- as.integer(as.factor(dat[, col]))
       nomatr <- c(nomatr, col)
     } else {
       T[, col] <- dat[, col]
