@@ -58,7 +58,7 @@ ReBaggRegress(form, train, rel="auto", thr.rel, learner, learner.pars,
   The function returns an object of class BagModel. 
 }
 \references{
-Branco, P. and Torgo, L. and Ribeiro, R.P. (2018) \empph{REBAGG: REsampled BAGGing for Imbalanced Regression} LIDTA2018: 2nd International Workshop on Learning with Imbalanced Domains: Theory and Applications (Co-located with ECML/PKDD 2018) Dublin, Ireland
+Branco, P. and Torgo, L. and Ribeiro, R.P. (2018) \emph{REBAGG: REsampled BAGGing for Imbalanced Regression} LIDTA2018: 2nd International Workshop on Learning with Imbalanced Domains: Theory and Applications (Co-located with ECML/PKDD 2018) Dublin, Ireland
 }
 \author{ Paula Branco \email{paobranco@gmail.com}, Rita Ribeiro
   \email{rpribeiro@dcc.fc.up.pt} and Luis Torgo \email{ltorgo@dcc.fc.up.pt} }
